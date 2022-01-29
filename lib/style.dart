@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+
+Color containerColor = const Color(0xFF1e151e);
+Color tappedButtonColor = const Color(0xFF82568a);
+Color topContainerColor1 = containerColor;
+Color topContainerColor2 = containerColor;
+Color topContainerColor3 = containerColor;
+Color appBarColor = const Color(0xFF0d060d);
+Color appBackgroundColor = const Color(0xFF120812);
+Color bodyTextColor = Colors.white;
+
+ThemeData pmTheme() {
+  return ThemeData(
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      primary: appBarColor,
+    ),
+    cardTheme: const CardTheme(color: Color(0xFF533758)),
+    listTileTheme:
+        ListTileThemeData(textColor: bodyTextColor, iconColor: bodyTextColor),
+    scaffoldBackgroundColor: appBarColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: appBarColor,
+      selectedItemColor: tappedButtonColor,
+      unselectedItemColor: Colors.white,
+      selectedIconTheme: IconThemeData(color: tappedButtonColor),
+      unselectedIconTheme: const IconThemeData(color: Colors.white),
+    ),
+    iconTheme: const IconThemeData(color: Colors.white),
+    textTheme: TextTheme(
+      bodyText2: TextStyle(
+        color: bodyTextColor,
+        fontFamily: 'Kanit',
+      ),
+    ),
+  );
+}
