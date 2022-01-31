@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'style.dart';
-import 'extractedWidgets/rounded_container.dart';
-import 'extractedWidgets/icon_content.dart';
-import 'extractedWidgets/img_content.dart';
+import 'package:flutter_course/style.dart';
+import 'package:flutter_course/extractedWidgets/rounded_container.dart';
+import 'package:flutter_course/extractedWidgets/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'vehMaintenanceSection.dart';
+import 'sparepart_section.dart';
+import 'myveh_section.dart';
 
 enum PmServices { vMaintenance, sparePartsShop, myVehicleSection }
 
@@ -16,145 +18,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget subServicesDisplay = Row();
-  Expanded vehMaintSubServices() {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const IconContent(
-                  iconText: 'Nearby Mechanic',
-                  iconC: FontAwesomeIcons.mapMarked),
-            ),
-          ),
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const IconContent(
-                  iconText: 'Tow Truck', iconC: FontAwesomeIcons.truckPickup),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Expanded sparePartsSection() {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const ImgContent(
-                  imgSrc: 'assets/carEngine.png', imgText: 'Engine and Oil'),
-            ),
-          ),
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const ImgContent(
-                  imgSrc: 'assets/airFilter.png', imgText: 'Air Filter'),
-            ),
-          ),
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const ImgContent(
-                  imgSrc: 'assets/carBattery.png', imgText: 'Car Battery'),
-            ),
-          ),
-          Expanded(
-            child: RoundedContainer(
-              boxColor: containerColor,
-              boxChild: const ImgContent(
-                  imgSrc: 'assets/brakePads.png', imgText: 'Breke Pads'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Expanded myVehicleSection() {
-    return Expanded(
-      child: RoundedContainer(
-        boxColor: containerColor,
-        cWidth: double.infinity,
-        boxChild: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Vehicle Model: '),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Oil date: '),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Battery Health: '),
-                ),
-              ],
-            ),
-            RoundedContainer(
-              boxColor: tappedButtonColor,
-              boxChild: const ImgContent(
-                imgSrc: 'assets/carCheck.png',
-                imgText: 'Periodic services',
-                imgHeight: 70,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void selectService(PmServices selectedService) {
-    setState(() {
-      if (selectedService == PmServices.vMaintenance) {
-        if (topContainerColor1 == containerColor) {
-          topContainerColor1 = tappedButtonColor;
-          topContainerColor2 = containerColor;
-          topContainerColor3 = containerColor;
-          subServicesDisplay = vehMaintSubServices();
-        } else {
-          topContainerColor1 = containerColor;
-          subServicesDisplay = Row();
-        }
-      }
-      if (selectedService == PmServices.sparePartsShop) {
-        if (topContainerColor2 == containerColor) {
-          topContainerColor1 = containerColor;
-          topContainerColor2 = tappedButtonColor;
-          topContainerColor3 = containerColor;
-          subServicesDisplay = sparePartsSection();
-        } else {
-          topContainerColor2 = containerColor;
-          subServicesDisplay = Row();
-        }
-      }
-      if (selectedService == PmServices.myVehicleSection) {
-        if (topContainerColor3 == containerColor) {
-          topContainerColor1 = containerColor;
-          topContainerColor2 = containerColor;
-          topContainerColor3 = tappedButtonColor;
-          subServicesDisplay = myVehicleSection();
-        } else {
-          topContainerColor3 = containerColor;
-          subServicesDisplay = Row();
-        }
-      }
-    });
-  }
+  PmServices selectedService = PmServices.vMaintenance;
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      selectService(PmServices.vMaintenance);
+                      setState(() {
+                        selectedService = PmServices.vMaintenance;
+                      });
                     },
                     child: RoundedContainer(
-                      boxColor: topContainerColor1,
+                      boxColor: selectedService == PmServices.vMaintenance
+                          ? tappedButtonColor
+                          : containerColor,
                       boxChild: const IconContent(
                         iconText: 'Vehicle Maintenance',
                         iconC: FontAwesomeIcons.tools,
@@ -206,10 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      selectService(PmServices.sparePartsShop);
+                      setState(() {
+                        selectedService = PmServices.sparePartsShop;
+                      });
                     },
                     child: RoundedContainer(
-                      boxColor: topContainerColor2,
+                      boxColor: selectedService == PmServices.sparePartsShop
+                          ? tappedButtonColor
+                          : containerColor,
                       boxChild: const IconContent(
                         iconText: 'Spare-Parts Shop',
                         iconC: FontAwesomeIcons.shoppingCart,
@@ -220,10 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                     child: GestureDetector(
                   onTap: () {
-                    selectService(PmServices.myVehicleSection);
+                    setState(() {
+                      selectedService = PmServices.myVehicleSection;
+                    });
                   },
                   child: RoundedContainer(
-                    boxColor: topContainerColor3,
+                    boxColor: selectedService == PmServices.myVehicleSection
+                        ? tappedButtonColor
+                        : containerColor,
                     boxChild: const IconContent(
                       iconC: FontAwesomeIcons.car,
                       iconText: 'My Vehicle',
@@ -278,7 +154,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          subServicesDisplay
+          // subServicesDisplay
+          selectedService == PmServices.vMaintenance
+              ? vehMaintSubServices()
+              : Row(),
+          selectedService == PmServices.sparePartsShop
+              ? sparePartsSection()
+              : Row(),
+          selectedService == PmServices.myVehicleSection
+              ? myVehicleSection()
+              : Row(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
