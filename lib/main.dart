@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/HomePage/homepage.dart';
 
+import 'NearbyMechanic Page/nearbymechanic_page.dart';
+import 'TowTruckPage/towtruck_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,30 +15,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: pmTheme(),
-      home: const MainApp(
-        leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: ClipOval(
-            child: Image(
-              image: AssetImage('assets/pmLogo3.png'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const InitialPage(),
+        'NearbyMechanicPage': (context) => const NavigatingPage(
+              title: 'Nearby Mechanics',
+              page: NearbyMechanicPage(),
             ),
-          ),
-        ),
-        title: 'Pocket Mechanic',
-        actions: [
-          IconButton(
-            onPressed: null,
-            icon: Icon(Icons.more_vert),
-          ),
-        ],
-        body: MyHomePage(),
-      ),
+        'TowTruckPage': (context) => const NavigatingPage(
+              title: 'Tow Truck',
+              page: TowTruckPage(),
+            ),
+      },
     );
   }
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp(
+class Page extends StatelessWidget {
+  const Page(
       {Key? key,
       required this.body,
       required this.title,
@@ -78,6 +75,34 @@ class MainApp extends StatelessWidget {
   }
 }
 
+class InitialPage extends StatelessWidget {
+  const InitialPage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Page(
+      leading: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: ClipOval(
+          child: Image(
+            image: AssetImage('assets/pmLogo3.png'),
+          ),
+        ),
+      ),
+      title: 'Pocket Mechanic',
+      actions: [
+        IconButton(
+          onPressed: null,
+          icon: Icon(Icons.more_vert),
+        ),
+      ],
+      body: MyHomePage(),
+    );
+  }
+}
+
 class NavigatingPage extends StatelessWidget {
   const NavigatingPage({Key? key, required this.title, required this.page})
       : super(key: key);
@@ -85,7 +110,7 @@ class NavigatingPage extends StatelessWidget {
   final Widget page;
   @override
   Widget build(BuildContext context) {
-    return MainApp(
+    return Page(
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
