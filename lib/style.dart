@@ -14,6 +14,13 @@ ThemeData pmTheme() {
     colorScheme: ColorScheme.fromSwatch().copyWith(
       primary: appBarColor,
     ),
+    sliderTheme: SliderThemeData(
+      thumbColor: tappedButtonColor,
+      overlayColor: const Color(0x6082568a),
+      activeTrackColor: tappedButtonColor,
+      inactiveTrackColor: const Color(0x2082568a),
+      overlayShape: const RoundSliderOverlayShape(overlayRadius: 25),
+    ),
     cardTheme: const CardTheme(color: Color(0xFF533758)),
     listTileTheme:
         ListTileThemeData(textColor: bodyTextColor, iconColor: bodyTextColor),
