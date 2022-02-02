@@ -5,6 +5,7 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_course/components/rounded_buttoncontainer.dart';
 
 enum vMaintanceSubServices { nearbyMechanic, towTruck }
 vMaintanceSubServices? selectedSubService;
@@ -23,35 +24,32 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
       child: Row(
         children: [
           Expanded(
-            child: RoundedContainer(
+            child: RoundedButtonContainer(
+              child: const IconContent(
+                  iconText: 'Nearby Mechanic',
+                  iconC: FontAwesomeIcons.mapMarked),
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.nearbyMechanic;
                   Navigator.pushNamed(context, '/NearbyMechanicPage');
                 });
               },
-              boxColor:
-                  selectedSubService == vMaintanceSubServices.nearbyMechanic
-                      ? tappedButtonColor
-                      : containerColor,
-              boxChild: const IconContent(
-                  iconText: 'Nearby Mechanic',
-                  iconC: FontAwesomeIcons.mapMarked),
+              boxColor: containerColor,
+              onPressedColor: tappedButtonColor,
             ),
           ),
           Expanded(
-            child: RoundedContainer(
+            child: RoundedButtonContainer(
+              child: const IconContent(
+                  iconText: 'Tow Truck', iconC: FontAwesomeIcons.truckPickup),
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.towTruck;
                   Navigator.pushNamed(context, '/TowTruckPage');
                 });
               },
-              boxColor: selectedSubService == vMaintanceSubServices.towTruck
-                  ? tappedButtonColor
-                  : containerColor,
-              boxChild: const IconContent(
-                  iconText: 'Tow Truck', iconC: FontAwesomeIcons.truckPickup),
+              boxColor: containerColor,
+              onPressedColor: tappedButtonColor,
             ),
           ),
         ],

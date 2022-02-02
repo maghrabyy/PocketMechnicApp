@@ -18,14 +18,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   PmServices selectedService = PmServices.vMaintenance;
-  Widget hi(Widget child) {
-    return RawMaterialButton(
-      child: child,
-      onPressed: () {},
-      elevation: 8.0,
-      constraints: const BoxConstraints.tightFor(width: 56, height: 56),
-      shape: const CircleBorder(),
-    );
+
+  Widget bottomServices() {
+    if (selectedService == PmServices.vMaintenance) {
+      return const VehMaintenanceSection();
+    } else if (selectedService == PmServices.sparePartsShop) {
+      return const SparePartSection();
+    } else {
+      return const MyVehicleSection();
+    }
   }
 
   @override
@@ -104,17 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
             boxChild: middleContainer,
           ),
         ),
-        // subServicesDisplay
-
-        selectedService == PmServices.vMaintenance
-            ? const VehMaintenanceSection()
-            : Row(),
-        selectedService == PmServices.sparePartsShop
-            ? const SparePartSection()
-            : Row(),
-        selectedService == PmServices.myVehicleSection
-            ? const MyVehicleSection()
-            : Row()
+        bottomServices()
       ],
     );
   }
