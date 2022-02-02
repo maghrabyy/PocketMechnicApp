@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_course/extractedWidgets/rounded_container.dart';
+import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/style.dart';
 
 class NearbyMechanicPage extends StatefulWidget {

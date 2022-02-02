@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
-import 'package:flutter_course/extractedWidgets/rounded_container.dart';
-import 'package:flutter_course/extractedWidgets/img_content.dart';
+import 'package:flutter_course/Components/rounded_container.dart';
+import 'package:flutter_course/Components/img_content.dart';
 
 enum sparePartCategories { engineOil, airFilter, carBattery, brakePads }
 

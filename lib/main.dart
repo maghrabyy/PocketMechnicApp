@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
-import 'package:flutter_course/HomePage/homepage.dart';
-
-import 'NearbyMechanic Page/nearbymechanic_page.dart';
-import 'TowTruckPage/towtruck_page.dart';
+import 'package:flutter_course/Pages/HomePage/homepage.dart';
+import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
+import 'Pages/TowTruckPage/towtruck_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,11 +17,11 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const InitialPage(),
-        'NearbyMechanicPage': (context) => const NavigatingPage(
+        '/NearbyMechanicPage': (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
               page: NearbyMechanicPage(),
             ),
-        'TowTruckPage': (context) => const NavigatingPage(
+        '/TowTruckPage': (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
             ),

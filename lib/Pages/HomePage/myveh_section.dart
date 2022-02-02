@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
-import 'package:flutter_course/extractedWidgets/rounded_container.dart';
-import 'package:flutter_course/extractedWidgets/img_content.dart';
+import 'package:flutter_course/Components/rounded_container.dart';
+import 'package:flutter_course/Components/img_content.dart';
 
 class MyVehicleSection extends StatefulWidget {
   const MyVehicleSection({Key? key}) : super(key: key);

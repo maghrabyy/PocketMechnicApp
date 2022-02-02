@@ -1,12 +1,13 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
-import 'package:flutter_course/extractedWidgets/rounded_container.dart';
-import 'package:flutter_course/extractedWidgets/icon_content.dart';
+import 'package:flutter_course/Components/rounded_container.dart';
+import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum vMaintanceSubServices { nearbyMechanic, towTruck }
 vMaintanceSubServices? selectedSubService;
-// ignore: file_names
 
 class VehMaintenanceSection extends StatefulWidget {
   const VehMaintenanceSection({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.nearbyMechanic;
-                  Navigator.pushNamed(context, 'NearbyMechanicPage');
+                  Navigator.pushNamed(context, '/NearbyMechanicPage');
                 });
               },
               boxColor:
@@ -43,7 +44,7 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.towTruck;
-                  Navigator.pushNamed(context, 'TowTruckPage');
+                  Navigator.pushNamed(context, '/TowTruckPage');
                 });
               },
               boxColor: selectedSubService == vMaintanceSubServices.towTruck
