@@ -33,7 +33,7 @@ ThemeData pmTheme() {
       selectedIconTheme: IconThemeData(color: tappedButtonColor),
       unselectedIconTheme: const IconThemeData(color: Colors.white),
     ),
-    iconTheme: const IconThemeData(color: Colors.white),
+    iconTheme: const IconThemeData(color: Colors.white, size: 50),
     textTheme: TextTheme(
       bodyText2: TextStyle(
         color: bodyTextColor,

@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Page extends StatelessWidget {
-  const Page(
+class RawPage extends StatelessWidget {
+  const RawPage(
       {Key? key,
       required this.body,
       required this.title,
@@ -81,7 +81,7 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Page(
+    return const RawPage(
       leading: Padding(
         padding: EdgeInsets.all(8.0),
         child: ClipOval(
@@ -109,7 +109,7 @@ class NavigatingPage extends StatelessWidget {
   final Widget page;
   @override
   Widget build(BuildContext context) {
-    return Page(
+    return RawPage(
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

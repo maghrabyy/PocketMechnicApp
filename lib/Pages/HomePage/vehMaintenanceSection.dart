@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
-import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_course/components/rounded_buttoncontainer.dart';
