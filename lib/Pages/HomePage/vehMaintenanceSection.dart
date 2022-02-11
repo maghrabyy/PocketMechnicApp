@@ -30,7 +30,7 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.nearbyMechanic;
-                  Navigator.pushNamed(context, '/NearbyMechanicLoading');
+                  Navigator.pushNamed(context, '/NearbyMechanicPage');
                 });
               },
               boxColor: containerColor,

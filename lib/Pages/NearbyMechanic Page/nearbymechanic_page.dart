@@ -15,7 +15,6 @@ class _NearbyMechanicPageState extends State<NearbyMechanicPage> {
   @override
   void initState() {
     super.initState();
-    updatingUI(widget.decodedJsonData);
   }
 
   updatingUI(dynamic theDataPath) {
