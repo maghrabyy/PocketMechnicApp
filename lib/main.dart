@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
-import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
+import 'Pages/NearbyMechanic Page/nearbymechanicloading.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
 
 void main() {
@@ -17,10 +17,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const InitialPage(),
-        '/NearbyMechanicPage': (context) => const NavigatingPage(
-              title: 'Nearby Mechanics',
-              page: NearbyMechanicPage(),
-            ),
+        '/NearbyMechanicLoading': (context) => const NearbyMechanicLoading(),
         '/TowTruckPage': (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
@@ -47,6 +44,7 @@ class RawPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(leading: leading, title: Text(title), actions: actions),
       body: body,
       floatingActionButton: floatingButton,
@@ -81,8 +79,8 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const RawPage(
-      leading: Padding(
+    return RawPage(
+      leading: const Padding(
         padding: EdgeInsets.all(8.0),
         child: ClipOval(
           child: Image(
@@ -93,11 +91,11 @@ class InitialPage extends StatelessWidget {
       title: 'Pocket Mechanic',
       actions: [
         IconButton(
-          onPressed: null,
-          icon: Icon(Icons.more_vert),
+          onPressed: () {},
+          icon: const Icon(Icons.more_vert),
         ),
       ],
-      body: MyHomePage(),
+      body: const MyHomePage(),
     );
   }
 }
