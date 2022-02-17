@@ -31,9 +31,9 @@ class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: SpinKitFadingFour(
-        color: tappedButtonColor,
+        color: fourthLayerColor,
       ),
     );
   }

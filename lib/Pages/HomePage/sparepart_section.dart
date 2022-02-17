@@ -27,8 +27,8 @@ class _SparePartSectionState extends State<SparePartSection> {
                 });
               },
               boxColor: selectedSPCategory == sparePartCategories.engineOil
-                  ? tappedButtonColor
-                  : containerColor,
+                  ? fourthLayerColor
+                  : thirdLayerColor,
               boxChild: const ImgContent(
                   imgSrc: 'assets/carEngine.png', imgText: 'Engine and Oil'),
             ),
@@ -41,8 +41,8 @@ class _SparePartSectionState extends State<SparePartSection> {
                 });
               },
               boxColor: selectedSPCategory == sparePartCategories.airFilter
-                  ? tappedButtonColor
-                  : containerColor,
+                  ? fourthLayerColor
+                  : thirdLayerColor,
               boxChild: const ImgContent(
                   imgSrc: 'assets/airFilter.png', imgText: 'Air Filter'),
             ),
@@ -55,8 +55,8 @@ class _SparePartSectionState extends State<SparePartSection> {
                 });
               },
               boxColor: selectedSPCategory == sparePartCategories.carBattery
-                  ? tappedButtonColor
-                  : containerColor,
+                  ? fourthLayerColor
+                  : thirdLayerColor,
               boxChild: const ImgContent(
                   imgSrc: 'assets/carBattery.png', imgText: 'Car Battery'),
             ),
@@ -69,8 +69,8 @@ class _SparePartSectionState extends State<SparePartSection> {
                 });
               },
               boxColor: selectedSPCategory == sparePartCategories.brakePads
-                  ? tappedButtonColor
-                  : containerColor,
+                  ? fourthLayerColor
+                  : thirdLayerColor,
               boxChild: const ImgContent(
                   imgSrc: 'assets/brakePads.png', imgText: 'Breke Pads'),
             ),

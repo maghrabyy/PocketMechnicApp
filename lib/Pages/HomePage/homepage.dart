@@ -34,9 +34,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget middleContainer = const GradProjectCards();
     return Column(
       children: [
-        RoundedContainer(
-          boxColor: containerColor,
-          boxChild: const Center(
+        const RoundedContainer(
+          boxColor: thirdLayerColor,
+          boxChild: Center(
             child: Text(
               'Our services',
               textAlign: TextAlign.center,
@@ -56,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   boxColor: selectedService == PmServices.vMaintenance
-                      ? tappedButtonColor
-                      : containerColor,
+                      ? fourthLayerColor
+                      : thirdLayerColor,
                   boxChild: const IconContent(
                     iconText: 'Vehicle Maintenance',
                     iconC: FontAwesomeIcons.tools,
@@ -72,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   boxColor: selectedService == PmServices.sparePartsShop
-                      ? tappedButtonColor
-                      : containerColor,
+                      ? fourthLayerColor
+                      : thirdLayerColor,
                   boxChild: const IconContent(
                     iconText: 'Spare-Parts Shop',
                     iconC: FontAwesomeIcons.shoppingCart,
@@ -88,8 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 boxColor: selectedService == PmServices.myVehicleSection
-                    ? tappedButtonColor
-                    : containerColor,
+                    ? fourthLayerColor
+                    : thirdLayerColor,
                 boxChild: const IconContent(
                   iconC: FontAwesomeIcons.car,
                   iconText: 'My Vehicle',
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Expanded(
           flex: 2,
           child: RoundedContainer(
-            boxColor: containerColor,
+            boxColor: thirdLayerColor,
             boxChild: middleContainer,
           ),
         ),

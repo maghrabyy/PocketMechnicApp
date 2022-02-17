@@ -15,7 +15,7 @@ class _MyVehicleSectionState extends State<MyVehicleSection> {
   Widget build(BuildContext context) {
     return Expanded(
       child: RoundedContainer(
-        boxColor: containerColor,
+        boxColor: thirdLayerColor,
         cWidth: double.infinity,
         boxChild: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,9 +38,9 @@ class _MyVehicleSectionState extends State<MyVehicleSection> {
                 ),
               ],
             ),
-            RoundedContainer(
-              boxColor: tappedButtonColor,
-              boxChild: const ImgContent(
+            const RoundedContainer(
+              boxColor: fourthLayerColor,
+              boxChild: ImgContent(
                 imgSrc: 'assets/carCheck.png',
                 imgText: 'Periodic services',
                 imgHeight: 70,

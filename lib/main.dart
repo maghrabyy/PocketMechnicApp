@@ -135,7 +135,7 @@ class _InitialPageState extends State<InitialPage> {
       title: Text(_pageTitles[currentPageIndex]),
       actions: [
         PopupMenuButton(
-          color: appBackgroundColor,
+          color: firstLayerColor,
           itemBuilder: (BuildContext context) => const <PopupMenuItem<String>>[
             PopupMenuItem(
               child: Text('Account settings'),

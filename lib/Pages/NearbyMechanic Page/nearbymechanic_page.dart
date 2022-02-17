@@ -23,10 +23,10 @@ class _NearbyMechanicPageState extends State<NearbyMechanicPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-      boxColor: containerColor,
+    return const RoundedContainer(
+      boxColor: thirdLayerColor,
       cWidth: double.infinity,
-      boxChild: const IconContent(
+      boxChild: IconContent(
         iconText: 'The map will be here.',
         iconC: FontAwesomeIcons.mapMarked,
         textSize: 50,

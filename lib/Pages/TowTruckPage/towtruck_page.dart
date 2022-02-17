@@ -14,7 +14,7 @@ class _TowTruckPageState extends State<TowTruckPage> {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      boxColor: containerColor,
+      boxColor: thirdLayerColor,
       boxChild: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

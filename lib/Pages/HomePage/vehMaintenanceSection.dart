@@ -33,8 +33,8 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
                   Navigator.pushNamed(context, '/NearbyMechanicPage');
                 });
               },
-              boxColor: containerColor,
-              onPressedColor: tappedButtonColor,
+              boxColor: thirdLayerColor,
+              onPressedColor: fourthLayerColor,
             ),
           ),
           Expanded(
@@ -47,8 +47,8 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
                   Navigator.pushNamed(context, '/TowTruckPage');
                 });
               },
-              boxColor: containerColor,
-              onPressedColor: tappedButtonColor,
+              boxColor: thirdLayerColor,
+              onPressedColor: fourthLayerColor,
             ),
           ),
         ],

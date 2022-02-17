@@ -1,42 +1,31 @@
 import 'package:flutter/material.dart';
 
-Color containerColor = const Color(0xFF1e151e);
-Color tappedButtonColor = const Color(0xFF82568a);
-Color topContainerColor1 = containerColor;
-Color topContainerColor2 = containerColor;
-Color topContainerColor3 = containerColor;
-Color appBarColor = const Color(0xFF0d060d);
-Color appBackgroundColor = const Color(0xFF120812);
-Color bodyTextColor = Colors.white;
+const fourthLayerColor = Color(0xFF82568a);
+const thirdLayerColor = Color(0xFF1e151e);
+const secondLayerColor = Color(0xFF0d060d);
+const firstLayerColor = Color(0xFF120812);
+const bodyTextColor = Colors.white;
 
 ThemeData pmTheme() {
   return ThemeData(
-    colorScheme: ColorScheme.fromSwatch().copyWith(
-      primary: appBarColor,
-    ),
-    sliderTheme: SliderThemeData(
-      thumbColor: tappedButtonColor,
-      overlayColor: const Color(0x6082568a),
-      activeTrackColor: tappedButtonColor,
-      inactiveTrackColor: const Color(0x2082568a),
-      overlayShape: const RoundSliderOverlayShape(overlayRadius: 25),
-    ),
+    colorScheme: ColorScheme.fromSwatch()
+        .copyWith(primary: secondLayerColor, secondary: fourthLayerColor),
     cardTheme: const CardTheme(color: Color(0xFF533758)),
-    listTileTheme:
-        ListTileThemeData(textColor: bodyTextColor, iconColor: bodyTextColor),
-    scaffoldBackgroundColor: appBarColor,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    listTileTheme: const ListTileThemeData(
+        textColor: bodyTextColor, iconColor: bodyTextColor),
+    scaffoldBackgroundColor: firstLayerColor,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: appBarColor,
-      selectedItemColor: tappedButtonColor,
+      backgroundColor: secondLayerColor,
+      selectedItemColor: fourthLayerColor,
       unselectedItemColor: Colors.white,
-      selectedIconTheme: IconThemeData(color: tappedButtonColor),
-      unselectedIconTheme: const IconThemeData(color: Colors.white),
+      selectedIconTheme: IconThemeData(color: fourthLayerColor),
+      unselectedIconTheme: IconThemeData(color: Colors.white),
     ),
     popupMenuTheme: const PopupMenuThemeData(
         textStyle: TextStyle(color: Colors.white, fontFamily: 'Kanit')),
     iconTheme: const IconThemeData(color: Colors.white, size: 50),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyText2: TextStyle(
         color: bodyTextColor,
         fontFamily: 'Kanit',
