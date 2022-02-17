@@ -13,7 +13,7 @@ class NearbyMechanicLoading extends StatefulWidget {
 
 class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
   void loadingData() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const NavigatingPage(

@@ -33,6 +33,8 @@ ThemeData pmTheme() {
       selectedIconTheme: IconThemeData(color: tappedButtonColor),
       unselectedIconTheme: const IconThemeData(color: Colors.white),
     ),
+    popupMenuTheme: const PopupMenuThemeData(
+        textStyle: TextStyle(color: Colors.white, fontFamily: 'Kanit')),
     iconTheme: const IconThemeData(color: Colors.white, size: 50),
     textTheme: TextTheme(
       bodyText2: TextStyle(
