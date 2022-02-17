@@ -21,26 +21,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: pmTheme(),
-      initialRoute: '/',
+      initialRoute: InitialPage.id,
       routes: {
-        '/': (context) => const InitialPage(),
-        '/NearbyMechanicPage': (context) => const NavigatingPage(
+        InitialPage.id: (context) => const InitialPage(),
+        NearbyMechanicPage.id: (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
               page: NearbyMechanicPage(),
             ),
-        '/TowTruckPage': (context) => const NavigatingPage(
+        TowTruckPage.id: (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
             ),
-        '/AccountSettingsPage': (context) => const NavigatingPage(
+        AccountSettingsPage.id: (context) => const NavigatingPage(
               title: 'Account Settings',
               page: AccountSettingsPage(),
             ),
-        '/HelpPage': (context) => const NavigatingPage(
+        HelpPage.id: (context) => const NavigatingPage(
               title: 'Help',
               page: HelpPage(),
             ),
-        '/ReportBugPage': (context) => const NavigatingPage(
+        ReportBugPage.id: (context) => const NavigatingPage(
               title: 'Report bug',
               page: ReportBugPage(),
             ),
@@ -87,6 +87,7 @@ class _RawPageState extends State<RawPage> {
 }
 
 class InitialPage extends StatefulWidget {
+  static String id = 'homePage';
   const InitialPage({
     Key? key,
   }) : super(key: key);
@@ -156,13 +157,13 @@ class _InitialPageState extends State<InitialPage> {
           ],
           onSelected: (value) {
             if (value == 'Account settings') {
-              Navigator.pushNamed(context, '/AccountSettingsPage');
+              Navigator.pushNamed(context, AccountSettingsPage.id);
             }
             if (value == 'Help') {
-              Navigator.pushNamed(context, '/HelpPage');
+              Navigator.pushNamed(context, HelpPage.id);
             }
             if (value == 'Report bug') {
-              Navigator.pushNamed(context, '/ReportBugPage');
+              Navigator.pushNamed(context, ReportBugPage.id);
             }
           },
         ),

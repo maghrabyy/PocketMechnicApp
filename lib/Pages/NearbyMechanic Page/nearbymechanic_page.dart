@@ -5,6 +5,7 @@ import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NearbyMechanicPage extends StatefulWidget {
+  static String id = 'NearbyMechanicPage';
   final dynamic decodedJsonData;
   const NearbyMechanicPage({Key? key, this.decodedJsonData}) : super(key: key);
   @override

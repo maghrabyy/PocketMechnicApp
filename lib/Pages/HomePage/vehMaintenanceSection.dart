@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Pages/NearbyMechanic%20Page/nearbymechanic_page.dart';
+import 'package:flutter_course/Pages/TowTruckPage/towtruck_page.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,7 +32,7 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.nearbyMechanic;
-                  Navigator.pushNamed(context, '/NearbyMechanicPage');
+                  Navigator.pushNamed(context, NearbyMechanicPage.id);
                 });
               },
               boxColor: thirdLayerColor,
@@ -44,7 +46,7 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
               onPressed: () {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.towTruck;
-                  Navigator.pushNamed(context, '/TowTruckPage');
+                  Navigator.pushNamed(context, TowTruckPage.id);
                 });
               },
               boxColor: thirdLayerColor,

@@ -18,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   PmServices selectedService = PmServices.vMaintenance;
+  Widget middleContainer = const GradProjectCards();
 
   Widget bottomServices() {
     if (selectedService == PmServices.vMaintenance) {
@@ -31,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget middleContainer = const GradProjectCards();
     return Column(
       children: [
         const RoundedContainer(
@@ -100,47 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Expanded(
           flex: 2,
-          child: RoundedContainer(
-            boxColor: thirdLayerColor,
-            boxChild: middleContainer,
-          ),
+          child: middleContainer,
         ),
         bottomServices()
-      ],
-    );
-  }
-}
-
-class SlidderTest extends StatefulWidget {
-  const SlidderTest({Key? key}) : super(key: key);
-
-  @override
-  _SlidderTestState createState() => _SlidderTestState();
-}
-
-class _SlidderTestState extends State<SlidderTest> {
-  int num = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          num.toString(),
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 50),
-        ),
-        Slider(
-          min: 0,
-          max: 120,
-          value: num.toDouble(),
-          onChanged: (double incNum) {
-            setState(() {
-              num = incNum.round();
-            });
-          },
-        )
       ],
     );
   }
