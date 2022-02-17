@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShopPage extends StatefulWidget {
+  static const String id = 'ShopPage';
   const ShopPage({Key? key}) : super(key: key);
 
   @override

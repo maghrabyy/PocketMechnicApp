@@ -3,6 +3,9 @@ import 'package:flutter_course/Pages/HelpPage/helppage.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
@@ -44,6 +47,15 @@ class MyApp extends StatelessWidget {
               title: 'Report bug',
               page: ReportBugPage(),
             ),
+        LoginPage.id: (context) => const NavigatingPage(
+              title: 'Login',
+              page: LoginPage(),
+            ),
+        RegisterPage.id: (context) => const NavigatingPage(
+              title: 'Registeration',
+              page: RegisterPage(),
+            ),
+        WelcomePage.id: (context) => const WelcomePage()
       },
     );
   }
@@ -87,7 +99,7 @@ class _RawPageState extends State<RawPage> {
 }
 
 class InitialPage extends StatefulWidget {
-  static String id = 'homePage';
+  static const String id = 'InitialPage';
   const InitialPage({
     Key? key,
   }) : super(key: key);

@@ -10,6 +10,7 @@ import 'myveh_section.dart';
 enum PmServices { vMaintenance, sparePartsShop, myVehicleSection }
 
 class MyHomePage extends StatefulWidget {
+  static const String id = 'MyHomePage';
   const MyHomePage({Key? key}) : super(key: key);
 
   @override

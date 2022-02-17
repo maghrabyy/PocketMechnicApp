@@ -7,6 +7,8 @@ const secondLayerColor = Color(0xFF0d060d);
 const firstLayerColor = Color(0xFF120812);
 const textColor = Colors.white;
 const iconColor = Colors.white;
+const loginButtonColor = Colors.grey;
+Color registerButtonColor = Colors.grey.shade600;
 
 ThemeData pmTheme() {
   return ThemeData(
@@ -31,6 +33,15 @@ ThemeData pmTheme() {
       bodyText2: TextStyle(
         color: textColor,
         fontFamily: 'Kanit',
+      ),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(fifthLayerColor),
       ),
     ),
   );

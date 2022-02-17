@@ -4,7 +4,7 @@ import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TowTruckPage extends StatefulWidget {
-  static String id = 'TowTruckPage';
+  static const String id = 'TowTruckPage';
   const TowTruckPage({Key? key}) : super(key: key);
 
   @override

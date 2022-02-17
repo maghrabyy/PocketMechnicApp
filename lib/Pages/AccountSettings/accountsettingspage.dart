@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AccountSettingsPage extends StatefulWidget {
-  static String id = 'AccountSettingsPage';
+  static const String id = 'AccountSettingsPage';
   const AccountSettingsPage({Key? key}) : super(key: key);
 
   @override

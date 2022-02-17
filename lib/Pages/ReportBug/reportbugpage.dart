@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReportBugPage extends StatefulWidget {
-  static String id = 'ReportBugPage';
+  static const String id = 'ReportBugPage';
   const ReportBugPage({Key? key}) : super(key: key);
 
   @override

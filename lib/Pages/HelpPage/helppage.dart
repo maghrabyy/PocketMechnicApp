@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HelpPage extends StatelessWidget {
-  static String id = 'HelpPage';
+  static const String id = 'HelpPage';
   const HelpPage({Key? key}) : super(key: key);
 
   @override

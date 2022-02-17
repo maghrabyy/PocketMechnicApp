@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MaintenancePage extends StatefulWidget {
+  static const String id = 'MaintenancePage';
   const MaintenancePage({Key? key}) : super(key: key);
 
   @override
