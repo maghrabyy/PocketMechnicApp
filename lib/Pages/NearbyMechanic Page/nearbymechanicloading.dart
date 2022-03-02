@@ -16,11 +16,10 @@ class NearbyMechanicLoading extends StatefulWidget {
 }
 
 class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
+  bool isPopAllowed = false;
   Location myLocation = Location();
   void loadingData() async {
     await myLocation.getCurrentLocation();
-    print('my Lat: ${myLocation.latitude}');
-    print('my Long: ${myLocation.longitude}');
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -29,15 +28,6 @@ class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
             page: NearbyMechanicPage(
               lat: myLocation.latitude,
               long: myLocation.longitude,
-            ),
-            floatingButton: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: fifthLayerColor,
-              foregroundColor: Colors.white,
-              child: const Icon(
-                Icons.center_focus_strong,
-                size: 30,
-              ),
             ),
           ),
         ));
@@ -50,10 +40,25 @@ class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: SpinKitFadingFour(
-        color: fourthLayerColor,
+    return WillPopScope(
+      onWillPop: () async {
+        if (isPopAllowed) {
+          return true; // allows pop
+        }
+        return false; // prevents pop
+      },
+      child: const Scaffold(
+        body: Center(
+          child: SpinKitFadingFour(
+            color: fourthLayerColor,
+          ),
+        ),
       ),
     );
   }

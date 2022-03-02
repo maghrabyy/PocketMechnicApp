@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,9 +16,12 @@ class NearbyMechanicPage extends StatefulWidget {
 }
 
 class _NearbyMechanicPageState extends State<NearbyMechanicPage> {
+  GoogleMapController? _googleMapController;
+
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _googleMapController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -25,10 +30,9 @@ class _NearbyMechanicPageState extends State<NearbyMechanicPage> {
       mapType: MapType.terrain,
       myLocationButtonEnabled: false,
       zoomControlsEnabled: false,
-      initialCameraPosition: CameraPosition(
-        target: LatLng(widget.lat!, widget.long!),
-        zoom: 15.0,
-      ),
+      initialCameraPosition:
+          CameraPosition(target: LatLng(widget.lat!, widget.long!), zoom: 15.0),
+      onMapCreated: (controller) => _googleMapController = controller,
     );
   }
 }

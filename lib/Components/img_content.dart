@@ -6,12 +6,14 @@ class ImgContent extends StatelessWidget {
   final Color? textColor;
   final double? imgHeight;
   final double? imgWidth;
+  final double? textSize;
   const ImgContent(
       {required this.imgSrc,
       required this.imgText,
       this.textColor,
       this.imgHeight,
-      this.imgWidth});
+      this.imgWidth,
+      this.textSize});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class ImgContent extends StatelessWidget {
           child: Text(
             imgText,
             textAlign: TextAlign.center,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontSize: textSize),
           ),
         )
       ],

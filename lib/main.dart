@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
+import 'package:flutter_course/pagedrawer.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
@@ -31,10 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         InitialPage.id: (context) =>
             loggedIn ? const InitialPage() : const WelcomePage(),
-        NearbyMechanicLoading.id: (context) => const NavigatingPage(
-              title: 'Nearby Mechanics',
-              page: NearbyMechanicLoading(),
-            ),
+        NearbyMechanicLoading.id: (context) => const NearbyMechanicLoading(),
         NearbyMechanicPage.id: (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
               page: NearbyMechanicPage(),
@@ -42,6 +41,10 @@ class MyApp extends StatelessWidget {
         TowTruckPage.id: (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
+            ),
+        AboutUsPage.id: (context) => const NavigatingPage(
+              title: 'About us',
+              page: AboutUsPage(),
             ),
         AccountSettingsPage.id: (context) => const NavigatingPage(
               title: 'Account Settings',
@@ -77,7 +80,8 @@ class RawPage extends StatefulWidget {
       this.actions,
       this.leading,
       this.floatingButton,
-      this.navigatingBar})
+      this.navigatingBar,
+      this.pagedrawer})
       : super(key: key);
   final Widget body;
   final Text title;
@@ -85,6 +89,7 @@ class RawPage extends StatefulWidget {
   final List<Widget>? actions;
   final Widget? floatingButton;
   final Widget? navigatingBar;
+  final Drawer? pagedrawer;
 
   @override
   State<RawPage> createState() => _RawPageState();
@@ -99,6 +104,7 @@ class _RawPageState extends State<RawPage> {
           leading: widget.leading,
           title: widget.title,
           actions: widget.actions),
+      drawer: widget.pagedrawer,
       body: widget.body,
       floatingActionButton: widget.floatingButton,
       bottomNavigationBar: widget.navigatingBar,
@@ -122,15 +128,15 @@ class _InitialPageState extends State<InitialPage> {
 
   final _pageOptions = [
     const MyHomePage(),
-    const ShopPage(),
     const MaintenancePage(),
+    const ShopPage(),
     const ProfilePage()
   ];
 
   final _pageTitles = [
     'Pocket Mechanic',
-    'Spare-parts Shop',
     'Maintenance Services',
+    'Spare-parts Shop',
     'My Profile'
   ];
 
@@ -145,54 +151,39 @@ class _InitialPageState extends State<InitialPage> {
   @override
   Widget build(BuildContext context) {
     return RawPage(
-      leading: const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: ClipOval(
-          child: Image(
-            image: AssetImage('assets/pmLogo3.png'),
+      leading: Builder(
+        builder: (context) => RawMaterialButton(
+          onPressed: () => Scaffold.of(context).openDrawer(),
+          splashColor: firstLayerColor,
+          highlightColor: firstLayerColor,
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ClipOval(
+              child: Image(
+                image: AssetImage('assets/pmLogo3.png'),
+              ),
+            ),
           ),
         ),
       ),
       title: Text(_pageTitles[currentPageIndex]),
       actions: [
-        PopupMenuButton(
-          color: firstLayerColor,
-          itemBuilder: (BuildContext context) => const <PopupMenuItem<String>>[
-            PopupMenuItem(
-              child: Text('Account settings'),
-              value: 'Account settings',
-            ),
-            PopupMenuItem(
-              child: Text('Help'),
-              value: 'Help',
-            ),
-            PopupMenuItem(
-              child: Text('Report bug'),
-              value: 'Report bug',
-            ),
-            PopupMenuItem(
-              child: Text('Logout'),
-              value: 'Logout',
-            ),
-          ],
-          onSelected: (value) {
-            if (value == 'Account settings') {
-              Navigator.pushNamed(context, AccountSettingsPage.id);
-            }
-            if (value == 'Help') {
-              Navigator.pushNamed(context, HelpPage.id);
-            }
-            if (value == 'Report bug') {
-              Navigator.pushNamed(context, ReportBugPage.id);
-            }
-            if (value == 'Logout') {
-              loggedIn = false;
-              Navigator.pushNamedAndRemoveUntil(
-                  context, InitialPage.id, (route) => false);
-            }
-          },
-        ),
+        currentPageIndex != 3
+            ? const PopupMenu()
+            : IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AccountSettingsPage.id);
+                },
+                icon: const Icon(
+                  Icons.settings,
+                  size: 20,
+                ),
+              ),
       ],
+      pagedrawer: const Drawer(
+        backgroundColor: secondLayerColor,
+        child: PageDrawer(),
+      ),
       body: PageView(
         controller: initialPageController,
         children: _pageOptions,
@@ -213,12 +204,12 @@ class _InitialPageState extends State<InitialPage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.store_sharp),
-            label: 'Shop',
+            icon: Icon(Icons.car_repair),
+            label: 'Maintenance',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.car_repair),
-            label: 'Repair',
+            icon: Icon(Icons.store_sharp),
+            label: 'Shop',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -226,6 +217,53 @@ class _InitialPageState extends State<InitialPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class PopupMenu extends StatelessWidget {
+  const PopupMenu({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      color: firstLayerColor,
+      itemBuilder: (BuildContext context) => const <PopupMenuItem<String>>[
+        PopupMenuItem(
+          child: Text('Account settings'),
+          value: 'Account settings',
+        ),
+        PopupMenuItem(
+          child: Text('Help'),
+          value: 'Help',
+        ),
+        PopupMenuItem(
+          child: Text('Report bug'),
+          value: 'Report bug',
+        ),
+        PopupMenuItem(
+          child: Text('Logout'),
+          value: 'Logout',
+        ),
+      ],
+      onSelected: (value) {
+        if (value == 'Account settings') {
+          Navigator.pushNamed(context, AccountSettingsPage.id);
+        }
+        if (value == 'Help') {
+          Navigator.pushNamed(context, HelpPage.id);
+        }
+        if (value == 'Report bug') {
+          Navigator.pushNamed(context, ReportBugPage.id);
+        }
+        if (value == 'Logout') {
+          loggedIn = false;
+          Navigator.pushNamedAndRemoveUntil(
+              context, InitialPage.id, (route) => false);
+        }
+      },
     );
   }
 }
@@ -244,7 +282,10 @@ class NavigatingPage extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios)),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 25,
+          )),
       title: Text(title),
       body: page,
       floatingButton: floatingButton,

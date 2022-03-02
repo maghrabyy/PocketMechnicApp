@@ -72,7 +72,7 @@ class _SparePartSectionState extends State<SparePartSection> {
                   ? fourthLayerColor
                   : thirdLayerColor,
               boxChild: const ImgContent(
-                  imgSrc: 'assets/brakePads.png', imgText: 'Breke Pads'),
+                  imgSrc: 'assets/brakePads.png', imgText: 'Brake Pads'),
             ),
           ),
         ],
