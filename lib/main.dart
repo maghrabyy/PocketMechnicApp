@@ -10,8 +10,11 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
 import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
+import 'Pages/NearbyMechanic Page/nearbymechanicloading.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
+
+bool loggedIn = false;
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +29,12 @@ class MyApp extends StatelessWidget {
       theme: pmTheme(),
       initialRoute: InitialPage.id,
       routes: {
-        InitialPage.id: (context) => const InitialPage(),
+        InitialPage.id: (context) =>
+            loggedIn ? const InitialPage() : const WelcomePage(),
+        NearbyMechanicLoading.id: (context) => const NavigatingPage(
+              title: 'Nearby Mechanics',
+              page: NearbyMechanicLoading(),
+            ),
         NearbyMechanicPage.id: (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
               page: NearbyMechanicPage(),
@@ -177,6 +185,11 @@ class _InitialPageState extends State<InitialPage> {
             if (value == 'Report bug') {
               Navigator.pushNamed(context, ReportBugPage.id);
             }
+            if (value == 'Logout') {
+              loggedIn = false;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, InitialPage.id, (route) => false);
+            }
           },
         ),
       ],
@@ -218,22 +231,23 @@ class _InitialPageState extends State<InitialPage> {
 }
 
 class NavigatingPage extends StatelessWidget {
-  const NavigatingPage({
-    Key? key,
-    required this.title,
-    required this.page,
-  }) : super(key: key);
+  const NavigatingPage(
+      {Key? key, required this.title, required this.page, this.floatingButton})
+      : super(key: key);
   final String title;
   final Widget page;
+  final FloatingActionButton? floatingButton;
   @override
   Widget build(BuildContext context) {
     return RawPage(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios)),
-        title: Text(title),
-        body: page);
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios)),
+      title: Text(title),
+      body: page,
+      floatingButton: floatingButton,
+    );
   }
 }

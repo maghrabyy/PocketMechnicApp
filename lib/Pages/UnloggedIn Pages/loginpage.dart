@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
+import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 
 class LoginPage extends StatelessWidget {
@@ -51,7 +52,11 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    loggedIn = true;
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, InitialPage.id, (route) => false);
+                  },
                   child: const Text('Login'),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(150, 35),

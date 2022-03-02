@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Services/location.dart';
+import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../main.dart';
 import 'nearbymechanic_page.dart';
 
 class NearbyMechanicLoading extends StatefulWidget {
+  static const String id = 'NearbyMechanicLoading';
   const NearbyMechanicLoading({Key? key}) : super(key: key);
 
   @override
@@ -12,13 +16,29 @@ class NearbyMechanicLoading extends StatefulWidget {
 }
 
 class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
-  void loadingData() {
+  Location myLocation = Location();
+  void loadingData() async {
+    await myLocation.getCurrentLocation();
+    print('my Lat: ${myLocation.latitude}');
+    print('my Long: ${myLocation.longitude}');
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const NavigatingPage(
+          builder: (context) => NavigatingPage(
             title: 'Nearby Mechanics',
-            page: NearbyMechanicPage(),
+            page: NearbyMechanicPage(
+              lat: myLocation.latitude,
+              long: myLocation.longitude,
+            ),
+            floatingButton: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: fifthLayerColor,
+              foregroundColor: Colors.white,
+              child: const Icon(
+                Icons.center_focus_strong,
+                size: 30,
+              ),
+            ),
           ),
         ));
   }
