@@ -40,8 +40,11 @@ class PageDrawer extends StatelessWidget {
         buildListTile(
             context, 'Report bug', Icons.bug_report, ReportBugPage.id),
         Expanded(
-            child: Align(
-                alignment: Alignment.bottomLeft, child: logoutTile(context))),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: logoutTile(context),
+          ),
+        ),
       ],
     );
   }
