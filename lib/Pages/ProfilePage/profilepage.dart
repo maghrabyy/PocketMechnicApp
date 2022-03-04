@@ -13,54 +13,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return const MyProfile();
-  }
-}
-
-class ProfileData extends StatelessWidget {
-  const ProfileData({
-    Key? key,
-    required this.text,
-    required this.icon,
-  }) : super(key: key);
-
-  final String text;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(
-            icon,
-            size: 18,
-            color: Colors.grey,
-          ),
-        ),
-        const SizedBox(
-          width: 25,
-        ),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(fontSize: 25),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class MyProfile extends StatelessWidget {
-  static const String id = 'ProfilePage';
-  const MyProfile({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
         SliverFillRemaining(
@@ -146,8 +98,16 @@ class MyProfile extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: ProfileData(
-                            text: 'Motor Type: ',
-                            icon: FontAwesomeIcons.wrench),
+                          text: 'Motor Type: ',
+                          imageData: 'assets/carEngineGrey.png',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: ProfileData(
+                          text: 'Transmissions: Automatic (DSG)',
+                          imageData: 'assets/gearStickGrey.png',
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {},
@@ -158,6 +118,49 @@ class MyProfile extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ProfileData extends StatelessWidget {
+  const ProfileData({
+    Key? key,
+    required this.text,
+    this.icon,
+    this.imageData,
+  }) : super(key: key);
+
+  final String text;
+  final IconData? icon;
+  final String? imageData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: icon != null
+              ? Icon(
+                  icon,
+                  size: 18,
+                  color: Colors.grey,
+                )
+              : Image(
+                  height: 25,
+                  image: AssetImage(imageData!),
+                ),
+        ),
+        const SizedBox(
+          width: 25,
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 25),
           ),
         )
       ],

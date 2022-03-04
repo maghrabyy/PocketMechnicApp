@@ -36,7 +36,6 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
                 });
               },
               boxColor: thirdLayerColor,
-              onPressedColor: fourthLayerColor,
             ),
           ),
           Expanded(
@@ -50,7 +49,6 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
                 });
               },
               boxColor: thirdLayerColor,
-              onPressedColor: fourthLayerColor,
             ),
           ),
         ],

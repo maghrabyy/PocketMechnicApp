@@ -13,11 +13,15 @@ Color registerButtonColor = Colors.grey.shade600;
 
 ThemeData pmTheme() {
   return ThemeData(
+    splashColor: fourthLayerColor,
+    highlightColor: fourthLayerColor,
     colorScheme: ColorScheme.fromSwatch()
         .copyWith(primary: secondLayerColor, secondary: fourthLayerColor),
     cardTheme: const CardTheme(color: fifthLayerColor),
-    listTileTheme:
-        const ListTileThemeData(textColor: textColor, iconColor: iconColor),
+    listTileTheme: const ListTileThemeData(
+      textColor: textColor,
+      iconColor: iconColor,
+    ),
     scaffoldBackgroundColor: firstLayerColor,
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
@@ -39,20 +43,35 @@ ThemeData pmTheme() {
         color: textColor,
       ),
     ),
+    textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.grey),
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(color: Colors.grey),
+      labelStyle: TextStyle(color: fifthLayerColor),
+      alignLabelWithHint: true,
       filled: true,
       fillColor: firstLayerColor,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: fourthLayerColor),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fifthLayerColor),
+        borderSide: BorderSide(color: fifthLayerColor, width: 2),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
+        elevation: MaterialStateProperty.all(10),
         backgroundColor: MaterialStateProperty.all(fifthLayerColor),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+        ),
       ),
     ),
   );

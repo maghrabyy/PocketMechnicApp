@@ -19,38 +19,33 @@ class _MaintenancePageState extends State<MaintenancePage> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: RoundedButtonContainer(
-            child: const IconContent(
-                iconSize: 130,
-                textSize: 40,
-                iconText: 'Nearby Mechanic',
-                iconC: FontAwesomeIcons.mapMarked),
-            onPressed: () {
-              setState(() {
-                Navigator.pushNamed(context, NearbyMechanicLoading.id);
-              });
-            },
-            boxColor: thirdLayerColor,
-            onPressedColor: fourthLayerColor,
-          ),
+        RoundedButtonContainer(
+          child: const IconContent(
+              iconSize: 100,
+              textSize: 40,
+              iconText: 'Nearby Mechanic',
+              iconC: FontAwesomeIcons.mapMarked),
+          onPressed: () {
+            setState(() {
+              Navigator.pushNamed(context, NearbyMechanicLoading.id);
+            });
+          },
+          boxColor: thirdLayerColor,
         ),
-        Expanded(
-          child: RoundedButtonContainer(
-            child: const IconContent(
-                iconSize: 130,
-                textSize: 40,
-                iconText: 'Tow Truck',
-                iconC: FontAwesomeIcons.truckPickup),
-            onPressed: () {
-              setState(() {
-                Navigator.pushNamed(context, TowTruckPage.id);
-              });
-            },
-            boxColor: thirdLayerColor,
-            onPressedColor: fourthLayerColor,
-          ),
+        RoundedButtonContainer(
+          child: const IconContent(
+              iconSize: 100,
+              textSize: 40,
+              iconText: 'Tow Truck',
+              iconC: FontAwesomeIcons.truckPickup),
+          onPressed: () {
+            setState(() {
+              Navigator.pushNamed(context, TowTruckPage.id);
+            });
+          },
+          boxColor: thirdLayerColor,
         ),
       ],
     );

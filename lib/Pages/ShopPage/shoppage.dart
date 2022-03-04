@@ -18,7 +18,6 @@ class _ShopPageState extends State<ShopPage> {
       crossAxisCount: 2,
       children: [
         RoundedButtonContainer(
-          onPressedColor: fourthLayerColor,
           onPressed: () {
             setState(() {});
           },
@@ -26,7 +25,6 @@ class _ShopPageState extends State<ShopPage> {
           child: shopCategory('assets/carEngine.png', 'Engine and Oil'),
         ),
         RoundedButtonContainer(
-          onPressedColor: fourthLayerColor,
           onPressed: () {
             setState(() {});
           },
@@ -34,7 +32,6 @@ class _ShopPageState extends State<ShopPage> {
           child: shopCategory('assets/airFilter.png', 'Air Filter'),
         ),
         RoundedButtonContainer(
-          onPressedColor: fourthLayerColor,
           onPressed: () {
             setState(() {});
           },
@@ -42,7 +39,6 @@ class _ShopPageState extends State<ShopPage> {
           child: shopCategory('assets/carBattery.png', 'Car Battery'),
         ),
         RoundedButtonContainer(
-          onPressedColor: fourthLayerColor,
           onPressed: () {
             setState(() {});
           },

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "620053855196",
+    "project_id": "pocket-mechanic-342507",
+    "storage_bucket": "pocket-mechanic-342507.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620053855196:android:c7451f6fe4a89de46c6d19",
+        "android_client_info": {
+          "package_name": "com.PocketMechanic.PM"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620053855196-73h6l5bhqef95q36dp8cif2lmgb7ddui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHN04bY9Mu0Ov01SAtA3KVKZkOOoFueyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620053855196-73h6l5bhqef95q36dp8cif2lmgb7ddui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

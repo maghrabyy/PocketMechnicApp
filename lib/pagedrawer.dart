@@ -5,11 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
 import 'Pages/HelpPage/helppage.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PageDrawer extends StatelessWidget {
-  const PageDrawer({
+  PageDrawer({
     Key? key,
   }) : super(key: key);
+
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +63,7 @@ class PageDrawer extends StatelessWidget {
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
       onTap: () {
+        _auth.signOut();
         loggedIn = false;
         Navigator.pushNamedAndRemoveUntil(
             context, InitialPage.id, (route) => false);
@@ -72,7 +76,7 @@ class PageDrawer extends StatelessWidget {
     return ListTile(
       leading: Icon(
         drawerIcon,
-        size: 40,
+        size: 30,
       ),
       title: Text(
         text,

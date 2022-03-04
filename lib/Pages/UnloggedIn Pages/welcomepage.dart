@@ -10,92 +10,85 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/welcomePage.jpg'),
-                  fit: BoxFit.cover)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 8,
-                child: Center(
-                  child: Text(
-                    'Pocket Mechanic',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.grey.shade100,
-                        fontWeight: FontWeight.bold,
-                        shadows: const [
-                          Shadow(
-                              // bottomLeft
-                              offset: Offset(-1.5, -1.5),
-                              color: Colors.black),
-                          Shadow(
-                              // bottomRight
-                              offset: Offset(1.5, -1.5),
-                              color: Colors.black),
-                          Shadow(
-                              // topRight
-                              offset: Offset(1.5, 1.5),
-                              color: Colors.black),
-                          Shadow(
-                              // topLeft
-                              offset: Offset(-1.5, 1.5),
-                              color: Colors.black),
-                        ]),
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/welcomePage.jpg'),
+                fit: BoxFit.cover)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 8,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Pocket Mechanic',
+                  style: TextStyle(
+                      fontSize: 40,
+                      color: Colors.grey.shade100,
+                      fontWeight: FontWeight.bold,
+                      shadows: const [
+                        Shadow(
+                            // bottomLeft
+                            offset: Offset(-1.5, -1.5),
+                            color: Colors.black),
+                        Shadow(
+                            // bottomRight
+                            offset: Offset(1.5, -1.5),
+                            color: Colors.black),
+                        Shadow(
+                            // topRight
+                            offset: Offset(1.5, 1.5),
+                            color: Colors.black),
+                        Shadow(
+                            // topLeft
+                            offset: Offset(-1.5, 1.5),
+                            color: Colors.black),
+                      ]),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, LoginPage.id);
+                  },
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 30, fontFamily: 'Kanit'),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: loginButtonColor,
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, LoginPage.id);
-                    },
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 30, fontFamily: 'Kanit'),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: loginButtonColor,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, RegisterPage.id);
+                  },
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(fontSize: 30, fontFamily: 'Kanit'),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: registerButtonColor,
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, RegisterPage.id);
-                    },
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(fontSize: 30, fontFamily: 'Kanit'),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: registerButtonColor,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              )
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 25,
+            )
+          ],
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
@@ -15,10 +16,13 @@ import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
 import 'Pages/NearbyMechanic Page/nearbymechanicloading.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 bool loggedIn = false;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -169,7 +173,7 @@ class _InitialPageState extends State<InitialPage> {
       title: Text(_pageTitles[currentPageIndex]),
       actions: [
         currentPageIndex != 3
-            ? const PopupMenu()
+            ? PopupMenu()
             : IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AccountSettingsPage.id);
@@ -180,7 +184,7 @@ class _InitialPageState extends State<InitialPage> {
                 ),
               ),
       ],
-      pagedrawer: const Drawer(
+      pagedrawer: Drawer(
         backgroundColor: secondLayerColor,
         child: PageDrawer(),
       ),
@@ -222,10 +226,10 @@ class _InitialPageState extends State<InitialPage> {
 }
 
 class PopupMenu extends StatelessWidget {
-  const PopupMenu({
+  PopupMenu({
     Key? key,
   }) : super(key: key);
-
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -260,6 +264,7 @@ class PopupMenu extends StatelessWidget {
         }
         if (value == 'Logout') {
           loggedIn = false;
+          _auth.signOut();
           Navigator.pushNamedAndRemoveUntil(
               context, InitialPage.id, (route) => false);
         }
