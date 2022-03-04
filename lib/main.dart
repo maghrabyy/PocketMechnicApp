@@ -18,7 +18,7 @@ import 'Pages/ReportBug/reportbugpage.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-bool loggedIn = false;
+import 'Pages/UnloggedIn Pages/resetpassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,8 +35,9 @@ class MyApp extends StatelessWidget {
       theme: pmTheme(),
       initialRoute: InitialPage.id,
       routes: {
-        InitialPage.id: (context) =>
-            loggedIn ? const InitialPage() : const WelcomePage(),
+        InitialPage.id: (context) => FirebaseAuth.instance.currentUser != null
+            ? const InitialPage()
+            : const WelcomePage(),
         NearbyMechanicLoading.id: (context) => const NearbyMechanicLoading(),
         NearbyMechanicPage.id: (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
@@ -70,7 +71,10 @@ class MyApp extends StatelessWidget {
               title: 'Registeration',
               page: RegisterPage(),
             ),
-        WelcomePage.id: (context) => const WelcomePage()
+        ResetPassword.id: (context) => const NavigatingPage(
+              title: 'Reset Password',
+              page: ResetPassword(),
+            ),
       },
     );
   }
@@ -263,7 +267,6 @@ class PopupMenu extends StatelessWidget {
           Navigator.pushNamed(context, ReportBugPage.id);
         }
         if (value == 'Logout') {
-          loggedIn = false;
           _auth.signOut();
           Navigator.pushNamedAndRemoveUntil(
               context, InitialPage.id, (route) => false);

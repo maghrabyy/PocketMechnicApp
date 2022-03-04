@@ -64,7 +64,6 @@ class PageDrawer extends StatelessWidget {
       ),
       onTap: () {
         _auth.signOut();
-        loggedIn = false;
         Navigator.pushNamedAndRemoveUntil(
             context, InitialPage.id, (route) => false);
       },

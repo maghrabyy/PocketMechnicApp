@@ -4,6 +4,7 @@ import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/resetpassword.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,14 +80,14 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
                         if (email.text.isNotEmpty && password.text.isNotEmpty) {
+                          setState(() {
+                            _isLoading = true;
+                          });
                           try {
                             await _auth.signInWithEmailAndPassword(
                                 email: email.text, password: password.text);
-                            loggedIn = true;
+
                             Navigator.pushNamedAndRemoveUntil(
                                 context, InitialPage.id, (route) => false);
                           } catch (e) {
@@ -100,9 +101,6 @@ class _LoginPageState extends State<LoginPage> {
                               context,
                               'Complete the following fields!',
                               fifthLayerColor);
-                          setState(() {
-                            _isLoading = false;
-                          });
                         }
                       },
                       child: const Text('Login'),
@@ -114,7 +112,9 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, ResetPassword.id);
+                      },
                       child: const Text('Forgot password'),
                     ),
                   ),

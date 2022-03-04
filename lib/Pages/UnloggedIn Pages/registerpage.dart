@@ -90,17 +90,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    setState(() {
-                      _isRegLoading = true;
-                    });
                     if (fullName.text.isNotEmpty &&
                         email.text.isNotEmpty &&
                         phoneNumber.text.isNotEmpty &&
                         password.text.isNotEmpty) {
+                      setState(() {
+                        _isRegLoading = true;
+                      });
                       try {
                         await _auth.createUserWithEmailAndPassword(
                             email: email.text, password: password.text);
-                        loggedIn = true;
+
                         Navigator.pushNamedAndRemoveUntil(
                             context, InitialPage.id, (route) => false);
                       } catch (e) {
@@ -112,9 +112,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     } else {
                       displaySnackbar(context, 'Complete the following fields!',
                           fifthLayerColor);
-                      setState(() {
-                        _isRegLoading = false;
-                      });
                     }
                   },
                   child: const Text('Create an account'),
