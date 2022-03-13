@@ -50,6 +50,18 @@ ThemeData pmTheme() {
       alignLabelWithHint: true,
       filled: true,
       fillColor: firstLayerColor,
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: fourthLayerColor),
         borderRadius: BorderRadius.all(

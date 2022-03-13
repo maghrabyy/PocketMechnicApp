@@ -28,6 +28,11 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordConfirmation = TextEditingController();
 
   bool _isRegLoading = false;
+  bool emptyFullName = false;
+  bool emptyEmail = false;
+  bool emptyPhoneNumber = false;
+  bool emptyPassword = false;
+  bool emptyConfirmationPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,115 +43,196 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading: _isRegLoading,
       color: fourthLayerColor,
       opacity: 0.2,
-      child: RoundedContainer(
-        boxColor: thirdLayerColor,
-        cHeight: 500,
-        boxChild: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                  style: const TextStyle(fontFamily: 'Kanit'),
-                  text:
-                      'Create an account here, if you\'re already registered ',
-                  children: [
-                    TextSpan(
-                        text: 'click here ',
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushReplacementNamed(
-                                context, LoginPage.id);
-                          },
-                        style: const TextStyle(color: fourthLayerColor)),
-                    const TextSpan(text: 'to login.')
-                  ]),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RegularInput(
-                  label: 'Full name',
-                  hint: 'Enter your full name',
-                  inputController: fullName,
-                  goNext: true,
-                )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: EmailInput(
-                inputController: email,
-                goNext: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PhoneInput(
-                inputController: phoneNumber,
-                goNext: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PasswordInput(
-                inputController: password,
-                goNext: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PasswordInput(
-                inputController: passwordConfirmation,
-                confirmationPass: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (fullName.text.isNotEmpty &&
-                      email.text.isNotEmpty &&
-                      phoneNumber.text.isNotEmpty &&
-                      password.text.isNotEmpty &&
-                      passwordConfirmation.text.isNotEmpty) {
-                    if (password.text == passwordConfirmation.text) {
-                      setState(() {
-                        _isRegLoading = true;
-                      });
-                      try {
-                        //Registered
-                        await _auth.createUserWithEmailAndPassword(
-                            email: email.text, password: password.text);
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, InputVehicleData.id, (route) => false);
-                        DatabaseService newUser =
-                            DatabaseService(uId: _auth.currentUser!.uid);
-                        newUser.registerationData(
-                            fullName.text, email.text, phoneNumber.text);
-                      } catch (e) {
-                        displaySnackbar(context, '$e', fifthLayerColor);
-                        setState(() {
-                          _isRegLoading = false;
-                        });
-                      }
-                    } else {
-                      displaySnackbar(
-                          context,
-                          'The password your entered doesn\'s match',
-                          fifthLayerColor);
-                    }
-                  } else {
-                    displaySnackbar(context, 'Complete the following fields!',
-                        fifthLayerColor);
-                  }
-                },
-                child: const Text('Create an account'),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(150, 35),
+      child: Wrap(children: [
+        RoundedContainer(
+          boxColor: thirdLayerColor,
+          boxChild: Column(
+            //  mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: const TextStyle(fontFamily: 'Kanit'),
+                      text:
+                          'Create an account here, if you\'re already registered ',
+                      children: [
+                        TextSpan(
+                            text: 'click here ',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushReplacementNamed(
+                                    context, LoginPage.id);
+                              },
+                            style: const TextStyle(color: fourthLayerColor)),
+                        const TextSpan(text: 'to login.')
+                      ]),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RegularInput(
+                    label: 'Full name',
+                    hint: 'Enter your full name',
+                    inputController: fullName,
+                    goNext: true,
+                    emptyErrorText: 'This field cannot be empty.',
+                    emptyFieldError: emptyFullName,
+                    onChanged: (value) {
+                      setState(() {
+                        emptyFullName = false;
+                      });
+                    },
+                  )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: EmailInput(
+                  inputController: email,
+                  goNext: true,
+                  emptyFieldError: emptyEmail,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyEmail = false;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PhoneInput(
+                  inputController: phoneNumber,
+                  goNext: true,
+                  emptyFieldError: emptyPhoneNumber,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyPhoneNumber = false;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PasswordInput(
+                  inputController: password,
+                  goNext: true,
+                  emptyFieldError: emptyPassword,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyPassword = false;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PasswordInput(
+                  inputController: passwordConfirmation,
+                  confirmationPass: true,
+                  emptyFieldError: emptyConfirmationPassword,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyConfirmationPassword = false;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    if (fullName.text.isNotEmpty &&
+                        email.text.isNotEmpty &&
+                        phoneNumber.text.isNotEmpty &&
+                        password.text.isNotEmpty &&
+                        passwordConfirmation.text.isNotEmpty) {
+                      if (password.text == passwordConfirmation.text) {
+                        setState(() {
+                          _isRegLoading = true;
+                        });
+                        try {
+                          //Registered
+                          await _auth.createUserWithEmailAndPassword(
+                              email: email.text, password: password.text);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, InputVehicleData.id, (route) => false);
+                          DatabaseService newUser =
+                              DatabaseService(uId: _auth.currentUser!.uid);
+                          newUser.registerationData(
+                              fullName.text, email.text, phoneNumber.text);
+                        } on FirebaseAuthException catch (e) {
+                          String errorFromCode() {
+                            switch (e.code) {
+                              case "ERROR_EMAIL_ALREADY_IN_USE":
+                              case "account-exists-with-different-credential":
+                              case "email-already-in-use":
+                                return "Email already used. Go to login page.";
+
+                              case "ERROR_TOO_MANY_REQUESTS":
+                              case "operation-not-allowed":
+                                return "Too many requests to log into this account.";
+
+                              case "ERROR_OPERATION_NOT_ALLOWED":
+                                return "Server error, please try again later.";
+
+                              case "ERROR_INVALID_EMAIL":
+                              case "invalid-email":
+                                return "Email address is invalid.";
+
+                              case "ERROR_WEAK_PASSWORD":
+                              case "weak-password":
+                                return "Password must be equal or more than 6 characters.";
+
+                              default:
+                                return e.code;
+                            }
+                          }
+
+                          displaySnackbar(
+                              context, errorFromCode(), fifthLayerColor);
+                          setState(() {
+                            _isRegLoading = false;
+                          });
+                        }
+                      } else {
+                        displaySnackbar(
+                            context,
+                            'The password your entered doesn\'s match',
+                            fifthLayerColor);
+                      }
+                    } else {
+                      displaySnackbar(context,
+                          'Fill all the required data first.', fifthLayerColor);
+                      setState(() {
+                        if (fullName.text.isEmpty) {
+                          emptyFullName = true;
+                        }
+                        if (email.text.isEmpty) {
+                          emptyEmail = true;
+                        }
+                        if (phoneNumber.text.isEmpty) {
+                          emptyPhoneNumber = true;
+                        }
+                        if (password.text.isEmpty) {
+                          emptyPassword = true;
+                        }
+                        if (passwordConfirmation.text.isEmpty) {
+                          emptyConfirmationPassword = true;
+                        }
+                      });
+                    }
+                  },
+                  child: const Text('Create an account'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(150, 35),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }

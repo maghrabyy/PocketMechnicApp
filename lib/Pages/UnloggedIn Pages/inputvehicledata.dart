@@ -6,6 +6,7 @@ import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Components/customdropdownmenu.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/lists.dart';
+import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -15,30 +16,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
 final _auth = FirebaseAuth.instance;
-
-Future<String> getUserID(String userID) async {
-  String userID = '';
-  await _firestore
-      .collection('Users')
-      .doc(_auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    userID = value.data()!['UserID'].toString();
-  });
-  return userID;
-}
-
-Future<int> getVehicleNo(String userID) async {
-  int vehicleNo = 0;
-  await _firestore
-      .collection('Users')
-      .doc(_auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    vehicleNo = value.data()!['Cars'];
-  });
-  return vehicleNo;
-}
 
 class InputVehicleData extends StatefulWidget {
   static const String id = 'InputVehicleData';
@@ -195,6 +172,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
               ),
               ElevatedButton(
                 onPressed: () async {
+                  FocusScope.of(context).unfocus();
                   if (selectedBrand != null &&
                       selectedBodyType != null &&
                       inputtedModel.text.isNotEmpty &&

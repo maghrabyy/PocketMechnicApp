@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
-import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
+import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../Components/rounded_container.dart';
@@ -22,66 +22,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int vehicleIndex = 0;
-  Future<String> getVehicleID(String userID) async {
-    String vehicleID = '';
-    int vNum = await getVehicleNo(_auth.currentUser!.uid);
-    vehicleIndex = vNum - 1;
-    try {
-      await _fireStore
-          .collection('Users')
-          .doc(_auth.currentUser!.uid)
-          .get()
-          .then((value) {
-        vehicleID = value['UserVehicles'][vehicleIndex]['VehicleID'].toString();
-      });
-      return vehicleID;
-    } catch (e) {
-      return 'Dummy';
-    }
-  }
-
-  Future<List<dynamic>> getVehiclesList(String userID) async {
-    List vehiclesList = [];
-    int vNum = await getVehicleNo(_auth.currentUser!.uid);
-    vehicleIndex = vNum - 1;
-    try {
-      await _fireStore
-          .collection('Users')
-          .doc(_auth.currentUser!.uid)
-          .get()
-          .then((value) {
-        vehiclesList = value['UserVehicles'].toList();
-      });
-      return vehiclesList;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  changeVehicleIndex(String changeType) async {
-    List vehiclesList = await getVehiclesList(_auth.currentUser!.uid);
-    if (changeType == 'Inc') {
-      if (vehicleIndex == vehiclesList.length - 1) {
-        displaySnackbar(
-            context, 'There\'s no more vehicles in this list', fifthLayerColor);
-      } else {
-        setState(() {
-          vehicleIndex++;
-        });
-      }
-    } else if (changeType == 'Dec') {
-      if (vehicleIndex == 0) {
-        displaySnackbar(
-            context, 'That\'s the first vehicle in the list', fifthLayerColor);
-      } else {
-        setState(() {
-          vehicleIndex--;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -147,13 +87,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   cWidth: 370,
                   boxColor: thirdLayerColor,
                   boxChild: FutureBuilder(
-                      future: Future.wait([
-                        getVehiclesList(_auth.currentUser!.uid),
-                        getVehicleID(_auth.currentUser!.uid),
-                        getVehicleNo(_auth.currentUser!.uid)
-                      ]),
-                      builder:
-                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                      future: getUserData(_auth.currentUser!.uid),
+                      builder: (context, AsyncSnapshot snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                             return const Center(
@@ -162,7 +97,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             );
                           case ConnectionState.done:
-                            if (snapshot.data![1].toString() == 'Dummy') {
+                            if (snapshot.data!['UserVehicles'][vehicleIndex]
+                                        ['VehicleID']
+                                    .toString() ==
+                                'Dummy') {
                               return RoundedButtonContainer(
                                   width: double.infinity,
                                   child: const IconContent(
@@ -173,7 +111,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         context, InputVehicleData.idCanPop);
                                   });
                             } else {
-                              List vList = snapshot.data![0] as List<dynamic>;
+                              List vList = snapshot.data!['UserVehicles']
+                                  as List<dynamic>;
                               return Slidable(
                                   endActionPane: ActionPane(
                                       motion: const ScrollMotion(),
@@ -194,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: fourthLayerColor,
                                         child: ExpansionTile(
                                           initiallyExpanded:
-                                              snapshot.data![2] == 1
+                                              snapshot.data!['Cars'] == 1
                                                   ? true
                                                   : false,
                                           iconColor: iconColor,
@@ -380,7 +319,7 @@ class ProfileData extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Text(
-                        '....',
+                        'Loading...',
                         style: TextStyle(fontSize: textSize ?? 25),
                       );
                     }

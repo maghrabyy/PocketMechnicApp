@@ -7,10 +7,7 @@ class NearbyMechanicPage extends StatefulWidget {
   static const String id = 'NearbyMechanicPage';
   final double? lat;
   final double? long;
-  final dynamic decodedJsonData;
-  const NearbyMechanicPage(
-      {Key? key, this.decodedJsonData, this.lat, this.long})
-      : super(key: key);
+  const NearbyMechanicPage({Key? key, this.lat, this.long}) : super(key: key);
   @override
   _NearbyMechanicPageState createState() => _NearbyMechanicPageState();
 }

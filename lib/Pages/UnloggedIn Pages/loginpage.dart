@@ -25,7 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   final _auth = FirebaseAuth.instance;
 
   bool _isLoading = false;
-
+  bool emptyEmail = false;
+  bool emptyPassword = false;
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
@@ -65,12 +66,24 @@ class _LoginPageState extends State<LoginPage> {
                 child: EmailInput(
                   inputController: email,
                   goNext: true,
+                  emptyFieldError: emptyEmail,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyEmail = false;
+                    });
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: PasswordInput(
                   inputController: password,
+                  emptyFieldError: emptyPassword,
+                  onChanged: (value) {
+                    setState(() {
+                      emptyPassword = false;
+                    });
+                  },
                 ),
               ),
               Row(
@@ -80,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        FocusScope.of(context).unfocus();
                         if (email.text.isNotEmpty && password.text.isNotEmpty) {
                           setState(() {
                             _isLoading = true;
@@ -90,8 +104,39 @@ class _LoginPageState extends State<LoginPage> {
 
                             Navigator.pushNamedAndRemoveUntil(
                                 context, InitialPage.id, (route) => false);
-                          } catch (e) {
-                            displaySnackbar(context, '$e', fifthLayerColor);
+                          } on FirebaseAuthException catch (e) {
+                            String errorFromCode() {
+                              switch (e.code) {
+                                case "ERROR_WRONG_PASSWORD":
+                                case "wrong-password":
+                                  return "Wrong email/password combination.";
+
+                                case "ERROR_USER_NOT_FOUND":
+                                case "user-not-found":
+                                  return "No user found with this email.";
+
+                                case "ERROR_USER_DISABLED":
+                                case "user-disabled":
+                                  return "User disabled.";
+
+                                case "ERROR_TOO_MANY_REQUESTS":
+                                case "operation-not-allowed":
+                                  return "Too many requests to log into this account.";
+
+                                case "ERROR_OPERATION_NOT_ALLOWED":
+                                  return "Server error, please try again later.";
+
+                                case "ERROR_INVALID_EMAIL":
+                                case "invalid-email":
+                                  return "Email address is invalid.";
+
+                                default:
+                                  return "Login failed. Please try again.";
+                              }
+                            }
+
+                            displaySnackbar(
+                                context, errorFromCode(), fifthLayerColor);
                             setState(() {
                               _isLoading = false;
                             });
@@ -99,8 +144,16 @@ class _LoginPageState extends State<LoginPage> {
                         } else {
                           displaySnackbar(
                               context,
-                              'Complete the following fields!',
+                              'Fill all the required data first.',
                               fifthLayerColor);
+                          setState(() {
+                            if (email.text.isEmpty) {
+                              emptyEmail = true;
+                            }
+                            if (password.text.isEmpty) {
+                              emptyPassword = true;
+                            }
+                          });
                         }
                       },
                       child: const Text('Login'),

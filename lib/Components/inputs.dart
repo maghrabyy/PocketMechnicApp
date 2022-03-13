@@ -11,6 +11,9 @@ class RegularInput extends StatelessWidget {
     this.labelStyle,
     this.hintstyle,
     this.keyboardType,
+    this.emptyErrorText,
+    this.emptyFieldError,
+    this.onChanged,
   }) : super(key: key);
   final String label;
   final String? hint;
@@ -20,6 +23,9 @@ class RegularInput extends StatelessWidget {
   final TextStyle? labelStyle;
   final TextStyle? hintstyle;
   final TextInputType? keyboardType;
+  final String? emptyErrorText;
+  final bool? emptyFieldError;
+  final Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -29,7 +35,9 @@ class RegularInput extends StatelessWidget {
       textAlign: TextAlign.center,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
+      onChanged: onChanged,
       decoration: InputDecoration(
+        errorText: emptyFieldError == true ? emptyErrorText : null,
         labelText: label,
         hintStyle: hintstyle,
         labelStyle: labelStyle,
@@ -44,10 +52,14 @@ class EmailInput extends StatelessWidget {
     Key? key,
     this.goNext,
     required this.inputController,
+    this.emptyFieldError,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
+  final bool? emptyFieldError;
+  final Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -56,7 +68,9 @@ class EmailInput extends StatelessWidget {
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
       textAlign: TextAlign.center,
-      decoration: const InputDecoration(
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        errorText: emptyFieldError == true ? 'Email cannot be blank' : null,
         labelText: 'Email',
         hintText: 'Enter your email address',
       ),
@@ -95,10 +109,14 @@ class PhoneInput extends StatelessWidget {
     Key? key,
     this.goNext,
     required this.inputController,
+    this.emptyFieldError,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
+  final bool? emptyFieldError;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +126,9 @@ class PhoneInput extends StatelessWidget {
       textAlign: TextAlign.center,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
-      decoration: const InputDecoration(
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        errorText: emptyFieldError == true ? 'Password cannot be blank' : null,
         labelText: 'Phone number',
         hintText: 'Enter your phone number',
       ),
@@ -122,11 +142,15 @@ class PasswordInput extends StatelessWidget {
     this.goNext,
     required this.inputController,
     this.confirmationPass,
+    this.emptyFieldError,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
   final bool? confirmationPass;
+  final bool? emptyFieldError;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +160,9 @@ class PasswordInput extends StatelessWidget {
       textAlign: TextAlign.center,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
+      onChanged: onChanged,
       decoration: InputDecoration(
+        errorText: emptyFieldError == true ? 'Password cannot be blank' : null,
         labelText: confirmationPass == true ? 'Confirm Password' : 'Password',
         hintText: confirmationPass == true
             ? 'Confirm your password'
