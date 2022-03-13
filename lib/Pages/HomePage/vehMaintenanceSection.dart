@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/NearbyMechanic%20Page/nearbymechanicloading.dart';
+import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/TowTruckPage/towtruck_page.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_course/components/rounded_buttoncontainer.dart';
 
-enum vMaintanceSubServices { nearbyMechanic, towTruck }
+enum vMaintanceSubServices { nearbyMechanic, requestMechanic, towTruck }
 vMaintanceSubServices? selectedSubService;
 
 class VehMaintenanceSection extends StatefulWidget {
@@ -33,6 +34,19 @@ class _VehMaintenanceSectionState extends State<VehMaintenanceSection> {
                 setState(() {
                   selectedSubService = vMaintanceSubServices.nearbyMechanic;
                   Navigator.pushNamed(context, NearbyMechanicLoading.id);
+                });
+              },
+              boxColor: thirdLayerColor,
+            ),
+          ),
+          Expanded(
+            child: RoundedButtonContainer(
+              child: const IconContent(
+                  iconText: 'Request Mechanic', iconC: Icons.car_repair),
+              onPressed: () {
+                setState(() {
+                  selectedSubService = vMaintanceSubServices.requestMechanic;
+                  Navigator.pushNamed(context, RequestMechanicPage.id);
                 });
               },
               boxColor: thirdLayerColor,

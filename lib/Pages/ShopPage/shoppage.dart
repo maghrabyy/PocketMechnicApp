@@ -45,6 +45,34 @@ class _ShopPageState extends State<ShopPage> {
           boxColor: thirdLayerColor,
           child: shopCategory('assets/brakePads.png', 'Brake Pads'),
         ),
+        RoundedButtonContainer(
+          onPressed: () {
+            setState(() {});
+          },
+          boxColor: thirdLayerColor,
+          child: shopCategory('assets/carTire.png', 'Tires'),
+        ),
+        RoundedButtonContainer(
+          onPressed: () {
+            setState(() {});
+          },
+          boxColor: thirdLayerColor,
+          child: shopCategory('assets/carAlternator.png', 'Alternator'),
+        ),
+        RoundedButtonContainer(
+          onPressed: () {
+            setState(() {});
+          },
+          boxColor: thirdLayerColor,
+          child: shopCategory('assets/carRadiator.png', 'Radiator'),
+        ),
+        RoundedButtonContainer(
+          onPressed: () {
+            setState(() {});
+          },
+          boxColor: thirdLayerColor,
+          child: shopCategory('assets/carFrontSeats.png', 'Accessories'),
+        ),
       ],
     );
   }

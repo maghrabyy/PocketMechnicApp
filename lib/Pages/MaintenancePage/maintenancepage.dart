@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/NearbyMechanic%20Page/nearbymechanicloading.dart';
+import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/TowTruckPage/towtruck_page.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/icon_content.dart';
@@ -28,9 +29,18 @@ class _MaintenancePageState extends State<MaintenancePage> {
               iconText: 'Nearby Mechanic',
               iconC: FontAwesomeIcons.mapMarked),
           onPressed: () {
-            setState(() {
-              Navigator.pushNamed(context, NearbyMechanicLoading.id);
-            });
+            Navigator.pushNamed(context, NearbyMechanicLoading.id);
+          },
+          boxColor: thirdLayerColor,
+        ),
+        RoundedButtonContainer(
+          child: const IconContent(
+              iconSize: 100,
+              textSize: 40,
+              iconText: 'Request Mechanic',
+              iconC: Icons.car_repair),
+          onPressed: () {
+            Navigator.pushNamed(context, RequestMechanicPage.id);
           },
           boxColor: thirdLayerColor,
         ),
@@ -41,9 +51,7 @@ class _MaintenancePageState extends State<MaintenancePage> {
               iconText: 'Tow Truck',
               iconC: FontAwesomeIcons.truckPickup),
           onPressed: () {
-            setState(() {
-              Navigator.pushNamed(context, TowTruckPage.id);
-            });
+            Navigator.pushNamed(context, TowTruckPage.id);
           },
           boxColor: thirdLayerColor,
         ),

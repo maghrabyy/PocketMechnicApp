@@ -3,7 +3,16 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/img_content.dart';
 
-enum sparePartCategories { engineOil, airFilter, carBattery, brakePads }
+enum sparePartCategories {
+  engineOil,
+  airFilter,
+  carBattery,
+  brakePads,
+  tires,
+  alternator,
+  radiator,
+  accessories
+}
 
 class SparePartSection extends StatefulWidget {
   const SparePartSection({Key? key}) : super(key: key);
@@ -17,10 +26,11 @@ class _SparePartSectionState extends State<SparePartSection> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: RoundedContainer(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            RoundedContainer(
               onPressed: () {
                 setState(() {
                   selectedSPCategory = sparePartCategories.engineOil;
@@ -30,11 +40,11 @@ class _SparePartSectionState extends State<SparePartSection> {
                   ? fourthLayerColor
                   : thirdLayerColor,
               boxChild: const ImgContent(
-                  imgSrc: 'assets/carEngine.png', imgText: 'Engine and Oil'),
+                  imgHeight: 50,
+                  imgSrc: 'assets/carEngine.png',
+                  imgText: 'Engine and Oil'),
             ),
-          ),
-          Expanded(
-            child: RoundedContainer(
+            RoundedContainer(
               onPressed: () {
                 setState(() {
                   selectedSPCategory = sparePartCategories.airFilter;
@@ -44,11 +54,11 @@ class _SparePartSectionState extends State<SparePartSection> {
                   ? fourthLayerColor
                   : thirdLayerColor,
               boxChild: const ImgContent(
-                  imgSrc: 'assets/airFilter.png', imgText: 'Air Filter'),
+                  imgHeight: 50,
+                  imgSrc: 'assets/airFilter.png',
+                  imgText: 'Air Filter'),
             ),
-          ),
-          Expanded(
-            child: RoundedContainer(
+            RoundedContainer(
               onPressed: () {
                 setState(() {
                   selectedSPCategory = sparePartCategories.carBattery;
@@ -58,11 +68,11 @@ class _SparePartSectionState extends State<SparePartSection> {
                   ? fourthLayerColor
                   : thirdLayerColor,
               boxChild: const ImgContent(
-                  imgSrc: 'assets/carBattery.png', imgText: 'Car Battery'),
+                  imgHeight: 50,
+                  imgSrc: 'assets/carBattery.png',
+                  imgText: 'Car Battery'),
             ),
-          ),
-          Expanded(
-            child: RoundedContainer(
+            RoundedContainer(
               onPressed: () {
                 setState(() {
                   selectedSPCategory = sparePartCategories.brakePads;
@@ -72,10 +82,68 @@ class _SparePartSectionState extends State<SparePartSection> {
                   ? fourthLayerColor
                   : thirdLayerColor,
               boxChild: const ImgContent(
-                  imgSrc: 'assets/brakePads.png', imgText: 'Brake Pads'),
+                  imgHeight: 50,
+                  imgSrc: 'assets/brakePads.png',
+                  imgText: 'Brake Pads'),
             ),
-          ),
-        ],
+            RoundedContainer(
+              onPressed: () {
+                setState(() {
+                  selectedSPCategory = sparePartCategories.tires;
+                });
+              },
+              boxColor: selectedSPCategory == sparePartCategories.tires
+                  ? fourthLayerColor
+                  : thirdLayerColor,
+              boxChild: const ImgContent(
+                  imgHeight: 50,
+                  imgSrc: 'assets/carTire.png',
+                  imgText: 'Tires'),
+            ),
+            RoundedContainer(
+              onPressed: () {
+                setState(() {
+                  selectedSPCategory = sparePartCategories.alternator;
+                });
+              },
+              boxColor: selectedSPCategory == sparePartCategories.alternator
+                  ? fourthLayerColor
+                  : thirdLayerColor,
+              boxChild: const ImgContent(
+                  imgHeight: 50,
+                  imgSrc: 'assets/carAlternator.png',
+                  imgText: 'Alternator'),
+            ),
+            RoundedContainer(
+              onPressed: () {
+                setState(() {
+                  selectedSPCategory = sparePartCategories.radiator;
+                });
+              },
+              boxColor: selectedSPCategory == sparePartCategories.radiator
+                  ? fourthLayerColor
+                  : thirdLayerColor,
+              boxChild: const ImgContent(
+                  imgHeight: 50,
+                  imgSrc: 'assets/carRadiator.png',
+                  imgText: 'Radiator'),
+            ),
+            RoundedContainer(
+              onPressed: () {
+                setState(() {
+                  selectedSPCategory = sparePartCategories.accessories;
+                });
+              },
+              boxColor: selectedSPCategory == sparePartCategories.accessories
+                  ? fourthLayerColor
+                  : thirdLayerColor,
+              boxChild: const ImgContent(
+                  imgHeight: 50,
+                  imgSrc: 'assets/carFrontSeats.png',
+                  imgText: 'Accessories'),
+            ),
+          ],
+        ),
       ),
     );
   }

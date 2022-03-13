@@ -24,6 +24,8 @@ dependencies:
   firebase_auth: ^3.3.9
   cloud_firestore: ^3.1.10
   loading_overlay: ^0.3.0
+  flutter_slidable: ^1.2.0
+  marquee: ^2.2.1
 
 dev_dependencies:
   flutter_test:

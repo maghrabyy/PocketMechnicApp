@@ -62,6 +62,12 @@ ThemeData pmTheme() {
           Radius.circular(30),
         ),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: fifthLayerColor),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(

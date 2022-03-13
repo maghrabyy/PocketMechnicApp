@@ -7,20 +7,32 @@ class RegularInput extends StatelessWidget {
     required this.inputController,
     this.hint,
     this.goNext,
+    this.enabled,
+    this.labelStyle,
+    this.hintstyle,
+    this.keyboardType,
   }) : super(key: key);
   final String label;
   final String? hint;
   final TextEditingController inputController;
   final bool? goNext;
+  final bool? enabled;
+  final TextStyle? labelStyle;
+  final TextStyle? hintstyle;
+  final TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: keyboardType,
+      enabled: enabled,
       controller: inputController,
       textAlign: TextAlign.center,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
       decoration: InputDecoration(
         labelText: label,
+        hintStyle: hintstyle,
+        labelStyle: labelStyle,
         hintText: hint,
       ),
     );
@@ -109,10 +121,12 @@ class PasswordInput extends StatelessWidget {
     Key? key,
     this.goNext,
     required this.inputController,
+    this.confirmationPass,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
+  final bool? confirmationPass;
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +136,11 @@ class PasswordInput extends StatelessWidget {
       textAlign: TextAlign.center,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
-      decoration: const InputDecoration(
-        labelText: 'Password',
-        hintText: 'Enter your password',
+      decoration: InputDecoration(
+        labelText: confirmationPass == true ? 'Confirm Password' : 'Password',
+        hintText: confirmationPass == true
+            ? 'Confirm your password'
+            : 'Enter your password',
       ),
     );
   }

@@ -62,8 +62,8 @@ class PageDrawer extends StatelessWidget {
         'Logout',
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
-      onTap: () {
-        _auth.signOut();
+      onTap: () async {
+        await _auth.signOut();
         Navigator.pushNamedAndRemoveUntil(
             context, InitialPage.id, (route) => false);
       },
