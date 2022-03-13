@@ -5,6 +5,7 @@ import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../Components/rounded_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,15 +93,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                             return const Center(
-                              child: CircularProgressIndicator(
+                              child: SpinKitFadingFour(
                                 color: fifthLayerColor,
                               ),
                             );
                           case ConnectionState.done:
-                            if (snapshot.data!['UserVehicles'][vehicleIndex]
-                                        ['VehicleID']
-                                    .toString() ==
-                                'Dummy') {
+                            List vList =
+                                snapshot.data!['UserVehicles'] as List<dynamic>;
+                            if (vList.isEmpty) {
+                              _fireStore
+                                  .collection('Users')
+                                  .doc(_auth.currentUser!.uid)
+                                  .update({'Cars': 0});
                               return RoundedButtonContainer(
                                   width: double.infinity,
                                   child: const IconContent(
@@ -108,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       iconC: Icons.add),
                                   onPressed: () {
                                     Navigator.pushNamed(
-                                        context, InputVehicleData.idCanPop);
+                                        context, InputVehicleData.id);
                                   });
                             } else {
                               List vList = snapshot.data!['UserVehicles']
@@ -123,8 +127,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                             backgroundColor: fifthLayerColor,
                                             foregroundColor: Colors.white,
                                             onPressed: (context) {
-                                              Navigator.pushNamed(context,
-                                                  InputVehicleData.idCanPop);
+                                              Navigator.pushNamed(
+                                                  context, InputVehicleData.id);
                                             })
                                       ]),
                                   child: Column(

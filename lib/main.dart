@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
+import 'package:flutter_course/Pages/JoinAsPartner/joinaspartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
-import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/pagedrawer.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
@@ -26,7 +26,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
 final _auth = FirebaseAuth.instance;
-final authUserID = _auth.currentUser!.uid;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,120 +35,56 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  Future<int> getUserCars(String userID) async {
-    int userID = 0;
-    await _firestore
-        .collection('Users')
-        .doc(_auth.currentUser!.uid)
-        .get()
-        .then((value) {
-      userID = value.data()!['Cars'];
-    });
-    return userID;
-  }
-
   @override
   Widget build(BuildContext context) {
     return FirebaseAuth.instance.currentUser != null
-        ? FutureBuilder(
-            future: getVehicleNo(_auth.currentUser!.uid),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: fifthLayerColor,
+        ? StreamBuilder(
+            stream: _firestore
+                .collection('Users')
+                .doc(_auth.currentUser?.uid)
+                .snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: fourthLayerColor,
+                  child: const Center(
+                    child: Text(
+                      'Pocket Mechanic',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Lobster'),
                     ),
-                  );
-                case ConnectionState.done:
-                  if (!snapshot.hasData) {
-                    return Center(child: Text(snapshot.error.toString()));
-                  } else {
-                    return MaterialApp(
-                      theme: pmTheme(),
-                      initialRoute: InitialPage.id,
-                      routes: {
-                        InitialPage.id: (context) =>
-                            FirebaseAuth.instance.currentUser != null
-                                ? int.parse(snapshot.data.toString()) > 0
-                                    ? const InitialPage()
-                                    : const NavigatingPage(
-                                        title: 'My vehicle',
-                                        page: InputVehicleData(),
-                                        canPop: false,
-                                      )
-                                : const WelcomePage(),
-                        NearbyMechanicLoading.id: (context) =>
-                            const NearbyMechanicLoading(),
-                        NearbyMechanicPage.id: (context) =>
-                            const NavigatingPage(
-                              title: 'Nearby Mechanics',
-                              page: NearbyMechanicPage(),
-                            ),
-                        RequestMechanicPage.id: (context) =>
-                            const NavigatingPage(
-                              title: 'Request Mechanic',
-                              page: RequestMechanicPage(),
-                            ),
-                        TowTruckPage.id: (context) => const NavigatingPage(
-                              title: 'Tow Truck',
-                              page: TowTruckPage(),
-                            ),
-                        AboutUsPage.id: (context) => const NavigatingPage(
-                              title: 'About us',
-                              page: AboutUsPage(),
-                            ),
-                        AccountSettingsPage.id: (context) =>
-                            const NavigatingPage(
-                              title: 'Account Settings',
-                              page: AccountSettingsPage(),
-                            ),
-                        HelpPage.id: (context) => const NavigatingPage(
-                              title: 'Help',
-                              page: HelpPage(),
-                            ),
-                        ReportBugPage.id: (context) => const NavigatingPage(
-                              title: 'Report bug',
-                              page: ReportBugPage(),
-                            ),
-                        LoginPage.id: (context) => const NavigatingPage(
-                              title: 'Login',
-                              page: LoginPage(),
-                            ),
-                        RegisterPage.id: (context) => const NavigatingPage(
-                              title: 'Registeration',
-                              page: RegisterPage(),
-                            ),
-                        ResetPassword.id: (context) => const NavigatingPage(
-                              title: 'Reset Password',
-                              page: ResetPassword(),
-                            ),
-                        InputVehicleData.id: (context) => const NavigatingPage(
+                  ),
+                );
+              } else {
+                return AppRoutes(
+                  theInitialPage: (context) => _auth.currentUser != null
+                      ? snapshot.data['Cars'] > 0
+                          ? const InitialPage()
+                          : const NavigatingPage(
                               title: 'My vehicle',
                               page: InputVehicleData(),
                               canPop: false,
-                            ),
-                        InputVehicleData.idCanPop: (context) =>
-                            const NavigatingPage(
-                              title: 'My vehicle',
-                              page: InputVehicleData(),
-                            ),
-                      },
-                    );
-                  }
-
-                default:
-                  return const Text('Unhandle State');
+                            )
+                      : const WelcomePage(),
+                );
               }
             })
-        : const AppRoutes();
+        : AppRoutes(
+            theInitialPage: (context) => _auth.currentUser != null
+                ? const InitialPage()
+                : const WelcomePage(),
+          );
   }
 }
 
 class AppRoutes extends StatelessWidget {
-  const AppRoutes({
-    Key? key,
-  }) : super(key: key);
+  const AppRoutes({Key? key, required this.theInitialPage}) : super(key: key);
+  final Widget Function(BuildContext) theInitialPage;
 
   @override
   Widget build(BuildContext context) {
@@ -157,9 +92,7 @@ class AppRoutes extends StatelessWidget {
       theme: pmTheme(),
       initialRoute: InitialPage.id,
       routes: {
-        InitialPage.id: (context) => FirebaseAuth.instance.currentUser != null
-            ? const InitialPage()
-            : const WelcomePage(),
+        InitialPage.id: theInitialPage,
         NearbyMechanicLoading.id: (context) => const NearbyMechanicLoading(),
         NearbyMechanicPage.id: (context) => const NavigatingPage(
               title: 'Nearby Mechanics',
@@ -209,6 +142,10 @@ class AppRoutes extends StatelessWidget {
         InputVehicleData.idCanPop: (context) => const NavigatingPage(
               title: 'My vehicle',
               page: InputVehicleData(),
+            ),
+        JoinAsPartner.id: (context) => const NavigatingPage(
+              title: 'Join as Partner',
+              page: JoinAsPartner(),
             ),
       },
     );
@@ -312,7 +249,7 @@ class _InitialPageState extends State<InitialPage> {
       title: Text(_pageTitles[currentPageIndex]),
       actions: [
         currentPageIndex != 3
-            ? PopupMenu()
+            ? const PopupMenu()
             : IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AccountSettingsPage.id);
@@ -365,10 +302,9 @@ class _InitialPageState extends State<InitialPage> {
 }
 
 class PopupMenu extends StatelessWidget {
-  PopupMenu({
+  const PopupMenu({
     Key? key,
   }) : super(key: key);
-  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(

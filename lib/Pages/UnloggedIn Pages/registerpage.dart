@@ -155,12 +155,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           //Registered
                           await _auth.createUserWithEmailAndPassword(
                               email: email.text, password: password.text);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, InputVehicleData.id, (route) => false);
                           DatabaseService newUser =
                               DatabaseService(uId: _auth.currentUser!.uid);
                           newUser.registerationData(
                               fullName.text, email.text, phoneNumber.text);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, InputVehicleData.id, (route) => false);
                         } on FirebaseAuthException catch (e) {
                           String errorFromCode() {
                             switch (e.code) {

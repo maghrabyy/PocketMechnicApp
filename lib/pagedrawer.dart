@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Pages/JoinAsPartner/joinaspartner.dart';
 import 'package:flutter_course/main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,6 +43,8 @@ class PageDrawer extends StatelessWidget {
             HelpPage.id),
         buildListTile(
             context, 'Report bug', Icons.bug_report, ReportBugPage.id),
+        buildListTile(context, 'Join as a partner', FontAwesomeIcons.userPlus,
+            JoinAsPartner.id),
         Expanded(
           child: Align(
             alignment: Alignment.bottomLeft,

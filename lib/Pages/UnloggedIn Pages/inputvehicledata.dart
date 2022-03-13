@@ -20,6 +20,7 @@ final _auth = FirebaseAuth.instance;
 class InputVehicleData extends StatefulWidget {
   static const String id = 'InputVehicleData';
   static const String idCanPop = 'InputVehicleDataCanPop';
+
   const InputVehicleData({Key? key}) : super(key: key);
 
   @override
@@ -184,7 +185,6 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                       _isLoading = true;
                     });
                     //User's collection Cars: +1
-
                     await _firestore
                         .collection('Users')
                         .doc(_auth.currentUser!.uid)

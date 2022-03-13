@@ -8,36 +8,27 @@ final _auth = FirebaseAuth.instance;
 Future<DocumentSnapshot<Map<String, dynamic>>?> getUserData(
     String userID) async {
   DocumentSnapshot<Map<String, dynamic>>? userData;
-
-  await _firestore
-      .collection('Users')
-      .doc(_auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    userData = value;
-  });
-  return userData;
+  try {
+    await _firestore.collection('Users').doc(userID).get().then((value) {
+      userData = value;
+    });
+    return userData;
+  } catch (e) {
+    return null;
+  }
 }
 
 Future<String> getUserID(String userID) async {
-  String userID = '';
-  await _firestore
-      .collection('Users')
-      .doc(_auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    userID = value['UserID'].toString();
+  String vehicleNo = '';
+  await _firestore.collection('Users').doc(userID).get().then((value) {
+    vehicleNo = value['UserID'];
   });
-  return userID;
+  return vehicleNo;
 }
 
 Future<int> getVehicleNo(String userID) async {
   int vehicleNo = 0;
-  await _firestore
-      .collection('Users')
-      .doc(_auth.currentUser!.uid)
-      .get()
-      .then((value) {
+  await _firestore.collection('Users').doc(userID).get().then((value) {
     vehicleNo = value['Cars'];
   });
   return vehicleNo;
@@ -46,14 +37,10 @@ Future<int> getVehicleNo(String userID) async {
 int vehicleIndex = 0;
 Future<String> getVehicleID(String userID) async {
   String vehicleID = '';
-  int vNum = await getVehicleNo(_auth.currentUser!.uid);
+  int vNum = await getVehicleNo(userID);
   vehicleIndex = vNum - 1;
   try {
-    await _firestore
-        .collection('Users')
-        .doc(_auth.currentUser!.uid)
-        .get()
-        .then((value) {
+    await _firestore.collection('Users').doc(userID).get().then((value) {
       vehicleID = value['UserVehicles'][vehicleIndex]['VehicleID'].toString();
     });
     return vehicleID;
@@ -64,14 +51,9 @@ Future<String> getVehicleID(String userID) async {
 
 Future<List<dynamic>> getVehiclesList(String userID) async {
   List vehiclesList = [];
-  int vNum = await getVehicleNo(_auth.currentUser!.uid);
-  vehicleIndex = vNum - 1;
+
   try {
-    await _firestore
-        .collection('Users')
-        .doc(_auth.currentUser!.uid)
-        .get()
-        .then((value) {
+    await _firestore.collection('Users').doc(userID).get().then((value) {
       vehiclesList = value['UserVehicles'].toList();
     });
     return vehiclesList;

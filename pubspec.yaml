@@ -48,3 +48,9 @@ flutter:
     - family: Righteous
       fonts:
         - asset: fonts/Righteous-Regular.ttf
+    - family: Lobster
+      fonts:
+        - asset: fonts/Lobster-Regular.ttf
+    - family: PatuaOne
+      fonts:
+        - asset: fonts/PatuaOne-Regular.ttf
