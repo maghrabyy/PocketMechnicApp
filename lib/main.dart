@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage('assets/welcomePage.jpg'), context);
     return FirebaseAuth.instance.currentUser != null
         ? StreamBuilder(
             stream: _firestore
@@ -152,52 +153,11 @@ class AppRoutes extends StatelessWidget {
   }
 }
 
-class RawPage extends StatefulWidget {
-  const RawPage(
-      {Key? key,
-      required this.body,
-      required this.title,
-      this.actions,
-      this.leading,
-      this.floatingButton,
-      this.navigatingBar,
-      this.pagedrawer})
-      : super(key: key);
-  final Widget body;
-  final Text title;
-  final Widget? leading;
-  final List<Widget>? actions;
-  final Widget? floatingButton;
-  final Widget? navigatingBar;
-  final Drawer? pagedrawer;
-
-  @override
-  State<RawPage> createState() => _RawPageState();
-}
-
-class _RawPageState extends State<RawPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-          leading: widget.leading,
-          title: widget.title,
-          actions: widget.actions),
-      drawer: widget.pagedrawer,
-      body: widget.body,
-      floatingActionButton: widget.floatingButton,
-      bottomNavigationBar: widget.navigatingBar,
-    );
-  }
-}
-
 class InitialPage extends StatefulWidget {
-  static const String id = 'InitialPage';
   const InitialPage({
     Key? key,
   }) : super(key: key);
-
+  static const String id = 'InitialPage';
   @override
   State<InitialPage> createState() => _InitialPageState();
 }
@@ -230,37 +190,40 @@ class _InitialPageState extends State<InitialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RawPage(
-      leading: Builder(
-        builder: (context) => RawMaterialButton(
-          onPressed: () => Scaffold.of(context).openDrawer(),
-          splashColor: firstLayerColor,
-          highlightColor: firstLayerColor,
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ClipOval(
-              child: Image(
-                image: AssetImage('assets/pmLogo3.png'),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: Builder(
+          builder: (context) => RawMaterialButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            splashColor: firstLayerColor,
+            highlightColor: firstLayerColor,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ClipOval(
+                child: Image(
+                  image: AssetImage('assets/pmLogo3.png'),
+                ),
               ),
             ),
           ),
         ),
-      ),
-      title: Text(_pageTitles[currentPageIndex]),
-      actions: [
-        currentPageIndex != 3
-            ? const PopupMenu()
-            : IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AccountSettingsPage.id);
-                },
-                icon: const Icon(
-                  Icons.settings,
-                  size: 20,
+        title: Text(_pageTitles[currentPageIndex]),
+        actions: [
+          currentPageIndex != 3
+              ? const PopupMenu()
+              : IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AccountSettingsPage.id);
+                  },
+                  icon: const Icon(
+                    Icons.settings,
+                    size: 20,
+                  ),
                 ),
-              ),
-      ],
-      pagedrawer: Drawer(
+        ],
+      ),
+      drawer: Drawer(
         backgroundColor: secondLayerColor,
         child: PageDrawer(),
       ),
@@ -273,7 +236,7 @@ class _InitialPageState extends State<InitialPage> {
           });
         },
       ),
-      navigatingBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           onTapped(index);
         },
@@ -361,20 +324,22 @@ class NavigatingPage extends StatelessWidget {
   final bool? canPop;
   @override
   Widget build(BuildContext context) {
-    return RawPage(
-      leading: canPop == false
-          ? null
-          : IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                size: 25,
-              )),
-      title: Text(title),
+    return Scaffold(
+      appBar: AppBar(
+        leading: canPop == false
+            ? null
+            : IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 25,
+                )),
+        title: Text(title),
+      ),
       body: page,
-      floatingButton: floatingButton,
+      floatingActionButton: floatingButton,
     );
   }
 }

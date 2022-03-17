@@ -9,7 +9,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../Components/rounded_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:marquee/marquee.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -51,10 +50,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${_auth.currentUser?.displayName}',
-                        style: const TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
+                      child: ProfileData(
+                        snapshotCollection: 'Users',
+                        snapshotDocumentPath: _auth.currentUser!.uid,
+                        snapshotField: 'FullName',
                       ),
                     ),
                     const Divider(
@@ -112,137 +111,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       iconC: Icons.add),
                                   onPressed: () {
                                     Navigator.pushNamed(
-                                        context, InputVehicleData.id);
+                                        context, InputVehicleData.idCanPop);
                                   });
                             } else {
                               List vList = snapshot.data!['UserVehicles']
                                   as List<dynamic>;
-                              return Slidable(
-                                  endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      children: [
-                                        SlidableAction(
-                                            icon: Icons.add,
-                                            label: 'Add Vehicle',
-                                            backgroundColor: fifthLayerColor,
-                                            foregroundColor: Colors.white,
-                                            onPressed: (context) {
-                                              Navigator.pushNamed(
-                                                  context, InputVehicleData.id);
-                                            })
-                                      ]),
-                                  child: Column(
-                                    children: vList.map<Card>((dynamic value) {
-                                      return Card(
-                                        color: fourthLayerColor,
-                                        child: ExpansionTile(
-                                          initiallyExpanded:
-                                              snapshot.data!['Cars'] == 1
-                                                  ? true
-                                                  : false,
-                                          iconColor: iconColor,
-                                          collapsedIconColor: iconColor,
-                                          title: Text(
-                                            value['VehicleName'],
-                                            style: const TextStyle(
-                                                color: textColor,
-                                                fontSize: 20,
-                                                fontFamily: 'Kanit'),
-                                          ),
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                  snapshotCollection:
-                                                      'VehicleData',
-                                                  snapshotDocumentPath:
-                                                      value['VehicleID'],
-                                                  snapshotField: 'Brand',
-                                                  snapshotFrontText: 'Brand:',
-                                                  icon: FontAwesomeIcons.car),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                  snapshotCollection:
-                                                      'VehicleData',
-                                                  snapshotDocumentPath:
-                                                      value['VehicleID'],
-                                                  snapshotField: 'Model',
-                                                  snapshotFrontText: 'Model:',
-                                                  icon:
-                                                      FontAwesomeIcons.carAlt),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                  snapshotCollection:
-                                                      'VehicleData',
-                                                  snapshotDocumentPath:
-                                                      value['VehicleID'],
-                                                  snapshotField: 'BodyType',
-                                                  snapshotFrontText:
-                                                      'Body Type:',
-                                                  icon:
-                                                      FontAwesomeIcons.carSide),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                  snapshotCollection:
-                                                      'VehicleData',
-                                                  snapshotDocumentPath:
-                                                      value['VehicleID'],
-                                                  snapshotField: 'Color',
-                                                  snapshotFrontText: 'Color:',
-                                                  icon:
-                                                      FontAwesomeIcons.palette),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                snapshotCollection:
-                                                    'VehicleData',
-                                                snapshotDocumentPath:
-                                                    value['VehicleID'],
-                                                snapshotField: 'EngineCapacity',
-                                                snapshotFrontText:
-                                                    'Engine Capacity:',
-                                                snapshotBackText: 'cc',
-                                                imageData:
-                                                    'assets/carEngineGrey.png',
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ProfileData(
-                                                snapshotCollection:
-                                                    'VehicleData',
-                                                snapshotDocumentPath:
-                                                    value['VehicleID'],
-                                                snapshotField: 'Transimission',
-                                                snapshotFrontText:
-                                                    'Transimission:',
-                                                imageData:
-                                                    'assets/gearStickGrey.png',
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {},
-                                              child: const Text(
-                                                  'Periodic Services'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ));
+                              return SlidableRowVehiclesList(
+                                vList: vList,
+                                snapshotData: snapshot.data,
+                              );
                             }
 
                           default:
@@ -255,6 +132,104 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         )
       ],
+    );
+  }
+}
+
+class SlidableRowVehiclesList extends StatelessWidget {
+  const SlidableRowVehiclesList({
+    Key? key,
+    required this.vList,
+    required this.snapshotData,
+  }) : super(key: key);
+
+  final List vList;
+  final DocumentSnapshot<Object?> snapshotData;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: vList.map<SizedBox>((dynamic value) {
+          return SizedBox(
+            width: 370,
+            child: Column(
+              children: [
+                Text(
+                  value['VehicleName'],
+                  style: const TextStyle(
+                      color: textColor,
+                      fontSize: 20,
+                      fontFamily: 'Kanit',
+                      fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                      snapshotCollection: 'VehicleData',
+                      snapshotDocumentPath: value['VehicleID'],
+                      snapshotField: 'Brand',
+                      snapshotFrontText: 'Brand:',
+                      icon: FontAwesomeIcons.car),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                      snapshotCollection: 'VehicleData',
+                      snapshotDocumentPath: value['VehicleID'],
+                      snapshotField: 'Model',
+                      snapshotFrontText: 'Model:',
+                      icon: FontAwesomeIcons.carAlt),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                      snapshotCollection: 'VehicleData',
+                      snapshotDocumentPath: value['VehicleID'],
+                      snapshotField: 'BodyType',
+                      snapshotFrontText: 'Body Type:',
+                      icon: FontAwesomeIcons.carSide),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                      snapshotCollection: 'VehicleData',
+                      snapshotDocumentPath: value['VehicleID'],
+                      snapshotField: 'Color',
+                      snapshotFrontText: 'Color:',
+                      icon: FontAwesomeIcons.palette),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                    snapshotCollection: 'VehicleData',
+                    snapshotDocumentPath: value['VehicleID'],
+                    snapshotField: 'EngineCapacity',
+                    snapshotFrontText: 'Engine Capacity:',
+                    snapshotBackText: 'cc',
+                    imageData: 'assets/carEngineGrey.png',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileData(
+                    snapshotCollection: 'VehicleData',
+                    snapshotDocumentPath: value['VehicleID'],
+                    snapshotField: 'Transimission',
+                    snapshotFrontText: 'Transimission:',
+                    imageData: 'assets/gearStickGrey.png',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Periodic Services'),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
@@ -297,13 +272,15 @@ class ProfileData extends StatelessWidget {
                   size: 18,
                   color: Colors.grey,
                 )
-              : Image(
-                  height: 25,
-                  image: AssetImage(imageData!),
-                ),
+              : imageData != null
+                  ? Image(
+                      height: 25,
+                      image: AssetImage(imageData!),
+                    )
+                  : null,
         ),
-        const SizedBox(
-          width: 25,
+        SizedBox(
+          width: snapshotField != 'FullName' ? 25 : 0,
         ),
         Expanded(
           child: text != null
@@ -328,10 +305,16 @@ class ProfileData extends StatelessWidget {
                       );
                     }
                     var docData = snapshot.data as DocumentSnapshot;
-                    return Text(
-                      '${snapshotFrontText ?? ''} ${docData[snapshotField!]} ${snapshotBackText ?? ''}',
-                      style: TextStyle(fontSize: textSize ?? 25),
-                    );
+                    return snapshotField == 'FullName'
+                        ? Text(
+                            '${docData[snapshotField!]}',
+                            style: const TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            '${snapshotFrontText ?? ''} ${docData[snapshotField!]} ${snapshotBackText ?? ''}',
+                            style: TextStyle(fontSize: textSize ?? 25),
+                          );
                   },
                 ),
         ),

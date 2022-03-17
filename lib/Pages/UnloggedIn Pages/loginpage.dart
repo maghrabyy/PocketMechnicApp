@@ -130,6 +130,9 @@ class _LoginPageState extends State<LoginPage> {
                                 case "invalid-email":
                                   return "Email address is invalid.";
 
+                                case "network-request-failed":
+                                  return "Check your internet connection.";
+
                                 default:
                                   return "Login failed. Please try again.";
                               }

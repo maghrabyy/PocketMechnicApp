@@ -63,7 +63,7 @@ ThemeData pmTheme() {
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fourthLayerColor),
+        borderSide: BorderSide(color: fifthLayerColor),
         borderRadius: BorderRadius.all(
           Radius.circular(30),
         ),
@@ -75,7 +75,7 @@ ThemeData pmTheme() {
         ),
       ),
       disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fifthLayerColor),
+        borderSide: BorderSide(color: fourthLayerColor),
         borderRadius: BorderRadius.all(
           Radius.circular(30),
         ),

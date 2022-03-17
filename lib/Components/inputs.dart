@@ -14,6 +14,9 @@ class RegularInput extends StatelessWidget {
     this.emptyErrorText,
     this.emptyFieldError,
     this.onChanged,
+    this.maxLength,
+    this.action,
+    this.floatingLabel,
   }) : super(key: key);
   final String label;
   final String? hint;
@@ -25,10 +28,14 @@ class RegularInput extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? emptyErrorText;
   final bool? emptyFieldError;
+  final int? maxLength;
   final Function(String)? onChanged;
+  final IconButton? action;
+  final bool? floatingLabel;
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLength: maxLength,
       keyboardType: keyboardType,
       enabled: enabled,
       controller: inputController,
@@ -37,6 +44,10 @@ class RegularInput extends StatelessWidget {
           goNext == true ? TextInputAction.next : TextInputAction.done,
       onChanged: onChanged,
       decoration: InputDecoration(
+        floatingLabelBehavior: floatingLabel == true
+            ? FloatingLabelBehavior.always
+            : FloatingLabelBehavior.auto,
+        suffixIcon: action,
         errorText: emptyFieldError == true ? emptyErrorText : null,
         labelText: label,
         hintStyle: hintstyle,
@@ -111,26 +122,38 @@ class PhoneInput extends StatelessWidget {
     required this.inputController,
     this.emptyFieldError,
     this.onChanged,
+    this.hint,
+    this.enabled,
+    this.floatingLabel,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
   final bool? emptyFieldError;
   final Function(String)? onChanged;
+  final String? hint;
+  final bool? enabled;
+  final bool? floatingLabel;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLength: 11,
+      enabled: enabled,
       keyboardType: TextInputType.phone,
       controller: inputController,
       textAlign: TextAlign.center,
       textInputAction:
-          goNext == true ? TextInputAction.next : TextInputAction.done,
+          goNext == true ? TextInputAction.next : TextInputAction.none,
       onChanged: onChanged,
       decoration: InputDecoration(
-        errorText: emptyFieldError == true ? 'Password cannot be blank' : null,
+        floatingLabelBehavior: floatingLabel == true
+            ? FloatingLabelBehavior.always
+            : FloatingLabelBehavior.auto,
+        errorText:
+            emptyFieldError == true ? 'Phone number cannot be blank' : null,
         labelText: 'Phone number',
-        hintText: 'Enter your phone number',
+        hintText: hint ?? 'Enter your phone number',
       ),
     );
   }

@@ -18,6 +18,19 @@ Future<DocumentSnapshot<Map<String, dynamic>>?> getUserData(
   }
 }
 
+Future<DocumentSnapshot<Map<String, dynamic>>?> getVehicleData(
+    String userID) async {
+  DocumentSnapshot<Map<String, dynamic>>? userData;
+  try {
+    await _firestore.collection('VehicleData').doc(userID).get().then((value) {
+      userData = value;
+    });
+    return userData;
+  } catch (e) {
+    return null;
+  }
+}
+
 Future<String> getUserID(String userID) async {
   String vehicleNo = '';
   await _firestore.collection('Users').doc(userID).get().then((value) {

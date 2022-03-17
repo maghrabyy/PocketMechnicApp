@@ -22,7 +22,7 @@ FormField<String> customDropmenu(String label, String hint, List<String> items,
         value: currentvalue,
         hint: Text(
           hint,
-          style: TextStyle(color: disable != true ? Colors.white : Colors.grey),
+          style: TextStyle(color: disable != true ? Colors.grey : Colors.grey),
         ),
         dropdownColor: thirdLayerColor,
         style: const TextStyle(color: Colors.white),

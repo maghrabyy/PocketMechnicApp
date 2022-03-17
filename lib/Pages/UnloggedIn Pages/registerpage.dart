@@ -47,7 +47,6 @@ class _RegisterPageState extends State<RegisterPage> {
         RoundedContainer(
           boxColor: thirdLayerColor,
           boxChild: Column(
-            //  mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -99,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                 child: PhoneInput(
                   inputController: phoneNumber,
                   goNext: true,
@@ -112,7 +111,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                 child: PasswordInput(
                   inputController: password,
                   goNext: true,
@@ -183,6 +183,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               case "ERROR_WEAK_PASSWORD":
                               case "weak-password":
                                 return "Password must be equal or more than 6 characters.";
+                              case "network-request-failed":
+                                return "Check your internet connection.";
 
                               default:
                                 return e.code;
