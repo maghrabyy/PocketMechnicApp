@@ -8,6 +8,7 @@ import 'package:flutter_course/Pages/UnloggedIn%20Pages/resetpassword.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
-      progressIndicator: const CircularProgressIndicator(
+      progressIndicator: const SpinKitFadingFour(
         color: fifthLayerColor,
       ),
       isLoading: _isLoading,

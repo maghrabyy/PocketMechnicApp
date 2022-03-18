@@ -9,6 +9,7 @@ import 'package:flutter_course/Pages/UnloggedIn%20Pages/lists.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +40,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
-        progressIndicator: const CircularProgressIndicator(
+        progressIndicator: const SpinKitFadingFour(
           color: fifthLayerColor,
         ),
         isLoading: _isLoading,

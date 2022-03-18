@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+const splashScreenColor = Color(0xFF322034);
 const fifthLayerColor = Color(0xFF82568a);
 const fourthLayerColor = Color(0xFF533758);
 const thirdLayerColor = Color(0xFF1e151e);

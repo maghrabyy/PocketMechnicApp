@@ -4,6 +4,7 @@ import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -21,7 +22,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
-      progressIndicator: const CircularProgressIndicator(
+      progressIndicator: const SpinKitFadingFour(
         color: fifthLayerColor,
       ),
       isLoading: _isLoading,

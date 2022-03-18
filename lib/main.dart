@@ -14,6 +14,7 @@ import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
 import 'package:flutter_course/pagedrawer.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
 import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
 import 'Pages/NearbyMechanic Page/nearbymechanicloading.dart';
@@ -37,8 +38,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    precacheImage(const AssetImage('assets/welcomePage.jpg'), context);
-    return FirebaseAuth.instance.currentUser != null
+    return _auth.currentUser != null
         ? StreamBuilder(
             stream: _firestore
                 .collection('Users')
@@ -49,15 +49,24 @@ class MyApp extends StatelessWidget {
                 return Container(
                   width: double.infinity,
                   height: double.infinity,
-                  color: fourthLayerColor,
-                  child: const Center(
-                    child: Text(
-                      'Pocket Mechanic',
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Lobster'),
+                  color: splashScreenColor,
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Image(
+                          width: 250,
+                          image: AssetImage(
+                              'assets/PocketMechanicLogoLoading.png'),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        SpinKitFadingFour(
+                          color: fifthLayerColor,
+                        )
+                      ],
                     ),
                   ),
                 );
