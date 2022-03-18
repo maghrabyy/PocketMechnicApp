@@ -15,6 +15,7 @@ final vehicleBrands = [
   'DFM',
   'DFSK',
   'Ds',
+  'Dodge',
   'Fiat',
   'Ford',
   'Geely',
@@ -30,8 +31,8 @@ final vehicleBrands = [
   'Land Rover',
   'Lexus',
   'MG',
-  'Maserati'
-      'Mazda',
+  'Maserati',
+  'Mazda',
   'Mercedes',
   'Mini',
   'Mitsubishi',

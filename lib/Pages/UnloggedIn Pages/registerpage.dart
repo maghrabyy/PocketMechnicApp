@@ -78,6 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     goNext: true,
                     emptyErrorText: 'This field cannot be empty.',
                     emptyFieldError: emptyFullName,
+                    capitalizationBehaviour: TextCapitalization.words,
                     onChanged: (value) {
                       setState(() {
                         emptyFullName = false;
@@ -98,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: PhoneInput(
                   inputController: phoneNumber,
                   goNext: true,
@@ -111,8 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: PasswordInput(
                   inputController: password,
                   goNext: true,

@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
@@ -76,8 +76,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                   }, selectedBrand == null ? true : false),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
                       SizedBox(
@@ -92,6 +91,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                           inputController: inputtedModel,
                           maxLength: 30,
                           enabled: selectedBodyType == null ? false : true,
+                          capitalizationBehaviour: TextCapitalization.words,
                         ),
                       ),
                       Padding(
@@ -130,8 +130,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: customDropmenu(
                       'Vehicle\'s color',
                       'Select your vehicle\'s color',
@@ -143,8 +142,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                   }, false),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -164,8 +162,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: customDropmenu(
                       'Transimission',
                       'Select your vehicle\'s transimission',
@@ -186,47 +183,48 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                         selectedColor != null &&
                         inputtedEngineCapacity.text.isNotEmpty &&
                         selectedTransimission != null) {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      //User's collection Cars: +1
-                      await _firestore
-                          .collection('Users')
-                          .doc(_auth.currentUser!.uid)
-                          .update({'Cars': FieldValue.increment(1)});
-                      //UserVehicles's Collection set Data
-                      var rng = Random();
-                      var randNum = rng.nextInt(900000) + 100000;
-                      String vehicleID = 'V$randNum';
-                      await _firestore
-                          .collection('Users')
-                          .doc(_auth.currentUser!.uid)
-                          .update({
-                        'UserVehicles': FieldValue.arrayUnion([
-                          {
-                            'VehicleID': vehicleID,
-                            'VehicleName':
+                      try {
+                        final result =
+                            await InternetAddress.lookup('example.com');
+                        if (result.isNotEmpty &&
+                            result[0].rawAddress.isNotEmpty) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          //Update Vehicle Field (Users collection)
+                          var rng = Random();
+                          var randNum = rng.nextInt(900000) + 100000;
+                          String vehicleID = 'V$randNum';
+                          _firestore
+                              .collection('Users')
+                              .doc(_auth.currentUser!.uid)
+                              .update({
+                            'Vehicle.VehicleID': vehicleID,
+                            'Vehicle.VehicleName':
                                 '$selectedBrand ${inputtedModel.text} $selectedModelYear'
-                          }
-                        ])
-                      });
-                      //VehicleData Collection set Data
-                      await _firestore
-                          .collection('VehicleData')
-                          .doc(vehicleID)
-                          .set({
-                        'VehicleID': vehicleID,
-                        'Brand': selectedBrand,
-                        'Model': inputtedModel.text,
-                        'ModelYear': selectedModelYear,
-                        'BodyType': selectedBodyType,
-                        'Color': selectedColor,
-                        'EngineCapacity': inputtedEngineCapacity.text,
-                        'Transimission': selectedTransimission,
-                        'UserID': await getUserID(_auth.currentUser!.uid),
-                      });
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, InitialPage.id, (route) => false);
+                          });
+                          //VehicleData Collection set Data
+                          await _firestore
+                              .collection('VehicleData')
+                              .doc(vehicleID)
+                              .set({
+                            'VehicleID': vehicleID,
+                            'Brand': selectedBrand,
+                            'Model': inputtedModel.text,
+                            'ModelYear': selectedModelYear,
+                            'BodyType': selectedBodyType,
+                            'Color': selectedColor,
+                            'EngineCapacity': inputtedEngineCapacity.text,
+                            'Transimission': selectedTransimission,
+                            'UserID': await getUserID(_auth.currentUser!.uid),
+                          });
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, InitialPage.id, (route) => false);
+                        }
+                      } on SocketException catch (_) {
+                        displaySnackbar(context,
+                            'Check your internet connection.', fifthLayerColor);
+                      }
                     } else {
                       displaySnackbar(context,
                           'Fill all the required data first.', fifthLayerColor);

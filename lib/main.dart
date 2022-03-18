@@ -64,7 +64,8 @@ class MyApp extends StatelessWidget {
               } else {
                 return AppRoutes(
                   theInitialPage: (context) => _auth.currentUser != null
-                      ? snapshot.data['Cars'] > 0
+                      ? snapshot.data['Vehicle.VehicleID'] != '' &&
+                              snapshot.data['Vehicle.VehicleName'] != ''
                           ? const InitialPage()
                           : const NavigatingPage(
                               title: 'My vehicle',

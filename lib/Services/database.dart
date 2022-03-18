@@ -39,42 +39,6 @@ Future<String> getUserID(String userID) async {
   return vehicleNo;
 }
 
-Future<int> getVehicleNo(String userID) async {
-  int vehicleNo = 0;
-  await _firestore.collection('Users').doc(userID).get().then((value) {
-    vehicleNo = value['Cars'];
-  });
-  return vehicleNo;
-}
-
-int vehicleIndex = 0;
-Future<String> getVehicleID(String userID) async {
-  String vehicleID = '';
-  int vNum = await getVehicleNo(userID);
-  vehicleIndex = vNum - 1;
-  try {
-    await _firestore.collection('Users').doc(userID).get().then((value) {
-      vehicleID = value['UserVehicles'][vehicleIndex]['VehicleID'].toString();
-    });
-    return vehicleID;
-  } catch (e) {
-    return 'Dummy';
-  }
-}
-
-Future<List<dynamic>> getVehiclesList(String userID) async {
-  List vehiclesList = [];
-
-  try {
-    await _firestore.collection('Users').doc(userID).get().then((value) {
-      vehiclesList = value['UserVehicles'].toList();
-    });
-    return vehiclesList;
-  } catch (e) {
-    return [];
-  }
-}
-
 class DatabaseService {
   final String? uId;
   DatabaseService({required this.uId});
@@ -92,8 +56,7 @@ class DatabaseService {
       'FullName': fullName,
       'Email': email,
       'PhoneNumber': phoneNumber,
-      'Cars': 0,
-      'UserVehicles': [],
+      'Vehicle': {'VehicleID': '', 'VehicleName': ''}
     });
   }
 }

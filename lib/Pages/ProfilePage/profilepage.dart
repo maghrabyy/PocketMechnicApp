@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_course/Components/icon_content.dart';
-import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
-import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -97,30 +94,82 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             );
                           case ConnectionState.done:
-                            List vList =
-                                snapshot.data!['UserVehicles'] as List<dynamic>;
-                            if (vList.isEmpty) {
-                              _fireStore
-                                  .collection('Users')
-                                  .doc(_auth.currentUser!.uid)
-                                  .update({'Cars': 0});
-                              return RoundedButtonContainer(
-                                  width: double.infinity,
-                                  child: const IconContent(
-                                      iconText: 'Add Vehicle',
-                                      iconC: Icons.add),
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, InputVehicleData.idCanPop);
-                                  });
-                            } else {
-                              List vList = snapshot.data!['UserVehicles']
-                                  as List<dynamic>;
-                              return SlidableRowVehiclesList(
-                                vList: vList,
-                                snapshotData: snapshot.data,
-                              );
-                            }
+                            String vehID = snapshot.data['Vehicle.VehicleID'];
+                            String vehName =
+                                snapshot.data['Vehicle.VehicleName'];
+                            return Column(
+                              children: [
+                                Text(
+                                  vehName,
+                                  style: const TextStyle(
+                                      color: textColor,
+                                      fontSize: 20,
+                                      fontFamily: 'Kanit',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                      snapshotCollection: 'VehicleData',
+                                      snapshotDocumentPath: vehID,
+                                      snapshotField: 'Brand',
+                                      snapshotFrontText: 'Brand:',
+                                      icon: FontAwesomeIcons.car),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                      snapshotCollection: 'VehicleData',
+                                      snapshotDocumentPath: vehID,
+                                      snapshotField: 'Model',
+                                      snapshotFrontText: 'Model:',
+                                      icon: FontAwesomeIcons.carAlt),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                      snapshotCollection: 'VehicleData',
+                                      snapshotDocumentPath: vehID,
+                                      snapshotField: 'BodyType',
+                                      snapshotFrontText: 'Body Type:',
+                                      icon: FontAwesomeIcons.carSide),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                      snapshotCollection: 'VehicleData',
+                                      snapshotDocumentPath: vehID,
+                                      snapshotField: 'Color',
+                                      snapshotFrontText: 'Color:',
+                                      icon: FontAwesomeIcons.palette),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                    snapshotCollection: 'VehicleData',
+                                    snapshotDocumentPath: vehID,
+                                    snapshotField: 'EngineCapacity',
+                                    snapshotFrontText: 'Engine Capacity:',
+                                    snapshotBackText: 'cc',
+                                    imageData: 'assets/carEngineGrey.png',
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProfileData(
+                                    snapshotCollection: 'VehicleData',
+                                    snapshotDocumentPath: vehID,
+                                    snapshotField: 'Transimission',
+                                    snapshotFrontText: 'Transimission:',
+                                    imageData: 'assets/gearStickGrey.png',
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  child: const Text('Periodic Services'),
+                                ),
+                              ],
+                            );
 
                           default:
                             return const Text('Unhandle State');
@@ -132,104 +181,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         )
       ],
-    );
-  }
-}
-
-class SlidableRowVehiclesList extends StatelessWidget {
-  const SlidableRowVehiclesList({
-    Key? key,
-    required this.vList,
-    required this.snapshotData,
-  }) : super(key: key);
-
-  final List vList;
-  final DocumentSnapshot<Object?> snapshotData;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: vList.map<SizedBox>((dynamic value) {
-          return SizedBox(
-            width: 370,
-            child: Column(
-              children: [
-                Text(
-                  value['VehicleName'],
-                  style: const TextStyle(
-                      color: textColor,
-                      fontSize: 20,
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                      snapshotCollection: 'VehicleData',
-                      snapshotDocumentPath: value['VehicleID'],
-                      snapshotField: 'Brand',
-                      snapshotFrontText: 'Brand:',
-                      icon: FontAwesomeIcons.car),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                      snapshotCollection: 'VehicleData',
-                      snapshotDocumentPath: value['VehicleID'],
-                      snapshotField: 'Model',
-                      snapshotFrontText: 'Model:',
-                      icon: FontAwesomeIcons.carAlt),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                      snapshotCollection: 'VehicleData',
-                      snapshotDocumentPath: value['VehicleID'],
-                      snapshotField: 'BodyType',
-                      snapshotFrontText: 'Body Type:',
-                      icon: FontAwesomeIcons.carSide),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                      snapshotCollection: 'VehicleData',
-                      snapshotDocumentPath: value['VehicleID'],
-                      snapshotField: 'Color',
-                      snapshotFrontText: 'Color:',
-                      icon: FontAwesomeIcons.palette),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                    snapshotCollection: 'VehicleData',
-                    snapshotDocumentPath: value['VehicleID'],
-                    snapshotField: 'EngineCapacity',
-                    snapshotFrontText: 'Engine Capacity:',
-                    snapshotBackText: 'cc',
-                    imageData: 'assets/carEngineGrey.png',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileData(
-                    snapshotCollection: 'VehicleData',
-                    snapshotDocumentPath: value['VehicleID'],
-                    snapshotField: 'Transimission',
-                    snapshotFrontText: 'Transimission:',
-                    imageData: 'assets/gearStickGrey.png',
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Periodic Services'),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
     );
   }
 }
