@@ -39,6 +39,17 @@ Future<String> getUserID(String userID) async {
   return vehicleNo;
 }
 
+Future<bool> checkIfDocExists(String collectionPath, String docId) async {
+  try {
+    var collectionRef = _firestore.collection(collectionPath);
+
+    var doc = await collectionRef.doc(docId).get();
+    return doc.exists;
+  } catch (e) {
+    rethrow;
+  }
+}
+
 class DatabaseService {
   final String? uId;
   DatabaseService({required this.uId});

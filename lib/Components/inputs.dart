@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
 
 class RegularInput extends StatelessWidget {
-  const RegularInput({
-    Key? key,
-    required this.label,
-    required this.inputController,
-    this.hint,
-    this.goNext,
-    this.enabled,
-    this.labelStyle,
-    this.hintstyle,
-    this.keyboardType,
-    this.emptyErrorText,
-    this.emptyFieldError,
-    this.onChanged,
-    this.maxLength,
-    this.action,
-    this.floatingLabel,
-    this.capitalizationBehaviour,
-  }) : super(key: key);
+  const RegularInput(
+      {Key? key,
+      required this.label,
+      required this.inputController,
+      this.hint,
+      this.goNext,
+      this.enabled,
+      this.labelStyle,
+      this.hintstyle,
+      this.keyboardType,
+      this.emptyErrorText,
+      this.emptyFieldError,
+      this.onChanged,
+      this.maxLength,
+      this.action,
+      this.floatingLabel,
+      this.capitalizationBehaviour,
+      this.maxLines})
+      : super(key: key);
   final String label;
   final String? hint;
   final TextEditingController inputController;
@@ -35,6 +36,7 @@ class RegularInput extends StatelessWidget {
   final IconButton? action;
   final bool? floatingLabel;
   final TextCapitalization? capitalizationBehaviour;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -44,6 +46,7 @@ class RegularInput extends StatelessWidget {
       enabled: enabled,
       controller: inputController,
       textAlign: TextAlign.center,
+      maxLines: maxLines,
       textInputAction:
           goNext == true ? TextInputAction.next : TextInputAction.done,
       onChanged: onChanged,
@@ -53,7 +56,9 @@ class RegularInput extends StatelessWidget {
             : FloatingLabelBehavior.auto,
         suffixIcon: action,
         counterText: '',
-        errorText: emptyFieldError == true ? emptyErrorText : null,
+        errorText: emptyFieldError == true
+            ? emptyErrorText ?? 'You can\'t leave this field empty'
+            : null,
         labelText: label,
         hintStyle: hintstyle,
         labelStyle: labelStyle,
@@ -216,6 +221,43 @@ class _PasswordInputState extends State<PasswordInput> {
             ? 'Confirm your password'
             : 'Enter your password',
       ),
+    );
+  }
+}
+
+class TextArea extends StatelessWidget {
+  const TextArea({
+    Key? key,
+    required this.inputController,
+    required this.label,
+    this.hint,
+    this.emptyFieldError,
+    this.onChanged,
+  }) : super(key: key);
+  final TextEditingController inputController;
+  final String label;
+  final String? hint;
+  final bool? emptyFieldError;
+  final Function(String)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: inputController,
+      keyboardType: TextInputType.multiline,
+      textCapitalization: TextCapitalization.sentences,
+      maxLines: null,
+      expands: true,
+      textAlignVertical: TextAlignVertical.top,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+          errorText: emptyFieldError == true
+              ? 'You can\'t leave this field empty.'
+              : null,
+          floatingLabelAlignment: FloatingLabelAlignment.center,
+          label: Text(label),
+          hintText: hint ?? 'Write something here...',
+          floatingLabelBehavior: FloatingLabelBehavior.always),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_course/Pages/HelpPage/helppage.dart';
 import 'package:flutter_course/Pages/JoinAsPartner/joinaspartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
+import 'package:flutter_course/Pages/ReportBug/myreports.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
@@ -132,6 +133,10 @@ class AppRoutes extends StatelessWidget {
         ReportBugPage.id: (context) => const NavigatingPage(
               title: 'Report bug',
               page: ReportBugPage(),
+            ),
+        MyReports.id: (context) => const NavigatingPage(
+              title: 'My Reports',
+              page: MyReports(),
             ),
         LoginPage.id: (context) => const NavigatingPage(
               title: 'Login',

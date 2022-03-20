@@ -27,7 +27,7 @@ class _TowTruckPageState extends State<TowTruckPage> {
             ),
           ),
           const Text(
-            'Stuck somewhere and your vehicle is\'t helping?',
+            'Stuck somewhere and your vehicle isn\'t helping?',
           ),
           const Text(
             'Don\'t worry about it!',
