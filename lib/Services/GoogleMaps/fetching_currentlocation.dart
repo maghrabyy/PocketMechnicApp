@@ -5,17 +5,19 @@ import 'package:flutter_course/Services/location.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'nearbymechanic_page.dart';
+import 'googlemapsservice.dart';
 
-class NearbyMechanicLoading extends StatefulWidget {
-  static const String id = 'NearbyMechanicLoading';
-  const NearbyMechanicLoading({Key? key}) : super(key: key);
-
+class FetchCurrentLocation extends StatefulWidget {
+  const FetchCurrentLocation({
+    Key? key,
+    required this.pageTitle,
+  }) : super(key: key);
+  final String pageTitle;
   @override
-  _NearbyMechanicLoadingState createState() => _NearbyMechanicLoadingState();
+  _FetchCurrentLocationState createState() => _FetchCurrentLocationState();
 }
 
-class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
+class _FetchCurrentLocationState extends State<FetchCurrentLocation> {
   bool isPopAllowed = false;
   Location myLocation = Location();
   void loadingData() async {
@@ -24,8 +26,9 @@ class _NearbyMechanicLoadingState extends State<NearbyMechanicLoading> {
         context,
         MaterialPageRoute(
           builder: (context) => NavigatingPage(
-            title: 'Nearby Mechanics',
-            page: NearbyMechanicPage(
+            title: widget.pageTitle,
+            page: GoogleMapServices(
+              pageTitle: widget.pageTitle,
               lat: myLocation.latitude,
               long: myLocation.longitude,
             ),

@@ -17,8 +17,6 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
-import 'Pages/NearbyMechanic Page/nearbymechanic_page.dart';
-import 'Pages/NearbyMechanic Page/nearbymechanicloading.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -105,11 +103,6 @@ class AppRoutes extends StatelessWidget {
       initialRoute: InitialPage.id,
       routes: {
         InitialPage.id: theInitialPage,
-        NearbyMechanicLoading.id: (context) => const NearbyMechanicLoading(),
-        NearbyMechanicPage.id: (context) => const NavigatingPage(
-              title: 'Nearby Mechanics',
-              page: NearbyMechanicPage(),
-            ),
         RequestMechanicPage.id: (context) => const NavigatingPage(
               title: 'Request Mechanic',
               page: RequestMechanicPage(),

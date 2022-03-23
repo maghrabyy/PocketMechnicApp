@@ -33,79 +33,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const RoundedContainer(
-          boxColor: thirdLayerColor,
-          boxChild: Center(
-            child: Text(
-              'Our services',
-              textAlign: TextAlign.center,
+    return CustomScrollView(slivers: [
+      SliverFillRemaining(
+        hasScrollBody: false,
+        child: Column(
+          children: [
+            const RoundedContainer(
+              boxColor: thirdLayerColor,
+              boxChild: Center(
+                child: Text(
+                  'Our services',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              cHeight: 30.0,
+              cWidth: double.infinity,
             ),
-          ),
-          cHeight: 30.0,
-          cWidth: double.infinity,
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                child: RoundedContainer(
-                  onPressed: () {
-                    setState(() {
-                      selectedService = PmServices.vMaintenance;
-                    });
-                  },
-                  boxColor: selectedService == PmServices.vMaintenance
-                      ? fourthLayerColor
-                      : thirdLayerColor,
-                  boxChild: const IconContent(
-                    iconText: 'Vehicle Maintenance',
-                    iconC: FontAwesomeIcons.tools,
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: RoundedContainer(
+                      onPressed: () {
+                        setState(() {
+                          selectedService = PmServices.vMaintenance;
+                        });
+                      },
+                      boxColor: selectedService == PmServices.vMaintenance
+                          ? fourthLayerColor
+                          : thirdLayerColor,
+                      boxChild: const IconContent(
+                        iconText: 'Vehicle Maintenance',
+                        iconC: FontAwesomeIcons.tools,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: RoundedContainer(
-                  onPressed: () {
-                    setState(() {
-                      selectedService = PmServices.sparePartsShop;
-                    });
-                  },
-                  boxColor: selectedService == PmServices.sparePartsShop
-                      ? fourthLayerColor
-                      : thirdLayerColor,
-                  boxChild: const IconContent(
-                    iconText: 'Spare-Parts Shop',
-                    iconC: FontAwesomeIcons.shoppingCart,
+                  Expanded(
+                    child: RoundedContainer(
+                      onPressed: () {
+                        setState(() {
+                          selectedService = PmServices.sparePartsShop;
+                        });
+                      },
+                      boxColor: selectedService == PmServices.sparePartsShop
+                          ? fourthLayerColor
+                          : thirdLayerColor,
+                      boxChild: const IconContent(
+                        iconText: 'Spare-Parts Shop',
+                        iconC: FontAwesomeIcons.shoppingCart,
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                      child: RoundedContainer(
+                    onPressed: () {
+                      setState(() {
+                        selectedService = PmServices.myVehicleSection;
+                      });
+                    },
+                    boxColor: selectedService == PmServices.myVehicleSection
+                        ? fourthLayerColor
+                        : thirdLayerColor,
+                    boxChild: const IconContent(
+                      iconC: FontAwesomeIcons.car,
+                      iconText: 'My Vehicle',
+                    ),
+                  ))
+                ],
               ),
-              Expanded(
-                  child: RoundedContainer(
-                onPressed: () {
-                  setState(() {
-                    selectedService = PmServices.myVehicleSection;
-                  });
-                },
-                boxColor: selectedService == PmServices.myVehicleSection
-                    ? fourthLayerColor
-                    : thirdLayerColor,
-                boxChild: const IconContent(
-                  iconC: FontAwesomeIcons.car,
-                  iconText: 'My Vehicle',
-                ),
-              ))
-            ],
-          ),
+            ),
+            Expanded(flex: 2, child: middleContainer),
+            Expanded(child: bottomServices())
+          ],
         ),
-        Expanded(
-          flex: 2,
-          child: middleContainer,
-        ),
-        bottomServices()
-      ],
-    );
+      )
+    ]);
   }
 }
 
@@ -123,19 +125,20 @@ class GradProjectCards extends StatelessWidget {
           'SAMS Graduation Project 2022',
           style: TextStyle(fontFamily: 'Righteous', fontSize: 25),
         ),
-        Column(
-          children: [
-            const Card(
-              child: ListTile(
-                  leading: Icon(FontAwesomeIcons.projectDiagram),
-                  title: Text('Project Name'),
-                  subtitle: Text('Pocket Mechanic')),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.group),
-                title: const Text('Project Team'),
-                subtitle: Column(
+        const Card(
+          child: ListTile(
+              leading: Icon(FontAwesomeIcons.projectDiagram),
+              title: Text('Project Name'),
+              subtitle: Text('Pocket Mechanic')),
+        ),
+        Expanded(
+          child: Card(
+            child: ListTile(
+              leading: const Icon(Icons.group),
+              title: const Text('Project Team'),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Column(
                   children: const [
                     Text('Mahmoud Mohamed Gamal'),
                     Text('Muhammed Khaled Mostafa'),
@@ -145,13 +148,13 @@ class GradProjectCards extends StatelessWidget {
                 ),
               ),
             ),
-            const Card(
-              child: ListTile(
-                  leading: Icon(Icons.supervisor_account),
-                  title: Text('Supervisor'),
-                  subtitle: Text('Dr. Christena Albert')),
-            ),
-          ],
+          ),
+        ),
+        const Card(
+          child: ListTile(
+              leading: Icon(Icons.supervisor_account),
+              title: Text('Supervisor'),
+              subtitle: Text('Dr. Christena Albert')),
         )
       ],
     );

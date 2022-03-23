@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
+import 'package:flutter_course/Services/GoogleMaps/fetching_currentlocation.dart';
 import 'package:flutter_course/style.dart';
 
 class RequestMechanicPage extends StatefulWidget {
@@ -42,7 +43,15 @@ class _RequestMechanicPageState extends State<RequestMechanicPage> {
               style: ElevatedButton.styleFrom(
                   primary: Colors.deepPurple.shade700,
                   minimumSize: const Size(140, 50)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FetchCurrentLocation(
+                        pageTitle: 'Request Mechanic'),
+                  ),
+                );
+              },
               child: const Text('Request Mechanic'),
             ),
           ),

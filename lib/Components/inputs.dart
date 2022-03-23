@@ -233,12 +233,14 @@ class TextArea extends StatelessWidget {
     this.hint,
     this.emptyFieldError,
     this.onChanged,
+    this.maxLength,
   }) : super(key: key);
   final TextEditingController inputController;
   final String label;
   final String? hint;
   final bool? emptyFieldError;
   final Function(String)? onChanged;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +252,9 @@ class TextArea extends StatelessWidget {
       expands: true,
       textAlignVertical: TextAlignVertical.top,
       onChanged: onChanged,
+      maxLength: maxLength,
       decoration: InputDecoration(
+          counterText: '',
           errorText: emptyFieldError == true
               ? 'You can\'t leave this field empty.'
               : null,

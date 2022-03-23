@@ -3,8 +3,8 @@
 import 'package:geolocator/geolocator.dart';
 
 class Location {
-  double? latitude;
-  double? longitude;
+  double latitude = 0.0;
+  double longitude = 0.0;
 
   static LocationPermission? permission;
 
