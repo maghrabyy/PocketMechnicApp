@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
+import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
 import 'package:flutter_course/Services/database.dart';
+import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -230,6 +232,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(150, 35),
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: const TextStyle(fontFamily: 'Kanit'),
+                      text:
+                          'There\'s also a chance if you run an automotive service, you can ',
+                      children: [
+                        TextSpan(
+                            text: 'click here ',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const NavigatingPage(
+                                        title: 'Join as a partner.',
+                                        page: BecomePartner(
+                                          joinAsPartner: true,
+                                        ),
+                                      ),
+                                    ));
+                              },
+                            style: const TextStyle(color: fourthLayerColor)),
+                        const TextSpan(text: 'and become a partner with us.')
+                      ]),
                 ),
               ),
             ],

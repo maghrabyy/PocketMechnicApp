@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_course/Pages/JoinAsPartner/joinaspartner.dart';
+import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
+import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
+import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
+import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,11 +43,10 @@ class PageDrawer extends StatelessWidget {
             AccountSettingsPage.id),
         buildListTile(context, 'Help', Icons.help, HelpPage.id),
         buildListTile(context, 'About us', FontAwesomeIcons.exclamationCircle,
-            HelpPage.id),
+            AboutUsPage.id),
         buildListTile(
             context, 'Report bug', Icons.bug_report, ReportBugPage.id),
-        buildListTile(context, 'Join as a partner', FontAwesomeIcons.userPlus,
-            JoinAsPartner.id),
+        becomePartnerTile(context),
         Expanded(
           child: Align(
             alignment: Alignment.bottomLeft,
@@ -69,6 +71,28 @@ class PageDrawer extends StatelessWidget {
         await _auth.signOut();
         Navigator.pushNamedAndRemoveUntil(
             context, InitialPage.id, (route) => false);
+      },
+    );
+  }
+
+  ListTile becomePartnerTile(BuildContext context) {
+    return ListTile(
+      leading: const Icon(
+        FontAwesomeIcons.userPlus,
+        size: 30,
+      ),
+      title: Text(
+        'Become a partner',
+        style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
+      ),
+      onTap: () async {
+        if (await checkIfDocExists(
+                'PartnershipSubmission', _auth.currentUser!.uid) ==
+            false) {
+          Navigator.pushNamed(context, BecomePartner.id);
+        } else {
+          Navigator.pushNamed(context, SubmittedRequest.id);
+        }
       },
     );
   }

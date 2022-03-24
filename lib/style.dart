@@ -93,5 +93,10 @@ ThemeData pmTheme() {
         ),
       ),
     ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(fifthLayerColor),
+      checkColor: MaterialStateProperty.all(thirdLayerColor),
+      overlayColor: MaterialStateProperty.all(fourthLayerColor),
+    ),
   );
 }

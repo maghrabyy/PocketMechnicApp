@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
+import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
-import 'package:flutter_course/Pages/JoinAsPartner/joinaspartner.dart';
+import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
@@ -152,9 +153,13 @@ class AppRoutes extends StatelessWidget {
               title: 'My vehicle',
               page: InputVehicleData(),
             ),
-        JoinAsPartner.id: (context) => const NavigatingPage(
-              title: 'Join as Partner',
-              page: JoinAsPartner(),
+        BecomePartner.id: (context) => const NavigatingPage(
+              title: 'Become a partner',
+              page: BecomePartner(),
+            ),
+        SubmittedRequest.id: (context) => const NavigatingPage(
+              title: 'Submitted Request',
+              page: SubmittedRequest(),
             ),
       },
     );

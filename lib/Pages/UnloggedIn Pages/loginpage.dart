@@ -102,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                           try {
                             await _auth.signInWithEmailAndPassword(
                                 email: email.text, password: password.text);
-
                             Navigator.pushNamedAndRemoveUntil(
                                 context, InitialPage.id, (route) => false);
                           } on FirebaseAuthException catch (e) {
