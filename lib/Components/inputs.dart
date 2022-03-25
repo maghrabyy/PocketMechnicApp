@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_course/style.dart';
 
 class RegularInput extends StatelessWidget {
-  const RegularInput(
-      {Key? key,
-      required this.label,
-      required this.inputController,
-      this.hint,
-      this.goNext,
-      this.enabled,
-      this.labelStyle,
-      this.hintstyle,
-      this.keyboardType,
-      this.emptyErrorText,
-      this.emptyFieldError,
-      this.onChanged,
-      this.maxLength,
-      this.action,
-      this.floatingLabel,
-      this.capitalizationBehaviour,
-      this.maxLines})
-      : super(key: key);
+  const RegularInput({
+    Key? key,
+    required this.label,
+    required this.inputController,
+    this.hint,
+    this.goNext,
+    this.enabled,
+    this.labelStyle,
+    this.hintstyle,
+    this.keyboardType,
+    this.emptyErrorText,
+    this.emptyFieldError,
+    this.onChanged,
+    this.maxLength,
+    this.action,
+    this.floatingLabel,
+    this.capitalizationBehaviour,
+    this.maxLines,
+    this.prefix,
+  }) : super(key: key);
   final String label;
   final String? hint;
   final TextEditingController inputController;
@@ -37,6 +38,7 @@ class RegularInput extends StatelessWidget {
   final bool? floatingLabel;
   final TextCapitalization? capitalizationBehaviour;
   final int? maxLines;
+  final Widget? prefix;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -59,6 +61,7 @@ class RegularInput extends StatelessWidget {
         errorText: emptyFieldError == true
             ? emptyErrorText ?? 'You can\'t leave this field empty'
             : null,
+        prefix: prefix,
         labelText: label,
         hintStyle: hintstyle,
         labelStyle: labelStyle,
@@ -75,12 +78,14 @@ class EmailInput extends StatelessWidget {
     required this.inputController,
     this.emptyFieldError,
     this.onChanged,
+    this.floatingLabel,
   }) : super(key: key);
 
   final TextEditingController inputController;
   final bool? goNext;
   final bool? emptyFieldError;
   final Function(String)? onChanged;
+  final bool? floatingLabel;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -91,6 +96,9 @@ class EmailInput extends StatelessWidget {
       textAlign: TextAlign.center,
       onChanged: onChanged,
       decoration: InputDecoration(
+        floatingLabelBehavior: floatingLabel == true
+            ? FloatingLabelBehavior.always
+            : FloatingLabelBehavior.auto,
         errorText: emptyFieldError == true ? 'Email cannot be blank' : null,
         labelText: 'Email',
         hintText: 'Enter your email address',
@@ -132,6 +140,7 @@ class PhoneInput extends StatelessWidget {
     required this.inputController,
     this.emptyFieldError,
     this.onChanged,
+    this.label,
     this.hint,
     this.enabled,
     this.floatingLabel,
@@ -141,6 +150,7 @@ class PhoneInput extends StatelessWidget {
   final bool? goNext;
   final bool? emptyFieldError;
   final Function(String)? onChanged;
+  final String? label;
   final String? hint;
   final bool? enabled;
   final bool? floatingLabel;
@@ -163,7 +173,11 @@ class PhoneInput extends StatelessWidget {
             : FloatingLabelBehavior.auto,
         errorText:
             emptyFieldError == true ? 'Phone number cannot be blank' : null,
-        labelText: 'Phone number',
+        prefix: const Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Text('+20'),
+        ),
+        labelText: label ?? 'Phone number',
         hintText: hint ?? 'Enter your phone number',
       ),
     );
@@ -234,6 +248,7 @@ class TextArea extends StatelessWidget {
     this.emptyFieldError,
     this.onChanged,
     this.maxLength,
+    this.prefix,
   }) : super(key: key);
   final TextEditingController inputController;
   final String label;
@@ -241,6 +256,7 @@ class TextArea extends StatelessWidget {
   final bool? emptyFieldError;
   final Function(String)? onChanged;
   final int? maxLength;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +276,7 @@ class TextArea extends StatelessWidget {
               : null,
           floatingLabelAlignment: FloatingLabelAlignment.center,
           label: Text(label),
+          prefix: prefix,
           hintText: hint ?? 'Write something here...',
           floatingLabelBehavior: FloatingLabelBehavior.always),
     );

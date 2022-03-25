@@ -235,18 +235,21 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: customDropmenu(
-                                                'Vehicle Brand',
-                                                '${vehiclesSnapshot.data['Brand']}',
-                                                vehicleBrands,
-                                                selectedBrand, (value) {
-                                              setState(() {
-                                                selectedBrand = value;
-                                              });
-                                            },
-                                                enabledVehicleBrand
-                                                    ? false
-                                                    : true),
+                                            child: CustomDropDownMenu(
+                                              label: 'Vehicle Brand',
+                                              hint:
+                                                  '${vehiclesSnapshot.data['Brand']}',
+                                              items: vehicleBrands,
+                                              currentValue: selectedBrand,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedBrand = value;
+                                                });
+                                              },
+                                              disable: enabledVehicleBrand
+                                                  ? false
+                                                  : true,
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -272,78 +275,65 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child:
-                                                      DropdownButtonHideUnderline(
-                                                    child: DropdownButton(
-                                                      iconDisabledColor:
-                                                          Colors.grey,
-                                                      iconEnabledColor:
-                                                          Colors.white,
-                                                      hint: Text(
-                                                        '${vehiclesSnapshot.data['ModelYear']}',
-                                                        style: TextStyle(
-                                                            color:
-                                                                selectedBodyType !=
-                                                                        null
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .grey,
-                                                            fontSize: 13),
-                                                      ),
-                                                      dropdownColor:
-                                                          thirdLayerColor,
-                                                      value: selectedModelYear,
-                                                      items: modelYear
-                                                          .map((String value) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList(),
+                                                  child: NoBorderDropdownMenu(
+                                                      hint:
+                                                          '${vehiclesSnapshot.data['ModelYear']}',
+                                                      items: modelYear,
+                                                      currentValue:
+                                                          selectedModelYear,
                                                       onChanged:
-                                                          enabledModelYear
-                                                              ? (String?
-                                                                  value) {
-                                                                  setState(() {
-                                                                    selectedModelYear =
-                                                                        value!;
-                                                                  });
-                                                                }
-                                                              : null,
-                                                    ),
-                                                  ),
+                                                          (String? value) {
+                                                        setState(() {
+                                                          selectedModelYear =
+                                                              value!;
+                                                        });
+                                                      },
+                                                      hintColor:
+                                                          enabledModelYear ==
+                                                                  true
+                                                              ? Colors.white
+                                                              : Colors.grey,
+                                                      disable:
+                                                          enabledModelYear),
                                                 )
                                               ],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: customDropmenu(
-                                                'Body Type',
-                                                '${vehiclesSnapshot.data['BodyType']}',
-                                                bodyTypes,
-                                                selectedBodyType, (value) {
-                                              setState(() {
-                                                selectedBodyType = value;
-                                              });
-                                            }, enabledBodyType ? false : true),
+                                            child: CustomDropDownMenu(
+                                              label: 'Body Type',
+                                              hint:
+                                                  '${vehiclesSnapshot.data['BodyType']}',
+                                              items: bodyTypes,
+                                              currentValue: selectedBodyType,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedBodyType = value;
+                                                });
+                                              },
+                                              disable: enabledBodyType
+                                                  ? false
+                                                  : true,
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: customDropmenu(
-                                                'Vehicle Color',
-                                                '${vehiclesSnapshot.data['Color']}',
-                                                vehicleColors,
-                                                selectedColor, (value) {
-                                              setState(() {
-                                                selectedColor = value;
-                                              });
-                                            },
-                                                enabledVehicleColor
-                                                    ? false
-                                                    : true),
+                                            child: CustomDropDownMenu(
+                                              label: 'Vehicle Color',
+                                              hint:
+                                                  '${vehiclesSnapshot.data['Color']}',
+                                              items: vehicleColors,
+                                              currentValue: selectedColor,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedColor = value;
+                                                });
+                                              },
+                                              disable: enabledVehicleColor
+                                                  ? false
+                                                  : true,
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -362,18 +352,23 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: customDropmenu(
-                                                'Vehicle Transimission',
-                                                '${vehiclesSnapshot.data['Transimission']}',
-                                                transimissionTypes,
-                                                selectedTransimission, (value) {
-                                              setState(() {
-                                                selectedTransimission = value;
-                                              });
-                                            },
-                                                enabledVehicleTransmission
-                                                    ? false
-                                                    : true),
+                                            child: CustomDropDownMenu(
+                                              label: 'Vehicle Transimission',
+                                              hint:
+                                                  '${vehiclesSnapshot.data['Transimission']}',
+                                              items: transimissionTypes,
+                                              currentValue:
+                                                  selectedTransimission,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedTransimission = value;
+                                                });
+                                              },
+                                              disable:
+                                                  enabledVehicleTransmission
+                                                      ? false
+                                                      : true,
+                                            ),
                                           ),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(

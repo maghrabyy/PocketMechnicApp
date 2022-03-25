@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,17 +62,19 @@ class _BecomePartnerState extends State<BecomePartner> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: customDropmenu(
-                    'Service Type',
-                    'Choose your service type.',
-                    serviceTypes,
-                    serviceType, (value) {
-                  setState(() {
-                    serviceType = value;
-                  });
-                }, false),
-              ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomDropDownMenu(
+                    label: 'Service Type',
+                    hint: 'Choose your service type.',
+                    items: serviceTypes,
+                    currentValue: serviceType,
+                    onChanged: (value) {
+                      setState(() {
+                        serviceType = value;
+                      });
+                    },
+                    disable: false,
+                  )),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RegularInput(
@@ -94,13 +95,11 @@ class _BecomePartnerState extends State<BecomePartner> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RegularInput(
+                child: PhoneInput(
                   label: 'Service contact number',
                   hint: 'Enter your service contact number.',
                   inputController: serviceNumber,
-                  maxLength: 11,
                   emptyFieldError: emptyserviceNumber,
-                  keyboardType: TextInputType.phone,
                   floatingLabel: true,
                   goNext: true,
                   onChanged: (value) {
@@ -146,23 +145,42 @@ class _BecomePartnerState extends State<BecomePartner> {
               Visibility(
                   visible: diffUserInfo,
                   child: UserInfoInput(
-                      userName: fullName,
-                      emptyUserName: emptyFullName,
-                      userPhoneNum: phoneNum,
-                      emptyUserNum: emptyPhoneNum,
-                      userEmail: emailAdress,
-                      emptyUserEmail: emptyEmail)),
+                    userNameController: fullName,
+                    emptyUserName: emptyFullName,
+                    userNameOnChanged: (value) {
+                      setState(() {
+                        emptyFullName = false;
+                      });
+                    },
+                    userPhoneNumController: phoneNum,
+                    emptyUserNum: emptyPhoneNum,
+                    userNumOnChanged: (value) {
+                      setState(() {
+                        emptyPhoneNum = false;
+                      });
+                    },
+                    userEmailController: emailAdress,
+                    emptyUserEmail: emptyEmail,
+                    userEmailOnChanged: (value) {
+                      setState(() {
+                        emptyEmail = false;
+                      });
+                    },
+                  )),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: customDropmenu(
-                    'Contact Role',
-                    'Choose your contact role.',
-                    contactRoles,
-                    contactRole, (value) {
-                  setState(() {
-                    contactRole = value;
-                  });
-                }, false),
+                child: CustomDropDownMenu(
+                  label: 'Contact Role',
+                  hint: 'Choose your contact role.',
+                  items: contactRoles,
+                  currentValue: contactRole,
+                  onChanged: (value) {
+                    setState(() {
+                      contactRole = value;
+                    });
+                  },
+                  disable: false,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -251,7 +269,7 @@ class _BecomePartnerState extends State<BecomePartner> {
                           else {
                             //Submit request
                             var rng = Random();
-                            var randNum = rng.nextInt(900000) + 100000;
+                            var randNum = rng.nextInt(9000000) + 1000000;
                             String unregisteredID = 'Unregistered#$randNum';
                             _firestore
                                 .collection('PartnershipSubmission')
@@ -318,21 +336,27 @@ class _BecomePartnerState extends State<BecomePartner> {
 
 // ignore: must_be_immutable
 class UserInfoInput extends StatefulWidget {
-  UserInfoInput(
-      {Key? key,
-      required this.userName,
-      required this.emptyUserName,
-      required this.userPhoneNum,
-      required this.emptyUserNum,
-      required this.userEmail,
-      required this.emptyUserEmail})
-      : super(key: key);
-  final TextEditingController userName;
-  bool emptyUserName;
-  final TextEditingController userPhoneNum;
-  bool emptyUserNum;
-  final TextEditingController userEmail;
-  bool emptyUserEmail;
+  const UserInfoInput({
+    Key? key,
+    required this.userNameController,
+    required this.emptyUserName,
+    required this.userNameOnChanged,
+    required this.userPhoneNumController,
+    required this.emptyUserNum,
+    required this.userNumOnChanged,
+    required this.userEmailController,
+    required this.emptyUserEmail,
+    required this.userEmailOnChanged,
+  }) : super(key: key);
+  final TextEditingController userNameController;
+  final bool emptyUserName;
+  final ValueChanged<String?> userNameOnChanged;
+  final TextEditingController userPhoneNumController;
+  final bool emptyUserNum;
+  final ValueChanged<String?> userNumOnChanged;
+  final TextEditingController userEmailController;
+  final bool emptyUserEmail;
+  final ValueChanged<String?> userEmailOnChanged;
 
   @override
   State<UserInfoInput> createState() => _UserInfoInputState();
@@ -343,58 +367,44 @@ class _UserInfoInputState extends State<UserInfoInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Your personal information',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: RegularInput(
             label: 'Full Name',
             hint: 'Enter your full name.',
             maxLength: 30,
-            inputController: widget.userName,
+            inputController: widget.userNameController,
             emptyFieldError: widget.emptyUserName,
             floatingLabel: true,
             capitalizationBehaviour: TextCapitalization.words,
             goNext: true,
-            onChanged: (value) {
-              setState(() {
-                widget.emptyUserName = false;
-              });
-            },
+            onChanged: widget.userNameOnChanged,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: RegularInput(
-            label: 'Phonr number',
-            hint: 'Enter your phone number.',
-            inputController: widget.userPhoneNum,
+          child: PhoneInput(
+            inputController: widget.userPhoneNumController,
             emptyFieldError: widget.emptyUserNum,
-            keyboardType: TextInputType.phone,
-            maxLength: 11,
             floatingLabel: true,
             goNext: true,
-            onChanged: (value) {
-              setState(() {
-                widget.emptyUserNum = false;
-              });
-            },
+            onChanged: widget.userNumOnChanged,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RegularInput(
-            label: 'Email Address',
-            hint: 'Enter your email adress.',
-            inputController: widget.userEmail,
-            emptyFieldError: widget.emptyUserEmail,
-            floatingLabel: true,
-            capitalizationBehaviour: TextCapitalization.sentences,
-            onChanged: (value) {
-              setState(() {
-                widget.emptyUserEmail = false;
-              });
-            },
-          ),
-        ),
+            padding: const EdgeInsets.all(8.0),
+            child: EmailInput(
+              inputController: widget.userEmailController,
+              floatingLabel: true,
+              emptyFieldError: widget.emptyUserEmail,
+              onChanged: widget.userEmailOnChanged,
+            )),
       ],
     );
   }

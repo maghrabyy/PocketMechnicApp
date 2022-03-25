@@ -54,27 +54,33 @@ class _InputVehicleDataState extends State<InputVehicleData> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: customDropmenu(
-                      'Vehicle\'s brand',
-                      'Select your vehicle\'s brand',
-                      vehicleBrands,
-                      selectedBrand, (value) {
-                    setState(() {
-                      selectedBrand = value;
-                    });
-                  }, false),
+                  child: CustomDropDownMenu(
+                    label: 'Vehicle\'s brand',
+                    hint: 'Select your vehicle\'s brand',
+                    items: vehicleBrands,
+                    currentValue: selectedBrand,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedBrand = value;
+                      });
+                    },
+                    disable: false,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: customDropmenu(
-                      'Body Type',
-                      'Select your vehicle\'s body type',
-                      bodyTypes,
-                      selectedBodyType, (value) {
-                    setState(() {
-                      selectedBodyType = value;
-                    });
-                  }, selectedBrand == null ? true : false),
+                  child: CustomDropDownMenu(
+                    label: 'Body Type',
+                    hint: 'Select your vehicle\'s body type',
+                    items: bodyTypes,
+                    currentValue: selectedBodyType,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedBodyType = value;
+                      });
+                    },
+                    disable: selectedBrand == null ? true : false,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -96,51 +102,37 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            iconDisabledColor: Colors.grey,
-                            iconEnabledColor: Colors.white,
-                            hint: Text(
-                              'Model year',
-                              style: TextStyle(
-                                  color: selectedBodyType != null
-                                      ? Colors.white
-                                      : Colors.grey,
-                                  fontSize: 13),
-                            ),
-                            dropdownColor: thirdLayerColor,
-                            value: selectedModelYear,
-                            items: modelYear.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: selectedBodyType != null
-                                ? (String? value) {
-                                    setState(() {
-                                      selectedModelYear = value!;
-                                    });
-                                  }
-                                : null,
-                          ),
-                        ),
-                      )
+                          padding: const EdgeInsets.all(8.0),
+                          child: NoBorderDropdownMenu(
+                              hint: 'Model year',
+                              items: modelYear,
+                              currentValue: selectedModelYear,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedModelYear = value!;
+                                });
+                              },
+                              hintColor: selectedBodyType != null
+                                  ? Colors.white
+                                  : Colors.grey,
+                              disable: selectedBodyType == null ? false : true))
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: customDropmenu(
-                      'Vehicle\'s color',
-                      'Select your vehicle\'s color',
-                      vehicleColors,
-                      selectedColor, (value) {
-                    setState(() {
-                      selectedColor = value;
-                    });
-                  }, false),
+                  child: CustomDropDownMenu(
+                    label: 'Vehicle\'s color',
+                    hint: 'Select your vehicle\'s color',
+                    items: vehicleColors,
+                    currentValue: selectedColor,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedColor = value;
+                      });
+                    },
+                    disable: false,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -164,15 +156,18 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: customDropmenu(
-                      'Transimission',
-                      'Select your vehicle\'s transimission',
-                      transimissionTypes,
-                      selectedTransimission, (value) {
-                    setState(() {
-                      selectedTransimission = value;
-                    });
-                  }, false),
+                  child: CustomDropDownMenu(
+                    label: 'Transimission',
+                    hint: 'Select your vehicle\'s transimission',
+                    items: transimissionTypes,
+                    currentValue: selectedTransimission,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedTransimission = value;
+                      });
+                    },
+                    disable: false,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
