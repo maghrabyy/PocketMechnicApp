@@ -57,32 +57,22 @@ class CustomDropDownMenu extends StatelessWidget {
   }
 }
 
-/*DropdownButtonHideUnderline noBorderDropdownMenu(
-    String hint,
-    List<String> items,
-    String? currentvalue,
-    Color hintColor,
-    ValueChanged<String?> onChangedValue,
-    bool disable) {
-  return NoBorderDropdownMenu();
-}*/
-
 class NoBorderDropdownMenu extends StatelessWidget {
   const NoBorderDropdownMenu(
       {Key? key,
       required this.hint,
       required this.items,
       required this.onChanged,
-      required this.disable,
+      required this.enabled,
       this.currentValue,
       this.hintColor})
       : super(key: key);
   final String hint;
   final Color? hintColor;
-  final String? currentValue;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
-  final bool disable;
+  final dynamic currentValue;
+  final List items;
+  final ValueChanged onChanged;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -96,13 +86,13 @@ class NoBorderDropdownMenu extends StatelessWidget {
         ),
         dropdownColor: thirdLayerColor,
         value: currentValue,
-        items: items.map((String value) {
-          return DropdownMenuItem<String>(
+        items: items.map((value) {
+          return DropdownMenuItem<Object>(
             value: value,
-            child: Text(value),
+            child: Text(value.toString()),
           );
         }).toList(),
-        onChanged: disable ? onChanged : null,
+        onChanged: enabled ? onChanged : null,
       ),
     );
   }

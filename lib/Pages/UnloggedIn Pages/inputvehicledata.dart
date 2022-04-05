@@ -107,7 +107,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                               hint: 'Model year',
                               items: modelYear,
                               currentValue: selectedModelYear,
-                              onChanged: (String? value) {
+                              onChanged: (value) {
                                 setState(() {
                                   selectedModelYear = value!;
                                 });
@@ -115,7 +115,7 @@ class _InputVehicleDataState extends State<InputVehicleData> {
                               hintColor: selectedBodyType != null
                                   ? Colors.white
                                   : Colors.grey,
-                              disable: selectedBodyType == null ? false : true))
+                              enabled: selectedBodyType == null ? false : true))
                     ],
                   ),
                 ),

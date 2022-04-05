@@ -62,12 +62,21 @@ class DatabaseService {
     String userID = 'U$randNum';
     DocumentReference userCollection = _firestore.collection('Users').doc(uId);
     await firebaseUser?.updateDisplayName(fullName);
+    _firestore
+        .collection('BugsReports')
+        .doc(_auth.currentUser!.uid)
+        .set({'Reports': []});
+    _firestore
+        .collection('sparePartFavourites')
+        .doc(_auth.currentUser!.uid)
+        .set({'userID': userID, 'favouriteProducts': []});
     return await userCollection.set({
       'UserID': userID,
       'FullName': fullName,
       'Email': email,
       'PhoneNumber': phoneNumber,
-      'Vehicle': {'VehicleID': '', 'VehicleName': ''}
+      'Vehicle': {'VehicleID': '', 'VehicleName': ''},
+      'userType': 'Customer',
     });
   }
 }

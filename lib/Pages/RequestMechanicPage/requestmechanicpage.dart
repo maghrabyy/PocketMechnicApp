@@ -31,7 +31,7 @@ class _RequestMechanicPageState extends State<RequestMechanicPage> {
             textAlign: TextAlign.center,
           ),
           const Text(
-              'Right at your current location the mechanic will be able to accept your request perform the required service.',
+              'Right at your current location the mechanic will be able to accept your request and perform the required service.',
               textAlign: TextAlign.center),
           const Text(
             'You can simply send a photo of what is defected on your vehicle or you can send a voice message for the unusual noises your vehicle makes.',

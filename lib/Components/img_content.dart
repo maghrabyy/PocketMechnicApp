@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
 class ImgContent extends StatelessWidget {
-  final String imgText;
+  final String? imgText;
   final String imgSrc;
   final Color? textColor;
   final double? imgHeight;
   final double? imgWidth;
   final double? textSize;
-  const ImgContent(
-      {required this.imgSrc,
-      required this.imgText,
-      this.textColor,
-      this.imgHeight,
-      this.imgWidth,
-      this.textSize});
+  final Widget? content;
+  const ImgContent({
+    required this.imgSrc,
+    this.imgText,
+    this.textColor,
+    this.imgHeight,
+    this.imgWidth,
+    this.textSize,
+    this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +32,12 @@ class ImgContent extends StatelessWidget {
             )),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            imgText,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: textColor, fontSize: textSize),
-          ),
+          child: content ??
+              Text(
+                imgText!,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: textColor, fontSize: textSize),
+              ),
         )
       ],
     );

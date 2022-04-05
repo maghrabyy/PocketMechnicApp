@@ -78,40 +78,23 @@ class _ReportBugPageState extends State<ReportBugPage> {
                   var rng = Random();
                   var randNum = rng.nextInt(900000) + 100000;
                   String reportID = 'RP$randNum';
-                  if (await checkIfDocExists(
-                      'BugsReports', _auth.currentUser!.uid)) {
-                    _firestore
-                        .collection('BugsReports')
-                        .doc(_auth.currentUser!.uid)
-                        .update({
-                      'Reports': FieldValue.arrayUnion([
-                        {
-                          'userID': await getUserID(_auth.currentUser!.uid),
-                          'userEmail': _auth.currentUser!.email,
-                          'reportTitle': reportTitle.text,
-                          'reportDescription': reportField.text,
-                          'Date': DateTime.now(),
-                          'reportID': reportID,
-                        }
-                      ])
-                    });
-                  } else {
-                    _firestore
-                        .collection('BugsReports')
-                        .doc(_auth.currentUser!.uid)
-                        .set({
-                      'Reports': [
-                        {
-                          'userID': await getUserID(_auth.currentUser!.uid),
-                          'userEmail': _auth.currentUser!.email,
-                          'reportTitle': reportTitle.text,
-                          'reportDescription': reportField.text,
-                          'Date': DateTime.now(),
-                          'reportID': reportID,
-                        }
-                      ]
-                    });
-                  }
+
+                  _firestore
+                      .collection('BugsReports')
+                      .doc(_auth.currentUser!.uid)
+                      .update({
+                    'Reports': FieldValue.arrayUnion([
+                      {
+                        'userID': await getUserID(_auth.currentUser!.uid),
+                        'userEmail': _auth.currentUser!.email,
+                        'reportTitle': reportTitle.text,
+                        'reportDescription': reportField.text,
+                        'Date': DateTime.now(),
+                        'reportID': reportID,
+                      }
+                    ])
+                  });
+
                   reportTitle.clear();
                   reportField.clear();
                   displaySnackbar(context, 'Report sent.', fifthLayerColor);

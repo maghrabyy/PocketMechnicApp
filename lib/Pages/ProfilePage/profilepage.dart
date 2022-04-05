@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Components/textdivider.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -95,14 +96,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     String vehName = snapshot.data['Vehicle.VehicleName'];
                     return Column(
                       children: [
-                        Text(
+                        TextDivider(
+                            text: Text(
                           vehName,
                           style: const TextStyle(
                               color: textColor,
                               fontSize: 20,
                               fontFamily: 'Kanit',
                               fontWeight: FontWeight.bold),
-                        ),
+                        )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ProfileData(

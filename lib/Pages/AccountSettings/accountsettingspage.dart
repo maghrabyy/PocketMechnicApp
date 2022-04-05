@@ -281,8 +281,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                                       items: modelYear,
                                                       currentValue:
                                                           selectedModelYear,
-                                                      onChanged:
-                                                          (String? value) {
+                                                      onChanged: (value) {
                                                         setState(() {
                                                           selectedModelYear =
                                                               value!;
@@ -293,7 +292,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                                                   true
                                                               ? Colors.white
                                                               : Colors.grey,
-                                                      disable:
+                                                      enabled:
                                                           enabledModelYear),
                                                 )
                                               ],

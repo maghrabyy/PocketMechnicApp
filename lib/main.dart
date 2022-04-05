@@ -8,6 +8,7 @@ import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
+import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_course/pagedrawer.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
 import 'Pages/TowTruckPage/towtruck_page.dart';
@@ -104,6 +106,10 @@ class AppRoutes extends StatelessWidget {
       initialRoute: InitialPage.id,
       routes: {
         InitialPage.id: theInitialPage,
+        FavouriteSparePartItems.id: (context) => const NavigatingPage(
+              title: 'My Favourites',
+              page: FavouriteSparePartItems(),
+            ),
         RequestMechanicPage.id: (context) => const NavigatingPage(
               title: 'Request Mechanic',
               page: RequestMechanicPage(),
@@ -193,6 +199,32 @@ class _InitialPageState extends State<InitialPage> {
     'My Profile'
   ];
 
+  Widget topActions() {
+    if (currentPageIndex == 3) {
+      return IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AccountSettingsPage.id);
+        },
+        icon: const Icon(
+          Icons.settings,
+          size: 20,
+        ),
+      );
+    } else if (currentPageIndex == 2) {
+      return IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, FavouriteSparePartItems.id);
+        },
+        icon: const Icon(
+          FontAwesomeIcons.solidHeart,
+          size: 20,
+        ),
+      );
+    } else {
+      return const PopupMenu();
+    }
+  }
+
   onTapped(int selectedIndex) {
     setState(() {
       currentPageIndex = selectedIndex;
@@ -222,19 +254,7 @@ class _InitialPageState extends State<InitialPage> {
           ),
         ),
         title: Text(_pageTitles[currentPageIndex]),
-        actions: [
-          currentPageIndex != 3
-              ? const PopupMenu()
-              : IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AccountSettingsPage.id);
-                  },
-                  icon: const Icon(
-                    Icons.settings,
-                    size: 20,
-                  ),
-                ),
-        ],
+        actions: [topActions()],
       ),
       drawer: Drawer(
         backgroundColor: secondLayerColor,
