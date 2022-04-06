@@ -50,52 +50,73 @@ class FavouriteSparePartItems extends StatelessWidget {
                 children: favProducts.reversed.map<Padding>((dynamic value) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: MaterialButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => NavigatingPage(
-                                    title: value['productName'],
-                                    page: ProductPage(
-                                        productID: value['productID'])))));
-                      },
-                      color: fourthLayerColor,
-                      splashColor: fifthLayerColor,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/carEngine.png',
-                                ),
-                                height: 50,
-                              ),
-                            ),
-                            Text(
-                              value['productName'],
-                              style: const TextStyle(
-                                  fontSize: 20, color: textColor),
-                            ),
-                            Column(children: [
-                              Text('${value['productPrice'].toString()} EGP',
-                                  style: const TextStyle(
-                                      fontSize: 20, color: textColor)),
-                              Text(
-                                  value['productAvailability'] == true
-                                      ? 'In Stock'
-                                      : 'Out Stock',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color:
-                                          value['productAvailability'] == true
-                                              ? Colors.green
-                                              : Colors.redAccent)),
-                            ])
-                          ]),
-                    ),
+                    child: StreamBuilder(
+                        stream: _firestore
+                            .collection('sparePartProducts')
+                            .doc(value)
+                            .snapshots(),
+                        builder: (context, AsyncSnapshot productSnapshot) {
+                          if (!productSnapshot.hasData) {
+                            return const Center(
+                                child: SpinKitFadingFour(
+                              color: fifthLayerColor,
+                            ));
+                          } else {
+                            return MaterialButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => NavigatingPage(
+                                            title:
+                                                '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
+                                            page: ProductPage(
+                                                productID: productSnapshot
+                                                    .data['productID'])))));
+                              },
+                              color: fourthLayerColor,
+                              splashColor: fifthLayerColor,
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image(
+                                        image: AssetImage(
+                                          productSnapshot.data['productImage'],
+                                        ),
+                                        height: 50,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
+                                      style: const TextStyle(
+                                          fontSize: 20, color: textColor),
+                                    ),
+                                    Column(children: [
+                                      Text(
+                                          '${productSnapshot.data['productPrice'].toString()} EGP',
+                                          style: const TextStyle(
+                                              fontSize: 20, color: textColor)),
+                                      Text(
+                                          productSnapshot.data[
+                                                      'productAvailability'] ==
+                                                  true
+                                              ? 'In Stock'
+                                              : 'Out Stock',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: productSnapshot.data[
+                                                          'productAvailability'] ==
+                                                      true
+                                                  ? Colors.green
+                                                  : Colors.redAccent)),
+                                    ])
+                                  ]),
+                            );
+                          }
+                        }),
                   );
                 }).toList(),
               ),

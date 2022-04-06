@@ -70,6 +70,10 @@ class DatabaseService {
         .collection('sparePartFavourites')
         .doc(_auth.currentUser!.uid)
         .set({'userID': userID, 'favouriteProducts': []});
+    _firestore
+        .collection('shoppingCart')
+        .doc(_auth.currentUser!.uid)
+        .set({'userID': userID, 'Cart': []});
     return await userCollection.set({
       'UserID': userID,
       'FullName': fullName,

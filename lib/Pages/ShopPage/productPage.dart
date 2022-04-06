@@ -2,13 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/customdropdownmenu.dart';
 import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Components/textdivider.dart';
+import 'package:flutter_course/Pages/ShopPage/shoppingcart.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,6 +27,8 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   TextEditingController feedbackController = TextEditingController();
+  int selectedQuantity = 1;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -42,6 +44,42 @@ class _ProductPageState extends State<ProductPage> {
           ));
         } else {
           final List feedbacksList = snapshot.data['Feedbacks'];
+          Row quantitySelection() {
+            return Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    if (selectedQuantity > 1) {
+                      setState(() {
+                        selectedQuantity--;
+                      });
+                    }
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.minusCircle,
+                    size: 22,
+                  ),
+                ),
+                Text(snapshot.data['productAvailability'] == true
+                    ? selectedQuantity.toString()
+                    : '0'),
+                IconButton(
+                  onPressed: () {
+                    if (selectedQuantity < snapshot.data['productQuantity']) {
+                      setState(() {
+                        selectedQuantity++;
+                      });
+                    }
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.plusCircle,
+                    size: 22,
+                  ),
+                ),
+              ],
+            );
+          }
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -67,7 +105,7 @@ class _ProductPageState extends State<ProductPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              snapshot.data['productName'],
+                              '${snapshot.data['productBrand']} ${snapshot.data['productName']}',
                               style: const TextStyle(fontSize: 25),
                             ),
                             Padding(
@@ -109,14 +147,39 @@ class _ProductPageState extends State<ProductPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(
-                              width: 60,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('Add to cart'),
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(100, 40)),
+                            quantitySelection(),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (snapshot.data['productAvailability'] ==
+                                      true) {
+                                    int totalPrice =
+                                        (snapshot.data['productPrice'] *
+                                            selectedQuantity);
+                                    _firestore
+                                        .collection('shoppingCart')
+                                        .doc(_auth.currentUser!.uid)
+                                        .update({
+                                      'Cart': FieldValue.arrayUnion([
+                                        {
+                                          'productID':
+                                              snapshot.data['productID'],
+                                          'selectedQuantity': selectedQuantity,
+                                          'totalPrice': totalPrice,
+                                        }
+                                      ])
+                                    });
+                                    Navigator.pushNamed(
+                                        context, ShoppingCart.id);
+                                  } else {
+                                    displaySnackbar(
+                                        context,
+                                        'This product is out of stock.',
+                                        fifthLayerColor);
+                                  }
+                                },
+                                child: const Text('Add to cart'),
+                              ),
                             ),
                             StreamBuilder(
                                 stream: _firestore
@@ -130,78 +193,53 @@ class _ProductPageState extends State<ProductPage> {
                                       color: fifthLayerColor,
                                     );
                                   } else {
-                                    List favouriteProducts = favProductsSnapshot
-                                        .data['favouriteProducts'];
-                                    var toCheck = {
-                                      'productAvailability':
-                                          snapshot.data['productAvailability'],
-                                      'productID': snapshot.data['productID'],
-                                      'productName':
-                                          snapshot.data['productName'],
-                                      'productPrice':
-                                          snapshot.data['productPrice'],
-                                    };
-                                    return IconButton(
-                                        onPressed: () async {
-                                          //to favourite
-                                          if (!favouriteProducts.any(
-                                              (e) => mapEquals(e, toCheck))) {
-                                            _firestore
-                                                .collection(
-                                                    'sparePartFavourites')
-                                                .doc(_auth.currentUser!.uid)
-                                                .update({
-                                              'favouriteProducts':
-                                                  FieldValue.arrayUnion([
-                                                {
-                                                  'productName': snapshot
-                                                      .data['productName'],
-                                                  'productID': snapshot
-                                                      .data['productID'],
-                                                  'productPrice': snapshot
-                                                      .data['productPrice'],
-                                                  'productAvailability':
-                                                      snapshot.data[
-                                                          'productAvailability']
-                                                }
-                                              ])
-                                            });
-                                          }
-                                          //to unfavourite
-                                          else {
-                                            _firestore
-                                                .collection(
-                                                    'sparePartFavourites')
-                                                .doc(_auth.currentUser!.uid)
-                                                .update({
-                                              'favouriteProducts':
-                                                  FieldValue.arrayRemove([
-                                                {
-                                                  'productName': snapshot
-                                                      .data['productName'],
-                                                  'productID': snapshot
-                                                      .data['productID'],
-                                                  'productPrice': snapshot
-                                                      .data['productPrice'],
-                                                  'productAvailability':
-                                                      snapshot.data[
-                                                          'productAvailability']
-                                                }
-                                              ])
-                                            });
-                                          }
-                                        },
-                                        icon: Icon(
-                                          favouriteProducts.any(
-                                                  (e) => mapEquals(e, toCheck))
-                                              ? FontAwesomeIcons.solidHeart
-                                              : FontAwesomeIcons.heart,
-                                          color: favouriteProducts.any(
-                                                  (e) => mapEquals(e, toCheck))
-                                              ? Colors.redAccent
-                                              : iconColor,
-                                          size: 35,
-                                        ));
+                                    List favouriteProductIDs =
+                                        favProductsSnapshot
+                                            .data['favouriteProducts'];
+                                    return Expanded(
+                                      child: IconButton(
+                                          onPressed: () async {
+                                            //to favourite
+                                            if (!favouriteProductIDs.contains(
+                                              snapshot.data['productID'],
+                                            )) {
+                                              _firestore
+                                                  .collection(
+                                                      'sparePartFavourites')
+                                                  .doc(_auth.currentUser!.uid)
+                                                  .update({
+                                                'favouriteProducts':
+                                                    FieldValue.arrayUnion([
+                                                  snapshot.data['productID'],
+                                                ])
+                                              });
+                                            }
+                                            //to unfavourite
+                                            else {
+                                              _firestore
+                                                  .collection(
+                                                      'sparePartFavourites')
+                                                  .doc(_auth.currentUser!.uid)
+                                                  .update({
+                                                'favouriteProducts':
+                                                    FieldValue.arrayRemove([
+                                                  snapshot.data['productID'],
+                                                ])
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(
+                                            favouriteProductIDs.contains(
+                                                    snapshot.data['productID'])
+                                                ? FontAwesomeIcons.solidHeart
+                                                : FontAwesomeIcons.heart,
+                                            color: favouriteProductIDs.contains(
+                                                    snapshot.data['productID'])
+                                                ? Colors.redAccent
+                                                : iconColor,
+                                            size: 35,
+                                          )),
+                                    );
                                   }
                                 })
                           ],

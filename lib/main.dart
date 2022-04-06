@@ -10,6 +10,7 @@ import 'package:flutter_course/Pages/ReportBug/myreports.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
+import 'package:flutter_course/Pages/ShopPage/shoppingcart.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
@@ -25,6 +26,7 @@ import 'Pages/TowTruckPage/towtruck_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Pages/UnloggedIn Pages/resetpassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:badges/badges.dart';
 
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
@@ -109,6 +111,10 @@ class AppRoutes extends StatelessWidget {
         FavouriteSparePartItems.id: (context) => const NavigatingPage(
               title: 'My Favourites',
               page: FavouriteSparePartItems(),
+            ),
+        ShoppingCart.id: (context) => const NavigatingPage(
+              title: 'Shopping Cart',
+              page: ShoppingCart(),
             ),
         RequestMechanicPage.id: (context) => const NavigatingPage(
               title: 'Request Mechanic',
@@ -199,29 +205,68 @@ class _InitialPageState extends State<InitialPage> {
     'My Profile'
   ];
 
-  Widget topActions() {
+  List<Widget> topActions() {
     if (currentPageIndex == 3) {
-      return IconButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AccountSettingsPage.id);
-        },
-        icon: const Icon(
-          Icons.settings,
-          size: 20,
+      return [
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, AccountSettingsPage.id);
+          },
+          icon: const Icon(
+            Icons.settings,
+            size: 20,
+          ),
         ),
-      );
+        const PopupMenu()
+      ];
     } else if (currentPageIndex == 2) {
-      return IconButton(
-        onPressed: () {
-          Navigator.pushNamed(context, FavouriteSparePartItems.id);
-        },
-        icon: const Icon(
-          FontAwesomeIcons.solidHeart,
-          size: 20,
+      return [
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, FavouriteSparePartItems.id);
+          },
+          icon: const Icon(
+            FontAwesomeIcons.solidHeart,
+            size: 20,
+          ),
         ),
-      );
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, ShoppingCart.id);
+          },
+          icon: Stack(children: [
+            Badge(
+              position: const BadgePosition(bottom: 1, start: 15),
+              badgeColor: fourthLayerColor,
+              badgeContent: StreamBuilder(
+                  stream: _firestore
+                      .collection('shoppingCart')
+                      .doc(_auth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text('.');
+                    } else {
+                      int cartListItemsLength = snapshot.data['Cart'].length;
+                      return Positioned(
+                        top: 3.0,
+                        left: 4.0,
+                        child: Text(
+                          cartListItemsLength.toString(),
+                        ),
+                      );
+                    }
+                  }),
+              child: const Icon(
+                FontAwesomeIcons.shoppingCart,
+                size: 20,
+              ),
+            ),
+          ]),
+        ),
+      ];
     } else {
-      return const PopupMenu();
+      return const [PopupMenu()];
     }
   }
 
@@ -254,7 +299,7 @@ class _InitialPageState extends State<InitialPage> {
           ),
         ),
         title: Text(_pageTitles[currentPageIndex]),
-        actions: [topActions()],
+        actions: topActions(),
       ),
       drawer: Drawer(
         backgroundColor: secondLayerColor,

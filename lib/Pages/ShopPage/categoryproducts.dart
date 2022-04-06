@@ -55,7 +55,8 @@ class CategoryProducts extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: ((context) => NavigatingPage(
-                                    title: value['productName'],
+                                    title:
+                                        '${value['productBrand']} ${value['productName']}',
                                     page: ProductPage(
                                         productID: value['productID'])))));
                       },
@@ -70,7 +71,7 @@ class CategoryProducts extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  value['productName'],
+                                  '${value['productBrand']} ${value['productName']}',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       fontSize: 20, color: textColor),
