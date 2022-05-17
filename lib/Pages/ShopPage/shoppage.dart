@@ -12,7 +12,11 @@ navigateToCategory(
       MaterialPageRoute(
           builder: ((context) => NavigatingPage(
               title: pageTitle,
-              page: CategoryProducts(category: categoryName)))));
+              actions: shopAppBarActions(context),
+              page: CategoryProducts(
+                category: categoryName,
+                pageTitle: pageTitle,
+              )))));
 }
 
 List<Widget> sparePartShop(
@@ -20,7 +24,7 @@ List<Widget> sparePartShop(
   return [
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Engine And Oil', 'EngineAndOil');
+          navigateToCategory(context, 'Engine And Oil shop', 'EngineAndOil');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -30,7 +34,7 @@ List<Widget> sparePartShop(
             imgText: 'Engine and Oil')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Air Filter', 'AirFilter');
+          navigateToCategory(context, 'Air Filter shop', 'AirFilter');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -40,7 +44,7 @@ List<Widget> sparePartShop(
             imgText: 'Air Filter')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Car Battery', 'CarBattery');
+          navigateToCategory(context, 'Car Battery shop', 'CarBattery');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -50,7 +54,7 @@ List<Widget> sparePartShop(
             imgText: 'Car Battery')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Brake Pads', 'BrakePads');
+          navigateToCategory(context, 'Brake Pads shop', 'BrakePads');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -60,7 +64,7 @@ List<Widget> sparePartShop(
             imgText: 'Brake Pads')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Tires', 'Tires');
+          navigateToCategory(context, 'Tires shop', 'Tires');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -70,7 +74,7 @@ List<Widget> sparePartShop(
             imgText: 'Tires')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Alternator', 'Alternator');
+          navigateToCategory(context, 'Alternator shop', 'Alternator');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -80,7 +84,7 @@ List<Widget> sparePartShop(
             imgText: 'Alternator')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Radiator', 'Radiator');
+          navigateToCategory(context, 'Radiator shop', 'Radiator');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(
@@ -90,7 +94,7 @@ List<Widget> sparePartShop(
             imgText: 'Radiator')),
     RoundedButtonContainer(
         onPressed: () {
-          navigateToCategory(context, 'Accessories', 'Accessories');
+          navigateToCategory(context, 'Accessories shop', 'Accessories');
         },
         boxColor: thirdLayerColor,
         child: ImgContent(

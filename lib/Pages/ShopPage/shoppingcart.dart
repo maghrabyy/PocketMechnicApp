@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
+import 'package:flutter_course/Pages/ShopPage/placeorder.dart';
 import 'package:flutter_course/Pages/ShopPage/productPage.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
@@ -54,11 +55,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Icon(
-                      Icons.pageview,
+                      Icons.shopping_cart,
                       size: 100,
                     ),
                     Text(
-                      'There\'s no items found here.',
+                      'Your cart is empty.',
                       style: TextStyle(fontSize: 25),
                     )
                   ],
@@ -86,26 +87,63 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     color: fifthLayerColor,
                                   ));
                                 } else {
+                                  String categoryPageTitle() {
+                                    switch (
+                                        productSnapshot.data['categoryName']) {
+                                      case 'EngineAndOil':
+                                        return 'Engine And Oil shop';
+
+                                      case 'AirFilter':
+                                        return 'Air Filter shop';
+
+                                      case 'CarBattery':
+                                        return 'Car Battery shop';
+
+                                      case 'BrakePads':
+                                        return 'Brake Pads shop';
+
+                                      case 'Tires':
+                                        return 'Tires shop';
+
+                                      case 'Alternator':
+                                        return 'Alternator shop';
+
+                                      case 'Radiator':
+                                        return 'Radiator shop';
+
+                                      case 'Accessories':
+                                        return 'Accessories shop';
+                                      default:
+                                        return 'Unknown';
+                                    }
+                                  }
+
                                   return RoundedButtonContainer(
                                     onPressed: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: ((context) => NavigatingPage(
-                                                  title:
-                                                      '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
-                                                  page: ProductPage(
-                                                      productID: value[
-                                                          'productID'])))));
+                                              builder: ((context) =>
+                                                  NavigatingPage(
+                                                      title:
+                                                          categoryPageTitle(),
+                                                      actions:
+                                                          shopAppBarActions(
+                                                              context),
+                                                      page: ProductPage(
+                                                          productID: value[
+                                                              'productID'])))));
                                     },
                                     boxColor: thirdLayerColor,
                                     child: Row(
                                       children: [
                                         Expanded(
-                                            child: Image(
-                                                image: AssetImage(
-                                                    productSnapshot.data[
-                                                        'productImage']))),
+                                            child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Image(
+                                              image: AssetImage(productSnapshot
+                                                  .data['productImage'])),
+                                        )),
                                         Expanded(
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -142,6 +180,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                   'Description: ${productSnapshot.data['productDescription']}',
                                                   textAlign: TextAlign.center,
                                                 ),
+                                                //   quantitySelection()
                                               ],
                                             ),
                                           ),
@@ -188,8 +227,18 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text('Place Order')),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NavigatingPage(
+                                              title: 'Place Order',
+                                              page: PlaceOrderPage(
+                                                subTotal: subTotal,
+                                                shippingFees: shippingFees,
+                                              ))));
+                                },
+                                child: const Text('Check Out')),
                           ),
                         ),
                         Padding(

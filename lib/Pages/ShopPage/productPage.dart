@@ -2,13 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/customdropdownmenu.dart';
 import 'package:flutter_course/Components/inputs.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Components/textdivider.dart';
-import 'package:flutter_course/Pages/ShopPage/shoppingcart.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -28,6 +28,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   TextEditingController feedbackController = TextEditingController();
   int selectedQuantity = 1;
+  int oldSelectedQuantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,35 @@ class _ProductPageState extends State<ProductPage> {
           ));
         } else {
           final List feedbacksList = snapshot.data['Feedbacks'];
+          List cartList = [];
+          _firestore
+              .collection('shoppingCart')
+              .doc(_auth.currentUser!.uid)
+              .get()
+              .then((value) => cartList = value['Cart']);
+          int getOldSelectedQuantity() {
+            for (var map in cartList) {
+              if (map?.containsKey('productID') ?? false) {
+                if (map!['productID'] == snapshot.data['productID']) {
+                  oldSelectedQuantity = map['selectedQuantity'];
+                }
+              }
+            }
+            return oldSelectedQuantity;
+          }
+
+          int getOldTotalPrice() {
+            int oldTotalPrice = 0;
+            for (var map in cartList) {
+              if (map?.containsKey('productID') ?? false) {
+                if (map!['productID'] == snapshot.data['productID']) {
+                  oldTotalPrice = map['totalPrice'];
+                }
+              }
+            }
+            return oldTotalPrice;
+          }
+
           Row quantitySelection() {
             return Row(
               children: [
@@ -90,36 +120,43 @@ class _ProductPageState extends State<ProductPage> {
                     child: Column(
                       children: [
                         Center(
-                          child: CircleAvatar(
-                            backgroundColor: fifthLayerColor,
-                            radius: 70,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image(
-                                  image: AssetImage(
-                                      snapshot.data['productImage'])),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 10,
+                                    color: Colors.black,
+                                    spreadRadius: 5)
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              backgroundColor: fifthLayerColor,
+                              radius: 70,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Image(
+                                    image: AssetImage(
+                                        snapshot.data['productImage'])),
+                              ),
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${snapshot.data['productBrand']} ${snapshot.data['productName']}',
-                              style: const TextStyle(fontSize: 25),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Icon(
-                                Icons.circle,
-                                size: 15,
-                                color:
-                                    snapshot.data['productAvailability'] == true
-                                        ? Colors.green
-                                        : Colors.redAccent,
-                              ),
-                            )
-                          ],
+                        Text(
+                          '${snapshot.data['productBrand']} ${snapshot.data['productName']}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 25),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.circle,
+                            size: 15,
+                            color: snapshot.data['productAvailability'] == true
+                                ? Colors.green
+                                : Colors.redAccent,
+                          ),
                         ),
                         Text(
                           '${snapshot.data['productPrice'].toString()} EGP',
@@ -156,21 +193,50 @@ class _ProductPageState extends State<ProductPage> {
                                     int totalPrice =
                                         (snapshot.data['productPrice'] *
                                             selectedQuantity);
-                                    _firestore
-                                        .collection('shoppingCart')
-                                        .doc(_auth.currentUser!.uid)
-                                        .update({
-                                      'Cart': FieldValue.arrayUnion([
-                                        {
+                                    if (!cartList.any((e) => mapEquals(e, {
                                           'productID':
                                               snapshot.data['productID'],
                                           'selectedQuantity': selectedQuantity,
-                                          'totalPrice': totalPrice,
-                                        }
-                                      ])
-                                    });
-                                    Navigator.pushNamed(
-                                        context, ShoppingCart.id);
+                                          'totalPrice': totalPrice
+                                        }))) {
+                                      _firestore
+                                          .collection('shoppingCart')
+                                          .doc(_auth.currentUser!.uid)
+                                          .update({
+                                        'Cart': FieldValue.arrayRemove([
+                                          {
+                                            'productID':
+                                                snapshot.data['productID'],
+                                            'selectedQuantity':
+                                                getOldSelectedQuantity(),
+                                            'totalPrice': getOldTotalPrice(),
+                                          }
+                                        ])
+                                      });
+                                      _firestore
+                                          .collection('shoppingCart')
+                                          .doc(_auth.currentUser!.uid)
+                                          .update({
+                                        'Cart': FieldValue.arrayUnion([
+                                          {
+                                            'productID':
+                                                snapshot.data['productID'],
+                                            'selectedQuantity':
+                                                selectedQuantity,
+                                            'totalPrice': totalPrice,
+                                          }
+                                        ])
+                                      });
+                                      displaySnackbar(
+                                          context,
+                                          'Item(s) added to your cart.',
+                                          fifthLayerColor);
+                                    } else {
+                                      displaySnackbar(
+                                          context,
+                                          'Item(s) already in your cart.',
+                                          fifthLayerColor);
+                                    }
                                   } else {
                                     displaySnackbar(
                                         context,

@@ -9,6 +9,7 @@ import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
+import 'package:flutter_course/Pages/ShopPage/orders.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppingcart.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
@@ -31,6 +32,54 @@ import 'package:badges/badges.dart';
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
 final _auth = FirebaseAuth.instance;
+
+List<Widget> shopAppBarActions(BuildContext context) {
+  return [
+    IconButton(
+      onPressed: () {
+        Navigator.pushNamed(context, FavouriteSparePartItems.id);
+      },
+      icon: const Icon(
+        FontAwesomeIcons.solidHeart,
+        size: 20,
+      ),
+    ),
+    IconButton(
+      onPressed: () {
+        Navigator.pushNamed(context, ShoppingCart.id);
+      },
+      icon: Stack(children: [
+        Badge(
+          position: const BadgePosition(bottom: 1, start: 15),
+          badgeColor: fourthLayerColor,
+          badgeContent: StreamBuilder(
+              stream: _firestore
+                  .collection('shoppingCart')
+                  .doc(_auth.currentUser!.uid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const Text('.');
+                } else {
+                  int cartListItemsLength = snapshot.data['Cart'].length;
+                  return Positioned(
+                    top: 3.0,
+                    left: 4.0,
+                    child: Text(
+                      cartListItemsLength.toString(),
+                    ),
+                  );
+                }
+              }),
+          child: const Icon(
+            FontAwesomeIcons.shoppingCart,
+            size: 20,
+          ),
+        ),
+      ]),
+    ),
+  ];
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,6 +164,10 @@ class AppRoutes extends StatelessWidget {
         ShoppingCart.id: (context) => const NavigatingPage(
               title: 'Shopping Cart',
               page: ShoppingCart(),
+            ),
+        MyOrders.id: (context) => const NavigatingPage(
+              title: 'My Orders',
+              page: MyOrders(),
             ),
         RequestMechanicPage.id: (context) => const NavigatingPage(
               title: 'Request Mechanic',
@@ -220,51 +273,7 @@ class _InitialPageState extends State<InitialPage> {
         const PopupMenu()
       ];
     } else if (currentPageIndex == 2) {
-      return [
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, FavouriteSparePartItems.id);
-          },
-          icon: const Icon(
-            FontAwesomeIcons.solidHeart,
-            size: 20,
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, ShoppingCart.id);
-          },
-          icon: Stack(children: [
-            Badge(
-              position: const BadgePosition(bottom: 1, start: 15),
-              badgeColor: fourthLayerColor,
-              badgeContent: StreamBuilder(
-                  stream: _firestore
-                      .collection('shoppingCart')
-                      .doc(_auth.currentUser!.uid)
-                      .snapshots(),
-                  builder: (context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Text('.');
-                    } else {
-                      int cartListItemsLength = snapshot.data['Cart'].length;
-                      return Positioned(
-                        top: 3.0,
-                        left: 4.0,
-                        child: Text(
-                          cartListItemsLength.toString(),
-                        ),
-                      );
-                    }
-                  }),
-              child: const Icon(
-                FontAwesomeIcons.shoppingCart,
-                size: 20,
-              ),
-            ),
-          ]),
-        ),
-      ];
+      return shopAppBarActions(context);
     } else {
       return const [PopupMenu()];
     }
@@ -394,12 +403,16 @@ class NavigatingPage extends StatelessWidget {
       required this.title,
       required this.page,
       this.floatingButton,
-      this.canPop})
+      this.canPop,
+      this.actions,
+      this.onPressedBack})
       : super(key: key);
   final String title;
   final Widget page;
   final FloatingActionButton? floatingButton;
   final bool? canPop;
+  final List<Widget>? actions;
+  final VoidCallback? onPressedBack;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -407,14 +420,16 @@ class NavigatingPage extends StatelessWidget {
         leading: canPop == false
             ? null
             : IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: onPressedBack ??
+                    () {
+                      Navigator.pop(context);
+                    },
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   size: 25,
                 )),
         title: Text(title),
+        actions: actions,
       ),
       body: page,
       floatingActionButton: floatingButton,

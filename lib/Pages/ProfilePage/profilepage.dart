@@ -31,15 +31,27 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundColor: fourthLayerColor,
-                    foregroundColor: Colors.white,
-                    radius: 60,
-                    child: Icon(
-                      Icons.person,
-                      size: 90,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 10,
+                            color: Colors.black,
+                            spreadRadius: 5)
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      backgroundColor: fourthLayerColor,
+                      foregroundColor: Colors.white,
+                      radius: 60,
+                      child: Icon(
+                        Icons.person,
+                        size: 90,
+                      ),
                     ),
                   ),
                 ),

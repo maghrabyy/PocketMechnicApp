@@ -34,11 +34,11 @@ class FavouriteSparePartItems extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(
-                    Icons.pageview,
+                    Icons.favorite_outline_outlined,
                     size: 100,
                   ),
                   Text(
-                    'There\'s no items found here.',
+                    'No items found in your favourites.',
                     style: TextStyle(fontSize: 25),
                   )
                 ],
@@ -62,14 +62,44 @@ class FavouriteSparePartItems extends StatelessWidget {
                               color: fifthLayerColor,
                             ));
                           } else {
+                            String categoryPageTitle() {
+                              switch (productSnapshot.data['categoryName']) {
+                                case 'EngineAndOil':
+                                  return 'Engine And Oil shop';
+
+                                case 'AirFilter':
+                                  return 'Air Filter shop';
+
+                                case 'CarBattery':
+                                  return 'Car Battery shop';
+
+                                case 'BrakePads':
+                                  return 'Brake Pads shop';
+
+                                case 'Tires':
+                                  return 'Tires shop';
+
+                                case 'Alternator':
+                                  return 'Alternator shop';
+
+                                case 'Radiator':
+                                  return 'Radiator shop';
+
+                                case 'Accessories':
+                                  return 'Accessories shop';
+                                default:
+                                  return 'Unknown';
+                              }
+                            }
+
                             return MaterialButton(
                               onPressed: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) => NavigatingPage(
-                                            title:
-                                                '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
+                                            title: categoryPageTitle(),
+                                            actions: shopAppBarActions(context),
                                             page: ProductPage(
                                                 productID: productSnapshot
                                                     .data['productID'])))));
@@ -89,10 +119,13 @@ class FavouriteSparePartItems extends StatelessWidget {
                                         height: 50,
                                       ),
                                     ),
-                                    Text(
-                                      '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
-                                      style: const TextStyle(
-                                          fontSize: 20, color: textColor),
+                                    Expanded(
+                                      child: Text(
+                                        '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontSize: 20, color: textColor),
+                                      ),
                                     ),
                                     Column(children: [
                                       Text(

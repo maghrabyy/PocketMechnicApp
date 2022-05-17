@@ -10,8 +10,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 final _firestore = FirebaseFirestore.instance;
 
 class CategoryProducts extends StatelessWidget {
-  const CategoryProducts({Key? key, required this.category}) : super(key: key);
+  const CategoryProducts(
+      {Key? key, required this.category, required this.pageTitle})
+      : super(key: key);
   final String category;
+  final String pageTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +58,8 @@ class CategoryProducts extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: ((context) => NavigatingPage(
-                                    title:
-                                        '${value['productBrand']} ${value['productName']}',
+                                    title: pageTitle,
+                                    actions: shopAppBarActions(context),
                                     page: ProductPage(
                                         productID: value['productID'])))));
                       },
@@ -70,11 +73,13 @@ class CategoryProducts extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  '${value['productBrand']} ${value['productName']}',
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontSize: 20, color: textColor),
+                                Expanded(
+                                  child: Text(
+                                    '${value['productBrand']} ${value['productName']}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 20, color: textColor),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),

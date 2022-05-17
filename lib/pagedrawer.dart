@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
+import 'package:flutter_course/Pages/ShopPage/orders.dart';
 import 'package:flutter_course/Services/database.dart';
 import 'package:flutter_course/main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,6 +48,7 @@ class PageDrawer extends StatelessWidget {
         buildListTile(
             context, 'Report bug', Icons.bug_report, ReportBugPage.id),
         becomePartnerTile(context),
+        buildListTile(context, 'Orders', Icons.shopping_bag, MyOrders.id),
         Expanded(
           child: Align(
             alignment: Alignment.bottomLeft,

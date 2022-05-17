@@ -14,89 +14,92 @@ Color registerButtonColor = Colors.grey.shade600;
 
 ThemeData pmTheme() {
   return ThemeData(
-    splashColor: fourthLayerColor,
-    highlightColor: fourthLayerColor,
-    colorScheme: ColorScheme.fromSwatch()
-        .copyWith(primary: secondLayerColor, secondary: fourthLayerColor),
-    cardTheme: const CardTheme(color: fifthLayerColor),
-    listTileTheme: const ListTileThemeData(
-      textColor: textColor,
-      iconColor: iconColor,
-    ),
-    scaffoldBackgroundColor: firstLayerColor,
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: secondLayerColor,
-      selectedItemColor: fourthLayerColor,
-      unselectedItemColor: textColor,
-      selectedIconTheme: IconThemeData(color: fourthLayerColor),
-      unselectedIconTheme: IconThemeData(color: iconColor),
-    ),
-    popupMenuTheme: PopupMenuThemeData(
-      textStyle: GoogleFonts.kanit(
-        color: textColor,
+      splashColor: fourthLayerColor,
+      highlightColor: fourthLayerColor,
+      colorScheme: ColorScheme.fromSwatch()
+          .copyWith(primary: secondLayerColor, secondary: fourthLayerColor),
+      cardTheme: const CardTheme(color: fifthLayerColor),
+      listTileTheme: const ListTileThemeData(
+        textColor: textColor,
+        iconColor: iconColor,
       ),
-    ),
-    iconTheme: const IconThemeData(color: iconColor, size: 50),
-    textTheme: TextTheme(
-      subtitle1: const TextStyle(color: textColor),
-      bodyText2: GoogleFonts.kanit(
-        color: textColor,
+      scaffoldBackgroundColor: firstLayerColor,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: secondLayerColor,
+        selectedItemColor: fourthLayerColor,
+        unselectedItemColor: textColor,
+        selectedIconTheme: IconThemeData(color: fourthLayerColor),
+        unselectedIconTheme: IconThemeData(color: iconColor),
       ),
-    ),
-    textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.grey),
-    inputDecorationTheme: const InputDecorationTheme(
-      hintStyle: TextStyle(color: Colors.grey),
-      labelStyle: TextStyle(color: fifthLayerColor),
-      alignLabelWithHint: true,
-      filled: true,
-      fillColor: firstLayerColor,
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
+      popupMenuTheme: PopupMenuThemeData(
+        textStyle: GoogleFonts.kanit(
+          color: textColor,
         ),
       ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
+      iconTheme: const IconThemeData(color: iconColor, size: 50),
+      textTheme: TextTheme(
+        subtitle1: const TextStyle(color: textColor),
+        bodyText2: GoogleFonts.kanit(
+          color: textColor,
         ),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fifthLayerColor),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
+      textSelectionTheme:
+          const TextSelectionThemeData(cursorColor: Colors.grey),
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(color: Colors.grey),
+        labelStyle: TextStyle(color: fifthLayerColor),
+        alignLabelWithHint: true,
+        filled: true,
+        fillColor: firstLayerColor,
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
         ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fifthLayerColor, width: 2),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
         ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: fourthLayerColor),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: fifthLayerColor),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
         ),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        elevation: MaterialStateProperty.all(10),
-        backgroundColor: MaterialStateProperty.all(fifthLayerColor),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: fifthLayerColor, width: 2),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: fourthLayerColor),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
           ),
         ),
       ),
-    ),
-    checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.all(fifthLayerColor),
-      checkColor: MaterialStateProperty.all(thirdLayerColor),
-      overlayColor: MaterialStateProperty.all(fourthLayerColor),
-    ),
-  );
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(10),
+          backgroundColor: MaterialStateProperty.all(fifthLayerColor),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ),
+        ),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.all(fifthLayerColor),
+        checkColor: MaterialStateProperty.all(thirdLayerColor),
+        overlayColor: MaterialStateProperty.all(fourthLayerColor),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.all(fifthLayerColor),
+      ));
 }
