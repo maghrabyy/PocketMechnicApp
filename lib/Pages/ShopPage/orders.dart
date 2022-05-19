@@ -40,7 +40,7 @@ class MyOrders extends StatelessWidget {
                       size: 100,
                     ),
                     Text(
-                      'You haven\'t placed any order yet.',
+                      'You haven\'t placed any orders yet.',
                       style: TextStyle(fontSize: 25),
                     )
                   ],

@@ -74,6 +74,10 @@ class DatabaseService {
         .collection('shoppingCart')
         .doc(_auth.currentUser!.uid)
         .set({'userID': userID, 'Cart': []});
+    _firestore
+        .collection('Orders')
+        .doc(_auth.currentUser!.uid)
+        .set({'userID': userID, 'ordersList': []});
     return await userCollection.set({
       'UserID': userID,
       'FullName': fullName,
@@ -81,6 +85,7 @@ class DatabaseService {
       'PhoneNumber': phoneNumber,
       'Vehicle': {'VehicleID': '', 'VehicleName': ''},
       'userType': 'Customer',
+      'address': '',
     });
   }
 }

@@ -34,6 +34,76 @@ class _PlaceOrderPageState extends State<PlaceOrderPage> {
   TextEditingController address2Input = TextEditingController();
   PaymentMethods? paymentMethodController = PaymentMethods.cashOnDelivery;
   bool saveAddress = false;
+  bool modifySavedAddress = false;
+  placeOrder(String city, String address1, String address2) async {
+    if (paymentMethodController == PaymentMethods.cashOnDelivery) {
+      List myCart = [];
+      await _firestore
+          .collection('shoppingCart')
+          .doc(_auth.currentUser!.uid)
+          .get()
+          .then((value) => myCart = value['Cart']);
+      var rng = Random();
+      var randNum = rng.nextInt(900000) + 100000;
+      String orderID = 'Ord$randNum';
+      String paymentMethodToString() {
+        if (paymentMethodController == PaymentMethods.cashOnDelivery) {
+          return 'Cash on Delivery';
+        } else if (paymentMethodController == PaymentMethods.debitCreditCard) {
+          return 'Debit/Credit Card';
+        } else {
+          return 'Machine on delivery (POS)';
+        }
+      }
+
+      _firestore.collection('Orders').doc(_auth.currentUser!.uid).update({
+        'ordersList': FieldValue.arrayUnion([
+          {
+            'Date': DateTime.now(),
+            'Items': myCart,
+            'addressDetails': {
+              'address1': address1,
+              'address2': address2,
+              'city': city,
+            },
+            'orderID': orderID,
+            'orderStatus': 'In-Progress',
+            'paymentMethod': paymentMethodToString(),
+            'shippingFees': widget.shippingFees,
+            'totalPrice': widget.subTotal
+          }
+        ])
+      });
+      _firestore
+          .collection('shoppingCart')
+          .doc(_auth.currentUser!.uid)
+          .update({'Cart': []});
+      if (saveAddress == true) {
+        await _firestore
+            .collection('Users')
+            .doc(_auth.currentUser!.uid)
+            .update({
+          'address': {
+            'address1': address1Input.text,
+            'address2': address2Input.text,
+            'city': cityInput.text,
+          }
+        });
+      }
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NavigatingPage(
+                  title: 'Order Details',
+                  page: OrderDetails(
+                    orderID: orderID,
+                  ))));
+      displaySnackbar(context, 'Order placed successfully.', fifthLayerColor);
+    } else {
+      displaySnackbar(
+          context, 'This payment isn\'t available yet.', fifthLayerColor);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +185,9 @@ class _PlaceOrderPageState extends State<PlaceOrderPage> {
                             iconColor: iconColor,
                             textColor: textColor,
                             collapsedIconColor: iconColor,
+                            onExpansionChanged: (exp) {
+                              modifySavedAddress = exp;
+                            },
                             trailing: const Icon(
                               Icons.edit,
                               size: 30,
@@ -233,92 +306,145 @@ class _PlaceOrderPageState extends State<PlaceOrderPage> {
         ),
         ElevatedButton(
             onPressed: () async {
-              if (cityInput.text.isNotEmpty && address1Input.text.isNotEmpty) {
-                if (paymentMethodController == PaymentMethods.cashOnDelivery) {
-                  List myCart = [];
-                  await _firestore
-                      .collection('shoppingCart')
-                      .doc(_auth.currentUser!.uid)
-                      .get()
-                      .then((value) => myCart = value['Cart']);
-                  var rng = Random();
-                  var randNum = rng.nextInt(900000) + 100000;
-                  String orderID = 'Ord$randNum';
-                  String paymentMethodToString() {
-                    if (paymentMethodController ==
-                        PaymentMethods.cashOnDelivery) {
-                      return 'Cash on Delivery';
-                    } else if (paymentMethodController ==
-                        PaymentMethods.debitCreditCard) {
-                      return 'Debit/Credit Card';
-                    } else {
-                      return 'Machine on delivery (POS)';
-                    }
-                  }
-
-                  _firestore
-                      .collection('Orders')
-                      .doc(_auth.currentUser!.uid)
-                      .update({
-                    'ordersList': FieldValue.arrayUnion([
-                      {
-                        'Date': DateTime.now(),
-                        'Items': myCart,
-                        'addressDetails': {
-                          'address1': address1Input.text,
-                          'address2': address2Input.text,
-                          'city': cityInput.text,
-                        },
-                        'orderID': orderID,
-                        'orderStatus': 'In-Progress',
-                        'paymentMethod': paymentMethodToString(),
-                        'shippingFees': widget.shippingFees,
-                        'totalPrice': widget.subTotal
-                      }
-                    ])
-                  });
-                  _firestore
-                      .collection('shoppingCart')
-                      .doc(_auth.currentUser!.uid)
-                      .update({'Cart': []});
-                  if (saveAddress == true) {
-                    _firestore
-                        .collection('Users')
-                        .doc(_auth.currentUser!.uid)
-                        .update({
-                      'address': {
-                        'address1': address1Input.text,
-                        'address2': address2Input.text,
-                        'city': cityInput.text,
-                      }
+              // ignore: prefer_typing_uninitialized_variables
+              var myAddress;
+              await _firestore
+                  .collection('Users')
+                  .doc(_auth.currentUser!.uid)
+                  .get()
+                  .then((value) => myAddress = value['address']);
+              if (myAddress == '') {
+                if (cityInput.text.isNotEmpty &&
+                    address1Input.text.isNotEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: fifthLayerColor,
+                              title: const Text(
+                                'Place order',
+                                style: TextStyle(color: textColor),
+                              ),
+                              content: Text(
+                                  'Are you sure you want to place order with a total of ${widget.subTotal}EGP?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      placeOrder(
+                                          cityInput.text,
+                                          address1Input.text,
+                                          address2Input.text);
+                                    },
+                                    child: const Text(
+                                      'Confirm',
+                                      style: TextStyle(color: textColor),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(color: textColor),
+                                    ))
+                              ]));
+                } else {
+                  displaySnackbar(context, 'Complete the following fields.',
+                      fifthLayerColor);
+                  if (cityInput.text.isEmpty) {
+                    setState(() {
+                      emptyCity = true;
                     });
                   }
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NavigatingPage(
-                              title: 'Order Details',
-                              page: OrderDetails(
-                                orderID: orderID,
-                              ))));
-                  displaySnackbar(
-                      context, 'Order placed successfully.', fifthLayerColor);
-                } else {
-                  displaySnackbar(context, 'This payment isn\'t available yet.',
-                      fifthLayerColor);
+                  if (address1Input.text.isEmpty) {
+                    setState(() {
+                      emptyyAddress1 = true;
+                    });
+                  }
                 }
               } else {
-                displaySnackbar(
-                    context, 'Complete the following fields.', fifthLayerColor);
-                if (cityInput.text.isEmpty) {
-                  setState(() {
-                    emptyCity = true;
-                  });
-                }
-                if (address1Input.text.isEmpty) {
-                  setState(() {
-                    emptyyAddress1 = true;
-                  });
+                if (modifySavedAddress == true) {
+                  if (cityInput.text.isNotEmpty &&
+                      address1Input.text.isNotEmpty) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                                backgroundColor: fifthLayerColor,
+                                title: const Text(
+                                  'Place order',
+                                  style: TextStyle(color: textColor),
+                                ),
+                                content: Text(
+                                    'Are you sure you want to place order with a total of ${widget.subTotal}EGP?'),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        placeOrder(
+                                            cityInput.text,
+                                            address1Input.text,
+                                            address2Input.text);
+                                      },
+                                      child: const Text(
+                                        'Confirm',
+                                        style: TextStyle(color: textColor),
+                                      )),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(color: textColor),
+                                      ))
+                                ]));
+                  } else {
+                    displaySnackbar(context, 'Complete the following fields.',
+                        fifthLayerColor);
+                    if (cityInput.text.isEmpty) {
+                      setState(() {
+                        emptyCity = true;
+                      });
+                    }
+                    if (address1Input.text.isEmpty) {
+                      setState(() {
+                        emptyyAddress1 = true;
+                      });
+                    }
+                  }
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: fifthLayerColor,
+                              title: const Text(
+                                'Place order',
+                                style: TextStyle(color: textColor),
+                              ),
+                              content: Text(
+                                  'Are you sure you want to place order with a total of ${widget.subTotal}EGP?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      placeOrder(
+                                          myAddress['city'],
+                                          myAddress['address1'],
+                                          myAddress['address2']);
+                                    },
+                                    child: const Text(
+                                      'Confirm',
+                                      style: TextStyle(color: textColor),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(color: textColor),
+                                    ))
+                              ]));
                 }
               }
             },

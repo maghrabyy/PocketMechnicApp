@@ -80,7 +80,7 @@ class OrderDetails extends StatelessWidget {
                                       image: AssetImage(productSnapshot
                                           .data['productImage'])),
                                   trailing: Text(
-                                    priceMultiedByQauntity.toString(),
+                                    '${priceMultiedByQauntity.toString()} EGP',
                                   ),
                                   title: Text(
                                       '${productSnapshot.data['productBrand']} ${productSnapshot.data['productName']} x ${value['selectedQuantity'].toString()}'));
@@ -96,11 +96,11 @@ class OrderDetails extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
-                  child: Text('Shipping Fees: $shippingFees'),
+                  child: Text('Shipping Fees: $shippingFees EGP'),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
-                  child: Text('Total Price: $totalPrice'),
+                  child: Text('Total Price: $totalPrice EGP'),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
