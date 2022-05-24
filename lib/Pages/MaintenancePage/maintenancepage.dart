@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/TowTruckPage/towtruck_page.dart';
-import 'package:flutter_course/Services/GoogleMaps/fetching_currentlocation.dart';
+import 'package:flutter_course/Pages/nearbyMechanic/nearbymechanic.dart';
+import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/icon_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,8 +22,8 @@ List<Widget> vehicleMaintenance(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  const FetchCurrentLocation(pageTitle: 'Nearby Mechanic'),
+              builder: (context) => const NavigatingPage(
+                  title: 'Nearby Mechanic', page: NearbyMechanic()),
             ),
           );
         },

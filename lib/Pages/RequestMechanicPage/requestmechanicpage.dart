@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
-import 'package:flutter_course/Services/GoogleMaps/fetching_currentlocation.dart';
+import 'package:flutter_course/Pages/RequestMechanicPage/bookdate.dart';
+import 'package:flutter_course/Pages/RequestMechanicPage/mechanic_chat.dart';
+import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 
 class RequestMechanicPage extends StatefulWidget {
@@ -33,9 +35,12 @@ class _RequestMechanicPageState extends State<RequestMechanicPage> {
           const Text(
               'Right at your current location the mechanic will be able to accept your request and perform the required service.',
               textAlign: TextAlign.center),
-          const Text(
-            'You can simply send a photo of what is defected on your vehicle or you can send a voice message for the unusual noises your vehicle makes.',
-            textAlign: TextAlign.center,
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'You can simply send a photo of what is defected on your vehicle or you can send a voice message for the unusual noises your vehicle makes.',
+              textAlign: TextAlign.center,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -47,14 +52,28 @@ class _RequestMechanicPageState extends State<RequestMechanicPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FetchCurrentLocation(
-                        pageTitle: 'Request Mechanic'),
+                    builder: (context) => const NavigatingPage(
+                        title: 'Mechanic Chat', page: MechanicChat()),
                   ),
                 );
               },
-              child: const Text('Request Mechanic'),
+              child: const Text('Request Mechanic (Emergency)'),
             ),
           ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.deepPurple.shade700,
+                  minimumSize: const Size(225, 50)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NavigatingPage(
+                        title: 'Book a mechanic', page: MechanicBookDate()),
+                  ),
+                );
+              },
+              child: const Text('Book a date'))
         ],
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Other%20Systems/Moderator%20System/home_page.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanichome_page.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
@@ -7,13 +9,18 @@ import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
+import 'package:flutter_course/Pages/RequestMechanicPage/bookdate.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
 import 'package:flutter_course/Pages/ShopPage/orders.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppage.dart';
 import 'package:flutter_course/Pages/ShopPage/shoppingcart.dart';
+import 'package:flutter_course/Pages/TowTruckPage/towtruck_drivers.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/inputvehicledata.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginoptions.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginpage.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/moderatorlogin.dart';
+import 'package:flutter_course/Pages/UnloggedIn%20Pages/partnerlogin.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
 import 'package:flutter_course/pagedrawer.dart';
@@ -32,6 +39,11 @@ import 'package:badges/badges.dart';
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
 final _auth = FirebaseAuth.instance;
+
+logout(BuildContext context) async {
+  await _auth.signOut();
+  Navigator.pushNamedAndRemoveUntil(context, InitialPage.id, (route) => false);
+}
 
 List<Widget> shopAppBarActions(BuildContext context) {
   return [
@@ -99,43 +111,23 @@ class MyApp extends StatelessWidget {
                 .snapshots(),
             builder: (context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: splashScreenColor,
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Image(
-                          width: 250,
-                          image: AssetImage(
-                              'assets/PocketMechanicLogoLoading.png'),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        SpinKitFadingFour(
-                          color: fifthLayerColor,
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                return const SplashScreenLoading();
               } else {
                 return AppRoutes(
-                  theInitialPage: (context) => _auth.currentUser != null
-                      ? snapshot.data['Vehicle.VehicleID'] != '' &&
-                              snapshot.data['Vehicle.VehicleName'] != ''
-                          ? const InitialPage()
-                          : const NavigatingPage(
-                              title: 'My vehicle',
-                              page: InputVehicleData(),
-                              canPop: false,
-                            )
-                      : const WelcomePage(),
-                );
+                    theInitialPage: (context) => _auth.currentUser != null
+                        ? snapshot.data['userType'] == 'Customer'
+                            ? snapshot.data['Vehicle.VehicleID'] != ' ' &&
+                                    snapshot.data['Vehicle.VehicleName'] != ''
+                                ? const InitialPage()
+                                : const NavigatingPage(
+                                    title: 'My vehicle',
+                                    page: InputVehicleData(),
+                                    canPop: false,
+                                  )
+                            : snapshot.data['userType'] == 'Partner'
+                                ? const MechanicHomePage()
+                                : const ModeratorHomePage()
+                        : const WelcomePage());
               }
             })
         : AppRoutes(
@@ -143,6 +135,39 @@ class MyApp extends StatelessWidget {
                 ? const InitialPage()
                 : const WelcomePage(),
           );
+  }
+}
+
+class SplashScreenLoading extends StatelessWidget {
+  const SplashScreenLoading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: splashScreenColor,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Image(
+              width: 250,
+              image: AssetImage('assets/PocketMechanicLogoLoading.png'),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SpinKitFadingFour(
+              color: fifthLayerColor,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -173,9 +198,17 @@ class AppRoutes extends StatelessWidget {
               title: 'Request Mechanic',
               page: RequestMechanicPage(),
             ),
+        MechanicBookDate.id: (context) => const NavigatingPage(
+              title: 'Book a Date',
+              page: RequestMechanicPage(),
+            ),
         TowTruckPage.id: (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
+            ),
+        TowTruckDrivers.id: (context) => const NavigatingPage(
+              title: 'Request Tow Truck',
+              page: TowTruckDrivers(),
             ),
         AboutUsPage.id: (context) => const NavigatingPage(
               title: 'About us',
@@ -201,6 +234,20 @@ class AppRoutes extends StatelessWidget {
               title: 'Login',
               page: LoginPage(),
             ),
+        LoginOptions.id: (context) => const NavigatingPage(
+              title: 'Login Options',
+              page: LoginOptions(),
+            ),
+        PartnerLogin.id: (context) => const NavigatingPage(
+              title: 'Partner Login',
+              page: PartnerLogin(),
+            ),
+        MechanicHomePage.id: (context) => const MechanicHomePage(),
+        ModeratorLogin.id: (context) => const NavigatingPage(
+              title: 'Moderator Login',
+              page: ModeratorLogin(),
+            ),
+        ModeratorHomePage.id: (context) => const ModeratorHomePage(),
         RegisterPage.id: (context) => const NavigatingPage(
               title: 'Registeration',
               page: RegisterPage(),
@@ -388,9 +435,7 @@ class PopupMenu extends StatelessWidget {
           Navigator.pushNamed(context, ReportBugPage.id);
         }
         if (value == 'Logout') {
-          await _auth.signOut();
-          Navigator.pushNamedAndRemoveUntil(
-              context, InitialPage.id, (route) => false);
+          logout(context);
         }
       },
     );

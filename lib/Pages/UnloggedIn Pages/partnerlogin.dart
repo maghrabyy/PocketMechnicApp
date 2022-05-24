@@ -1,32 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/gestures.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/inputs.dart';
-import 'package:flutter_course/Components/rounded_container.dart';
-import 'package:flutter_course/Components/snackbar.dart';
-import 'package:flutter_course/Pages/UnloggedIn%20Pages/loginoptions.dart';
-import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanichome_page.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/resetpassword.dart';
-import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import '../../Components/rounded_container.dart';
+import '../../Components/snackbar.dart';
 
-class LoginPage extends StatefulWidget {
-  static const String id = 'LoginPage';
-  const LoginPage({Key? key}) : super(key: key);
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+
+class PartnerLogin extends StatefulWidget {
+  static const String id = 'PartnetLogn';
+  const PartnerLogin({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<PartnerLogin> createState() => _PartnerLoginState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _PartnerLoginState extends State<PartnerLogin> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
   bool _emptyEmail = false;
   bool _emptyPassword = false;
@@ -45,26 +42,10 @@ class _LoginPageState extends State<LoginPage> {
           boxChild: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(text: 'Welcome back! '),
-                      const TextSpan(text: 'If you don\'t have an account '),
-                      TextSpan(
-                          text: 'click here ',
-                          style: const TextStyle(color: fourthLayerColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pushReplacementNamed(
-                                  context, RegisterPage.id);
-                            }),
-                      const TextSpan(text: 'to create one.'),
-                    ],
-                  ),
-                ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                    'Login here if you\'re a mechanic or a tow-truck driver'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -104,17 +85,17 @@ class _LoginPageState extends State<LoginPage> {
                             _isLoading = true;
                           });
                           try {
-                            String userType = '';
                             await _auth.signInWithEmailAndPassword(
                                 email: email.text, password: password.text);
+                            String userType = '';
                             await _firestore
                                 .collection('Users')
                                 .doc(_auth.currentUser!.uid)
                                 .get()
                                 .then((value) => userType = value['userType']);
-                            if (userType == 'Customer') {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, InitialPage.id, (route) => false);
+                            if (userType == 'Partner') {
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  MechanicHomePage.id, (route) => false);
                             } else {
                               await _auth.signOut();
                               displaySnackbar(context, 'Unauthorized login',
@@ -194,26 +175,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: 'click here ',
-                          style: const TextStyle(color: fourthLayerColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pushNamed(context, LoginOptions.id);
-                            }),
-                      const TextSpan(
-                          text:
-                              ' for other login options, if you\'re a partner.'),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
-import 'package:flutter_course/Services/GoogleMaps/fetching_currentlocation.dart';
+import 'package:flutter_course/Pages/TowTruckPage/towtruck_drivers.dart';
 import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -44,13 +44,7 @@ class _TowTruckPageState extends State<TowTruckPage> {
                   primary: Colors.deepPurple.shade700,
                   minimumSize: const Size(140, 50)),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FetchCurrentLocation(
-                        pageTitle: 'Request Tow Truck'),
-                  ),
-                );
+                Navigator.pushNamed(context, TowTruckDrivers.id);
               },
               child: const Text('Request Tow Truck'),
             ),
