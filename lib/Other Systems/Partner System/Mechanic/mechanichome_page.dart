@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course/main.dart';
 
 class MechanicHomePage extends StatelessWidget {
   static const String id = 'MechanicHomePage';
@@ -9,7 +10,14 @@ class MechanicHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
       body: Column(
-        children: const [Text('Welcome Partner!')],
+        children: [
+          const Text('Welcome Partner!'),
+          ElevatedButton(
+              onPressed: () {
+                logout(context);
+              },
+              child: const Text('Logout'))
+        ],
       ),
     );
   }

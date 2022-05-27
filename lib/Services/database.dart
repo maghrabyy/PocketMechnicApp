@@ -86,6 +86,7 @@ class DatabaseService {
       'Vehicle': {'VehicleID': '', 'VehicleName': ''},
       'userType': 'Customer',
       'address': '',
+      'partnerID': '',
     });
   }
 }

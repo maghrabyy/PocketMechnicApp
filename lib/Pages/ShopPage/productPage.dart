@@ -29,7 +29,6 @@ class _ProductPageState extends State<ProductPage> {
   TextEditingController feedbackController = TextEditingController();
   int selectedQuantity = 1;
   int oldSelectedQuantity = 0;
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -181,134 +180,174 @@ class _ProductPageState extends State<ProductPage> {
                           'Quantity: ${snapshot.data['productQuantity']}',
                           style: const TextStyle(fontSize: 20),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            quantitySelection(),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (snapshot.data['productAvailability'] ==
-                                      true) {
-                                    int totalPrice =
-                                        (snapshot.data['productPrice'] *
-                                            selectedQuantity);
-                                    if (!cartList.any((e) => mapEquals(e, {
-                                          'productID':
-                                              snapshot.data['productID'],
-                                          'selectedQuantity': selectedQuantity,
-                                          'totalPrice': totalPrice
-                                        }))) {
-                                      _firestore
-                                          .collection('shoppingCart')
-                                          .doc(_auth.currentUser!.uid)
-                                          .update({
-                                        'Cart': FieldValue.arrayRemove([
-                                          {
-                                            'productID':
-                                                snapshot.data['productID'],
-                                            'selectedQuantity':
-                                                getOldSelectedQuantity(),
-                                            'totalPrice': getOldTotalPrice(),
-                                          }
-                                        ])
-                                      });
-                                      _firestore
-                                          .collection('shoppingCart')
-                                          .doc(_auth.currentUser!.uid)
-                                          .update({
-                                        'Cart': FieldValue.arrayUnion([
-                                          {
-                                            'productID':
-                                                snapshot.data['productID'],
-                                            'selectedQuantity':
-                                                selectedQuantity,
-                                            'totalPrice': totalPrice,
-                                          }
-                                        ])
-                                      });
-                                      displaySnackbar(
-                                          context,
-                                          'Item(s) added to your cart.',
-                                          fifthLayerColor);
-                                    } else {
-                                      displaySnackbar(
-                                          context,
-                                          'Item(s) already in your cart.',
-                                          fifthLayerColor);
-                                    }
-                                  } else {
-                                    displaySnackbar(
-                                        context,
-                                        'This product is out of stock.',
-                                        fifthLayerColor);
-                                  }
-                                },
-                                child: const Text('Add to cart'),
-                              ),
-                            ),
-                            StreamBuilder(
-                                stream: _firestore
-                                    .collection('sparePartFavourites')
-                                    .doc(_auth.currentUser!.uid)
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot favProductsSnapshot) {
-                                  if (!favProductsSnapshot.hasData) {
-                                    return const SpinKitFadingFour(
-                                      color: fifthLayerColor,
-                                    );
-                                  } else {
-                                    List favouriteProductIDs =
-                                        favProductsSnapshot
-                                            .data['favouriteProducts'];
-                                    return Expanded(
-                                      child: IconButton(
-                                          onPressed: () async {
-                                            //to favourite
-                                            if (!favouriteProductIDs.contains(
-                                              snapshot.data['productID'],
-                                            )) {
+                        StreamBuilder(
+                          stream: _firestore
+                              .collection('Users')
+                              .doc(_auth.currentUser!.uid)
+                              .snapshots(),
+                          builder: (context, AsyncSnapshot usersSnapshot) {
+                            if (!usersSnapshot.hasData) {
+                              return const Center(
+                                child:
+                                    SpinKitFadingFour(color: fifthLayerColor),
+                              );
+                            } else {
+                              String userType = usersSnapshot.data['userType'];
+                              if (userType == 'Customer') {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    quantitySelection(),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (snapshot.data[
+                                                  'productAvailability'] ==
+                                              true) {
+                                            int totalPrice =
+                                                (snapshot.data['productPrice'] *
+                                                    selectedQuantity);
+                                            if (!cartList
+                                                .any((e) => mapEquals(e, {
+                                                      'productID': snapshot
+                                                          .data['productID'],
+                                                      'selectedQuantity':
+                                                          selectedQuantity,
+                                                      'totalPrice': totalPrice
+                                                    }))) {
                                               _firestore
-                                                  .collection(
-                                                      'sparePartFavourites')
+                                                  .collection('shoppingCart')
                                                   .doc(_auth.currentUser!.uid)
                                                   .update({
-                                                'favouriteProducts':
-                                                    FieldValue.arrayUnion([
-                                                  snapshot.data['productID'],
+                                                'Cart': FieldValue.arrayRemove([
+                                                  {
+                                                    'productID': snapshot
+                                                        .data['productID'],
+                                                    'selectedQuantity':
+                                                        getOldSelectedQuantity(),
+                                                    'totalPrice':
+                                                        getOldTotalPrice(),
+                                                  }
                                                 ])
                                               });
-                                            }
-                                            //to unfavourite
-                                            else {
                                               _firestore
-                                                  .collection(
-                                                      'sparePartFavourites')
+                                                  .collection('shoppingCart')
                                                   .doc(_auth.currentUser!.uid)
                                                   .update({
-                                                'favouriteProducts':
-                                                    FieldValue.arrayRemove([
-                                                  snapshot.data['productID'],
+                                                'Cart': FieldValue.arrayUnion([
+                                                  {
+                                                    'productID': snapshot
+                                                        .data['productID'],
+                                                    'selectedQuantity':
+                                                        selectedQuantity,
+                                                    'totalPrice': totalPrice,
+                                                  }
                                                 ])
                                               });
+                                              displaySnackbar(
+                                                  context,
+                                                  'Item(s) added to your cart.',
+                                                  fifthLayerColor);
+                                            } else {
+                                              displaySnackbar(
+                                                  context,
+                                                  'Item(s) already in your cart.',
+                                                  fifthLayerColor);
                                             }
-                                          },
-                                          icon: Icon(
-                                            favouriteProductIDs.contains(
-                                                    snapshot.data['productID'])
-                                                ? FontAwesomeIcons.solidHeart
-                                                : FontAwesomeIcons.heart,
-                                            color: favouriteProductIDs.contains(
-                                                    snapshot.data['productID'])
-                                                ? Colors.redAccent
-                                                : iconColor,
-                                            size: 35,
-                                          )),
-                                    );
-                                  }
-                                })
-                          ],
+                                          } else {
+                                            displaySnackbar(
+                                                context,
+                                                'This product is out of stock.',
+                                                fifthLayerColor);
+                                          }
+                                        },
+                                        child: const Text('Add to cart'),
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                        stream: _firestore
+                                            .collection('sparePartFavourites')
+                                            .doc(_auth.currentUser!.uid)
+                                            .snapshots(),
+                                        builder: (context,
+                                            AsyncSnapshot favProductsSnapshot) {
+                                          if (!favProductsSnapshot.hasData) {
+                                            return const SpinKitFadingFour(
+                                              color: fifthLayerColor,
+                                            );
+                                          } else {
+                                            List favouriteProductIDs =
+                                                favProductsSnapshot
+                                                    .data['favouriteProducts'];
+                                            return Expanded(
+                                              child: IconButton(
+                                                  onPressed: () async {
+                                                    //to favourite
+                                                    if (!favouriteProductIDs
+                                                        .contains(
+                                                      snapshot
+                                                          .data['productID'],
+                                                    )) {
+                                                      _firestore
+                                                          .collection(
+                                                              'sparePartFavourites')
+                                                          .doc(_auth
+                                                              .currentUser!.uid)
+                                                          .update({
+                                                        'favouriteProducts':
+                                                            FieldValue
+                                                                .arrayUnion([
+                                                          snapshot.data[
+                                                              'productID'],
+                                                        ])
+                                                      });
+                                                    }
+                                                    //to unfavourite
+                                                    else {
+                                                      _firestore
+                                                          .collection(
+                                                              'sparePartFavourites')
+                                                          .doc(_auth
+                                                              .currentUser!.uid)
+                                                          .update({
+                                                        'favouriteProducts':
+                                                            FieldValue
+                                                                .arrayRemove([
+                                                          snapshot.data[
+                                                              'productID'],
+                                                        ])
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    favouriteProductIDs
+                                                            .contains(snapshot
+                                                                    .data[
+                                                                'productID'])
+                                                        ? FontAwesomeIcons
+                                                            .solidHeart
+                                                        : FontAwesomeIcons
+                                                            .heart,
+                                                    color: favouriteProductIDs
+                                                            .contains(snapshot
+                                                                    .data[
+                                                                'productID'])
+                                                        ? Colors.redAccent
+                                                        : iconColor,
+                                                    size: 35,
+                                                  )),
+                                            );
+                                          }
+                                        })
+                                  ],
+                                );
+                              } else {
+                                return ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text('Modify'));
+                              }
+                            }
+                          },
                         ),
                       ],
                     ),

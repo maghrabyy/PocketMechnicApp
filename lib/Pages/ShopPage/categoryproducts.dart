@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_course/Components/img_content.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
 
 class CategoryProducts extends StatelessWidget {
@@ -53,13 +55,21 @@ class CategoryProducts extends StatelessWidget {
               children: productList.map<Wrap>((dynamic value) {
                 return Wrap(children: [
                   RoundedButtonContainer(
-                      onPressed: () {
+                      onPressed: () async {
+                        String userType = '';
+                        await _firestore
+                            .collection('Users')
+                            .doc(_auth.currentUser!.uid)
+                            .get()
+                            .then((value) => userType = value['userType']);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: ((context) => NavigatingPage(
                                     title: pageTitle,
-                                    actions: shopAppBarActions(context),
+                                    actions: userType == 'Customer'
+                                        ? shopAppBarActions(context)
+                                        : null,
                                     page: ProductPage(
                                         productID: value['productID'])))));
                       },

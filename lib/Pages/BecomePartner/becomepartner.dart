@@ -200,7 +200,7 @@ class _BecomePartnerState extends State<BecomePartner> {
                               await getUserData(_auth.currentUser!.uid);
                           _firestore
                               .collection('PartnershipSubmission')
-                              .doc(_auth.currentUser!.uid)
+                              .doc(userData?['UserID'])
                               .set({
                             'Date': DateTime.now(),
                             'ServiceType': serviceType,
@@ -210,8 +210,10 @@ class _BecomePartnerState extends State<BecomePartner> {
                             'UserID': userData!['UserID'],
                             'FullName': userName,
                             'PhoneNumber': userData['PhoneNumber'],
-                            'EmaillAddress': userEmail,
-                            'ContactRole': contactRole
+                            'EmailAddress': userEmail,
+                            'ContactRole': contactRole,
+                            'Registered': true,
+                            'ApplicationStatus': 'In-progress'
                           });
                           Navigator.pushReplacementNamed(
                               context, SubmittedRequest.id);
@@ -249,7 +251,7 @@ class _BecomePartnerState extends State<BecomePartner> {
                                 await getUserID(_auth.currentUser!.uid);
                             _firestore
                                 .collection('PartnershipSubmission')
-                                .doc(_auth.currentUser!.uid)
+                                .doc(userID)
                                 .set({
                               'Date': DateTime.now(),
                               'ServiceType': serviceType,
@@ -259,8 +261,10 @@ class _BecomePartnerState extends State<BecomePartner> {
                               'UserID': userID,
                               'FullName': fullName.text,
                               'PhoneNumber': phoneNum.text,
-                              'EmaillAddress': emailAdress.text,
-                              'ContactRole': contactRole
+                              'EmailAddress': emailAdress.text,
+                              'ContactRole': contactRole,
+                              'Registered': true,
+                              'ApplicationStatus': 'In-progress'
                             });
                             Navigator.pushReplacementNamed(
                                 context, SubmittedRequest.id);
@@ -283,8 +287,10 @@ class _BecomePartnerState extends State<BecomePartner> {
                               'UserID': unregisteredID,
                               'FullName': fullName.text,
                               'PhoneNumber': phoneNum.text,
-                              'EmaillAddress': emailAdress.text,
-                              'ContactRole': contactRole
+                              'EmailAddress': emailAdress.text,
+                              'ContactRole': contactRole,
+                              'Registered': false,
+                              'ApplicationStatus': 'In-progress'
                             });
                             Navigator.pushReplacement(
                                 context,

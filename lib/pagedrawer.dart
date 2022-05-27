@@ -70,9 +70,7 @@ class PageDrawer extends StatelessWidget {
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
       onTap: () async {
-        await _auth.signOut();
-        Navigator.pushNamedAndRemoveUntil(
-            context, InitialPage.id, (route) => false);
+        logout(context);
       },
     );
   }
@@ -88,8 +86,8 @@ class PageDrawer extends StatelessWidget {
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
       onTap: () async {
-        if (await checkIfDocExists(
-                'PartnershipSubmission', _auth.currentUser!.uid) ==
+        if (await checkIfDocExists('PartnershipSubmission',
+                await getUserID(_auth.currentUser!.uid)) ==
             false) {
           Navigator.pushNamed(context, BecomePartner.id);
         } else {

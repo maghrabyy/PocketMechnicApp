@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
-import 'package:flutter_course/Pages/RequestMechanicPage/bookdate.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/mechanic_chat.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
@@ -60,20 +59,6 @@ class _RequestMechanicPageState extends State<RequestMechanicPage> {
               child: const Text('Request Mechanic (Emergency)'),
             ),
           ),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.deepPurple.shade700,
-                  minimumSize: const Size(225, 50)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NavigatingPage(
-                        title: 'Book a mechanic', page: MechanicBookDate()),
-                  ),
-                );
-              },
-              child: const Text('Book a date'))
         ],
       ),
     );

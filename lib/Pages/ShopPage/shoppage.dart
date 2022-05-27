@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/ShopPage/categoryproducts.dart';
 import 'package:flutter_course/main.dart';
@@ -5,14 +7,24 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Components/img_content.dart';
 import '../../Components/rounded_buttoncontainer.dart';
 
+final _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
+
 navigateToCategory(
-    BuildContext context, String pageTitle, String categoryName) {
+    BuildContext context, String pageTitle, String categoryName) async {
+  String userType = '';
+  await _firestore
+      .collection('Users')
+      .doc(_auth.currentUser!.uid)
+      .get()
+      .then((value) => userType = value['userType']);
   Navigator.push(
       context,
       MaterialPageRoute(
           builder: ((context) => NavigatingPage(
               title: pageTitle,
-              actions: shopAppBarActions(context),
+              actions:
+                  userType == 'Customer' ? shopAppBarActions(context) : null,
               page: CategoryProducts(
                 category: categoryName,
                 pageTitle: pageTitle,

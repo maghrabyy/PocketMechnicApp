@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_course/Other%20Systems/Moderator%20System/home_page.dart';
+import 'package:flutter_course/Other%20Systems/Moderator%20System/modShop/addproduct.dart';
+import 'package:flutter_course/Other%20Systems/Moderator%20System/moderatormain.dart';
 import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanichome_page.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
-import 'package:flutter_course/Pages/RequestMechanicPage/bookdate.dart';
+import 'package:flutter_course/Pages/nearbyMechanic/bookdate.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
 import 'package:flutter_course/Pages/ShopPage/orders.dart';
@@ -126,7 +127,7 @@ class MyApp extends StatelessWidget {
                                   )
                             : snapshot.data['userType'] == 'Partner'
                                 ? const MechanicHomePage()
-                                : const ModeratorHomePage()
+                                : const ModeratorMain()
                         : const WelcomePage());
               }
             })
@@ -247,7 +248,11 @@ class AppRoutes extends StatelessWidget {
               title: 'Moderator Login',
               page: ModeratorLogin(),
             ),
-        ModeratorHomePage.id: (context) => const ModeratorHomePage(),
+        AddProduct.id: (context) => const NavigatingPage(
+              title: 'Add Product',
+              page: AddProduct(),
+            ),
+        ModeratorMain.id: (context) => const ModeratorMain(),
         RegisterPage.id: (context) => const NavigatingPage(
               title: 'Registeration',
               page: RegisterPage(),

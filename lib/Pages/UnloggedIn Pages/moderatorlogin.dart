@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/inputs.dart';
-import 'package:flutter_course/Other%20Systems/Moderator%20System/home_page.dart';
+import 'package:flutter_course/Other%20Systems/Moderator%20System/moderatormain.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/resetpassword.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -94,8 +94,8 @@ class _ModeratorLoginState extends State<ModeratorLogin> {
                                 .get()
                                 .then((value) => userType = value['userType']);
                             if (userType == 'Moderator') {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  ModeratorHomePage.id, (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, ModeratorMain.id, (route) => false);
                             } else {
                               await _auth.signOut();
                               displaySnackbar(context, 'Unauthorized login',
