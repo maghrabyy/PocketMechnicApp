@@ -17,114 +17,124 @@ class SubmittedRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getUserID(_auth.currentUser!.uid),
-      builder: (context, AsyncSnapshot userIDSnapshot) {
-        if (!userIDSnapshot.hasData) {
-          return const Center(
-            child: SpinKitFadingFour(color: fifthLayerColor),
-          );
-        } else {
-          return StreamBuilder(
-              stream: _firestore
-                  .collection('PartnershipSubmission')
-                  .doc(unregisteredID ?? userIDSnapshot.data)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: SpinKitFadingFour(color: fifthLayerColor),
-                  );
-                } else {
-                  if (snapshot.data['ApplicationStatus'] == 'Accepted') {
-                    return Center(
-                      child: RoundedContainer(
-                        boxColor: thirdLayerColor,
-                        boxChild: Wrap(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.checkCircle,
-                                  size: 60,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Your request has been accepted. You can login with your partner credentials.',
-                                    textAlign: TextAlign.center,
-                                    style: (TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                                Text(
-                                    'Service Type: ${snapshot.data['ServiceType']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Name: ${snapshot.data['ServiceName']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Contact Number: ${snapshot.data['ServiceContactNum']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Address: ${snapshot.data['ServiceAddress']}',
-                                    textAlign: TextAlign.center),
-                              ],
+    return _auth.currentUser != null
+        ? FutureBuilder(
+            future: getUserID(_auth.currentUser!.uid),
+            builder: (context, AsyncSnapshot userIDSnapshot) {
+              if (!userIDSnapshot.hasData) {
+                return const Center(
+                  child: SpinKitFadingFour(color: fifthLayerColor),
+                );
+              } else {
+                return SubmittedAppBox(applicationDoc: userIDSnapshot.data);
+              }
+            },
+          )
+        : SubmittedAppBox(applicationDoc: unregisteredID);
+  }
+}
+
+class SubmittedAppBox extends StatelessWidget {
+  const SubmittedAppBox({
+    Key? key,
+    required this.applicationDoc,
+  }) : super(key: key);
+
+  final String? applicationDoc;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: _firestore
+            .collection('PartnershipSubmission')
+            .doc(applicationDoc)
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: SpinKitFadingFour(color: fifthLayerColor),
+            );
+          } else {
+            if (snapshot.data['ApplicationStatus'] == 'Accepted') {
+              return Center(
+                child: RoundedContainer(
+                  boxColor: thirdLayerColor,
+                  boxChild: Wrap(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.checkCircle,
+                            size: 60,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Your request has been accepted. You can login with your partner credentials.',
+                              textAlign: TextAlign.center,
+                              style: (TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
                             ),
                           ),
-                        ]),
+                          Text('Service Type: ${snapshot.data['ServiceType']}',
+                              textAlign: TextAlign.center),
+                          Text('Service Name: ${snapshot.data['ServiceName']}',
+                              textAlign: TextAlign.center),
+                          Text(
+                              'Service Contact Number: ${snapshot.data['ServiceContactNum']}',
+                              textAlign: TextAlign.center),
+                          Text(
+                              'Service Address: ${snapshot.data['ServiceAddress']}',
+                              textAlign: TextAlign.center),
+                        ],
                       ),
-                    );
-                  } else {
-                    return Center(
-                      child: RoundedContainer(
-                        boxColor: thirdLayerColor,
-                        boxChild: Wrap(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.checkCircle,
-                                  size: 60,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Your request has been submitted. We\'ll contact you soon.',
-                                    textAlign: TextAlign.center,
-                                    style: (TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                                Text(
-                                    'Service Type: ${snapshot.data['ServiceType']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Name: ${snapshot.data['ServiceName']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Contact Number: ${snapshot.data['ServiceContactNum']}',
-                                    textAlign: TextAlign.center),
-                                Text(
-                                    'Service Address: ${snapshot.data['ServiceAddress']}',
-                                    textAlign: TextAlign.center),
-                              ],
+                    ),
+                  ]),
+                ),
+              );
+            } else {
+              return Center(
+                child: RoundedContainer(
+                  boxColor: thirdLayerColor,
+                  boxChild: Wrap(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.checkCircle,
+                            size: 60,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Your request has been submitted. We\'ll contact you soon.',
+                              textAlign: TextAlign.center,
+                              style: (TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
                             ),
                           ),
-                        ]),
+                          Text('Service Type: ${snapshot.data['ServiceType']}',
+                              textAlign: TextAlign.center),
+                          Text('Service Name: ${snapshot.data['ServiceName']}',
+                              textAlign: TextAlign.center),
+                          Text(
+                              'Service Contact Number: ${snapshot.data['ServiceContactNum']}',
+                              textAlign: TextAlign.center),
+                          Text(
+                              'Service Address: ${snapshot.data['ServiceAddress']}',
+                              textAlign: TextAlign.center),
+                        ],
                       ),
-                    );
-                  }
-                }
-              });
-        }
-      },
-    );
+                    ),
+                  ]),
+                ),
+              );
+            }
+          }
+        });
   }
 }

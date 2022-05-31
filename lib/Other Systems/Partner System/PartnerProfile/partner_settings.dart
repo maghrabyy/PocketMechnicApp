@@ -11,15 +11,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 
-class MechanicSettings extends StatefulWidget {
-  static const String id = 'MechanicSettings';
-  const MechanicSettings({Key? key}) : super(key: key);
+class PartnerSettings extends StatefulWidget {
+  static const String id = 'PartnerSettings';
+  const PartnerSettings({Key? key}) : super(key: key);
 
   @override
-  State<MechanicSettings> createState() => _MechanicSettingsState();
+  State<PartnerSettings> createState() => _PartnerSettingsState();
 }
 
-class _MechanicSettingsState extends State<MechanicSettings> {
+class _PartnerSettingsState extends State<PartnerSettings> {
   TimeOfDay? selectedOpenTime;
   String openHours = '';
   String openMinutes = '';

@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Other%20Systems/Moderator%20System/modShop/addproduct.dart';
 import 'package:flutter_course/Other%20Systems/Moderator%20System/moderatormain.dart';
-import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/MechanicProfile/mechanic_settings.dart';
-import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanicmain.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/PartnerProfile/partner_settings.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/partnermain.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
@@ -126,7 +126,7 @@ class MyApp extends StatelessWidget {
                                     canPop: false,
                                   )
                             : snapshot.data['userType'] == 'Partner'
-                                ? const MechanicMain()
+                                ? const PartnerMain()
                                 : const ModeratorMain()
                         : const WelcomePage());
               }
@@ -204,7 +204,7 @@ class AppRoutes extends StatelessWidget {
               page: TowTruckPage(),
             ),
         TowTruckDrivers.id: (context) => const NavigatingPage(
-              title: 'Request Tow Truck',
+              title: 'Tow Truck Drivers',
               page: TowTruckDrivers(),
             ),
         AboutUsPage.id: (context) => const NavigatingPage(
@@ -239,10 +239,10 @@ class AppRoutes extends StatelessWidget {
               title: 'Partner Login',
               page: PartnerLogin(),
             ),
-        MechanicMain.id: (context) => const MechanicMain(),
-        MechanicSettings.id: (context) => const NavigatingPage(
+        PartnerMain.id: (context) => const PartnerMain(),
+        PartnerSettings.id: (context) => const NavigatingPage(
               title: 'Settings',
-              page: MechanicSettings(),
+              page: PartnerSettings(),
             ),
         ModeratorLogin.id: (context) => const NavigatingPage(
               title: 'Moderator Login',
@@ -272,7 +272,9 @@ class AppRoutes extends StatelessWidget {
             ),
         BecomePartner.id: (context) => const NavigatingPage(
               title: 'Become a partner',
-              page: BecomePartner(),
+              page: BecomePartner(
+                joinAsPartner: false,
+              ),
             ),
         SubmittedRequest.id: (context) => const NavigatingPage(
               title: 'Submitted Request',

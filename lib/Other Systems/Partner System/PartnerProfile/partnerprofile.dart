@@ -12,8 +12,8 @@ import '../../../../Pages/ProfilePage/profilepage.dart';
 final _auth = FirebaseAuth.instance;
 final _fireStore = FirebaseFirestore.instance;
 
-class MechanicProfile extends StatelessWidget {
-  const MechanicProfile({Key? key}) : super(key: key);
+class PartnerProfile extends StatelessWidget {
+  const PartnerProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

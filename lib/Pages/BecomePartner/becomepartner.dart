@@ -16,8 +16,9 @@ final _auth = FirebaseAuth.instance;
 
 class BecomePartner extends StatefulWidget {
   static const String id = 'BecomePartner';
-  const BecomePartner({Key? key, this.joinAsPartner}) : super(key: key);
-  final bool? joinAsPartner;
+  const BecomePartner({Key? key, required this.joinAsPartner})
+      : super(key: key);
+  final bool joinAsPartner;
 
   @override
   State<BecomePartner> createState() => _BecomePartnerState();
@@ -247,18 +248,18 @@ class _BecomePartnerState extends State<BecomePartner> {
                           //Become Partner (logged in user)
                           if (widget.joinAsPartner == false) {
                             //Submit request
-                            String userID =
-                                await getUserID(_auth.currentUser!.uid);
+                            DocumentSnapshot<Map<String, dynamic>>? userData =
+                                await getUserData(_auth.currentUser!.uid);
                             _firestore
                                 .collection('PartnershipSubmission')
-                                .doc(userID)
+                                .doc(userData?['UserID'])
                                 .set({
                               'Date': DateTime.now(),
                               'ServiceType': serviceType,
                               'ServiceName': serviceName.text,
                               'ServiceContactNum': serviceNumber.text,
                               'ServiceAddress': serviceAddress.text,
-                              'UserID': userID,
+                              'UserID': userData!['UserID'],
                               'FullName': fullName.text,
                               'PhoneNumber': phoneNum.text,
                               'EmailAddress': emailAdress.text,

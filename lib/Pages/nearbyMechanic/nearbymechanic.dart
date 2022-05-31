@@ -9,6 +9,7 @@ import 'package:flutter_course/Pages/nearbyMechanic/mechanicreviews.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Services/GoogleMaps/googlemapsservice.dart';
 import 'package:flutter/services.dart';
 
@@ -26,6 +27,7 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
   String mechanicContactNum = '';
   List mechanicReviews = [];
   String partnerID = '';
+  bool isPartnerAvailable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +56,26 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                                       'Contact Number',
                                       style: TextStyle(color: textColor),
                                     ),
-                                    content: Text(mechanicContactNum),
+                                    content: Text('[+20] $mechanicContactNum'),
                                     actions: [
+                                      TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                            if (isPartnerAvailable == true) {
+                                              final Uri _phoneURL = Uri.parse(
+                                                  'tel:$mechanicContactNum');
+                                              await launchUrl(_phoneURL);
+                                            } else {
+                                              displaySnackbar(
+                                                  context,
+                                                  'Mechanic is currently unavailable.',
+                                                  fifthLayerColor);
+                                            }
+                                          },
+                                          child: const Text(
+                                            'Call',
+                                            style: TextStyle(color: textColor),
+                                          )),
                                       TextButton(
                                           onPressed: () {
                                             Navigator.pop(context);
@@ -68,14 +88,6 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                                           },
                                           child: const Text(
                                             'Copy',
-                                            style: TextStyle(color: textColor),
-                                          )),
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text(
-                                            'Cancel',
                                             style: TextStyle(color: textColor),
                                           )),
                                     ],
@@ -158,6 +170,7 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                             mechanicReviews = value['reviews'];
                             partnerID = value['partnerID'];
                             mechanicPressed = !mechanicPressed;
+                            isPartnerAvailable = value['available'];
                           });
                         },
                         width: 220,
