@@ -73,7 +73,7 @@ class _MyVehicleSectionState extends State<MyVehicleSection> {
                   boxColor: fourthLayerColor,
                   boxChild: ImgContent(
                     imgSrc: 'assets/carCheck.png',
-                    imgText: 'Periodic services',
+                    imgText: 'Maintenance History',
                     imgHeight: 70,
                   ),
                 ),

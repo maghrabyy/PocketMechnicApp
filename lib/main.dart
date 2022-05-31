@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Other%20Systems/Moderator%20System/modShop/addproduct.dart';
 import 'package:flutter_course/Other%20Systems/Moderator%20System/moderatormain.dart';
-import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanichome_page.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/MechanicProfile/mechanic_settings.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanicmain.dart';
 import 'package:flutter_course/Pages/AboutUsPage/aboutus_page.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
 import 'package:flutter_course/Pages/HelpPage/helppage.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 import 'package:flutter_course/Pages/ProfilePage/profilepage.dart';
 import 'package:flutter_course/Pages/ReportBug/myreports.dart';
-import 'package:flutter_course/Pages/nearbyMechanic/bookdate.dart';
 import 'package:flutter_course/Pages/RequestMechanicPage/requestmechanicpage.dart';
 import 'package:flutter_course/Pages/ShopPage/favouriteitems.dart';
 import 'package:flutter_course/Pages/ShopPage/orders.dart';
@@ -126,7 +126,7 @@ class MyApp extends StatelessWidget {
                                     canPop: false,
                                   )
                             : snapshot.data['userType'] == 'Partner'
-                                ? const MechanicHomePage()
+                                ? const MechanicMain()
                                 : const ModeratorMain()
                         : const WelcomePage());
               }
@@ -199,10 +199,6 @@ class AppRoutes extends StatelessWidget {
               title: 'Request Mechanic',
               page: RequestMechanicPage(),
             ),
-        MechanicBookDate.id: (context) => const NavigatingPage(
-              title: 'Book a Date',
-              page: RequestMechanicPage(),
-            ),
         TowTruckPage.id: (context) => const NavigatingPage(
               title: 'Tow Truck',
               page: TowTruckPage(),
@@ -243,7 +239,11 @@ class AppRoutes extends StatelessWidget {
               title: 'Partner Login',
               page: PartnerLogin(),
             ),
-        MechanicHomePage.id: (context) => const MechanicHomePage(),
+        MechanicMain.id: (context) => const MechanicMain(),
+        MechanicSettings.id: (context) => const NavigatingPage(
+              title: 'Settings',
+              page: MechanicSettings(),
+            ),
         ModeratorLogin.id: (context) => const NavigatingPage(
               title: 'Moderator Login',
               page: ModeratorLogin(),
@@ -362,7 +362,7 @@ class _InitialPageState extends State<InitialPage> {
         title: Text(_pageTitles[currentPageIndex]),
         actions: topActions(),
       ),
-      drawer: Drawer(
+      drawer: const Drawer(
         backgroundColor: secondLayerColor,
         child: PageDrawer(),
       ),
@@ -411,6 +411,7 @@ class PopupMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       color: firstLayerColor,
+      iconSize: 30,
       itemBuilder: (BuildContext context) => const <PopupMenuItem<String>>[
         PopupMenuItem(
           child: Text('Account settings'),

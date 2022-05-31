@@ -29,6 +29,7 @@ dependencies:
   timeago: ^3.2.2
   permission_handler: ^9.2.0
   badges: ^2.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

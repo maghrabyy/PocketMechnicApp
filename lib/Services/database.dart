@@ -31,12 +31,20 @@ Future<DocumentSnapshot<Map<String, dynamic>>?> getVehicleData(
   }
 }
 
-Future<String> getUserID(String userID) async {
-  String vehicleNo = '';
-  await _firestore.collection('Users').doc(userID).get().then((value) {
-    vehicleNo = value['UserID'];
+Future<String> getUserID(String uID) async {
+  String userID = '';
+  await _firestore.collection('Users').doc(uID).get().then((value) {
+    userID = value['UserID'];
   });
-  return vehicleNo;
+  return userID;
+}
+
+Future<String> getPartnerID(String pID) async {
+  String partnerID = '';
+  await _firestore.collection('Partners').doc(pID).get().then((value) {
+    partnerID = value['partnerID'];
+  });
+  return partnerID;
 }
 
 Future<bool> checkIfDocExists(String collectionPath, String docId) async {
@@ -78,6 +86,10 @@ class DatabaseService {
         .collection('Orders')
         .doc(_auth.currentUser!.uid)
         .set({'userID': userID, 'ordersList': []});
+    _firestore
+        .collection('servicesHistory')
+        .doc(_auth.currentUser!.uid)
+        .set({'userID': userID, 'services': []});
     return await userCollection.set({
       'UserID': userID,
       'FullName': fullName,

@@ -7,13 +7,16 @@ class IconContent extends StatelessWidget {
   final Color? textColor;
   final double? textSize;
   final double? iconSize;
-  const IconContent(
-      {required this.iconText,
-      required this.iconC,
-      this.iconColor,
-      this.textColor,
-      this.iconSize,
-      this.textSize});
+  final double? padding;
+  const IconContent({
+    required this.iconText,
+    required this.iconC,
+    this.iconColor,
+    this.textColor,
+    this.iconSize,
+    this.textSize,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class IconContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(padding ?? 12.0),
           child: Icon(
             iconC,
             color: iconColor,
@@ -29,7 +32,7 @@ class IconContent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(padding ?? 8.0),
           child: Text(
             iconText,
             textAlign: TextAlign.center,

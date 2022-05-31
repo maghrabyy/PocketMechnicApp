@@ -176,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ElevatedButton(
                           onPressed: () {},
-                          child: const Text('Periodic Services'),
+                          child: const Text('Maintenance History'),
                         ),
                       ],
                     );

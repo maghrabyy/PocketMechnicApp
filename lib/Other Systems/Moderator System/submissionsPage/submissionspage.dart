@@ -156,14 +156,15 @@ class _SubmissionsState extends State<Submissions> {
                                                   },
                                                   'userID': userID,
                                                   'servicesHistory': [],
-                                                  'appointmentDates': [],
                                                   'partnerType':
                                                       value['ServiceType'],
                                                   'available': false,
                                                   'workingHours': {
                                                     'open': '',
                                                     'close': ''
-                                                  }
+                                                  },
+                                                  'reviews': [],
+                                                  'ratingAverage': 0,
                                                 });
                                                 //update submission application status
                                                 final collection =
@@ -292,8 +293,6 @@ class _SubmissionsState extends State<Submissions> {
                                                                           userID,
                                                                       'servicesHistory':
                                                                           [],
-                                                                      'appointmentDates':
-                                                                          [],
                                                                       'partnerType':
                                                                           value[
                                                                               'ServiceType'],
@@ -305,7 +304,11 @@ class _SubmissionsState extends State<Submissions> {
                                                                             '',
                                                                         'close':
                                                                             ''
-                                                                      }
+                                                                      },
+                                                                      'reviews':
+                                                                          [],
+                                                                      'ratingAverage':
+                                                                          0,
                                                                     });
                                                                     //update submission application status
                                                                     final collection =

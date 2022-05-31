@@ -132,7 +132,9 @@ class _GoogleMapServicesState extends State<GoogleMapServices> {
 }
 */
 class GoogleMapAPI extends StatefulWidget {
-  const GoogleMapAPI({Key? key}) : super(key: key);
+  const GoogleMapAPI({Key? key, this.lat, this.long}) : super(key: key);
+  final double? lat;
+  final double? long;
 
   @override
   State<GoogleMapAPI> createState() => _GoogleMapAPIState();
@@ -195,7 +197,8 @@ class _GoogleMapAPIState extends State<GoogleMapAPI> {
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
               initialCameraPosition: CameraPosition(
-                  target: LatLng(myLocation.latitude, myLocation.longitude),
+                  target: LatLng(widget.lat ?? myLocation.latitude,
+                      widget.long ?? myLocation.longitude),
                   zoom: 15.0),
               onMapCreated: (controller) => googleMapController = controller,
             );

@@ -1,10 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/circlebutton.dart';
 import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
+import 'package:flutter_course/Components/snackbar.dart';
+import 'package:flutter_course/Components/textdivider.dart';
 import 'package:flutter_course/Pages/nearbyMechanic/bookdate.dart';
+import 'package:flutter_course/Pages/nearbyMechanic/mechanicreviews.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../Services/GoogleMaps/googlemapsservice.dart';
+import 'package:flutter/services.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 class NearbyMechanic extends StatefulWidget {
   const NearbyMechanic({Key? key}) : super(key: key);
@@ -15,119 +23,203 @@ class NearbyMechanic extends StatefulWidget {
 
 class _NearbyMechanicState extends State<NearbyMechanic> {
   bool mechanicPressed = false;
+  String mechanicContactNum = '';
+  List mechanicReviews = [];
+  String partnerID = '';
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-            child: Stack(children: [
-          const GoogleMapAPI(),
-          Visibility(
-            visible: mechanicPressed,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  MechanicAction(
-                    text: 'Contact',
-                    icon: Icons.contact_phone,
-                    onPressed: () {},
+          child: Stack(
+            children: [
+              const GoogleMapAPI(),
+              Visibility(
+                visible: mechanicPressed,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      MechanicAction(
+                        text: 'Contact',
+                        icon: Icons.contact_phone,
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    backgroundColor: fifthLayerColor,
+                                    title: const Text(
+                                      'Contact Number',
+                                      style: TextStyle(color: textColor),
+                                    ),
+                                    content: Text(mechanicContactNum),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            displaySnackbar(
+                                                context,
+                                                'Added to clipboard',
+                                                fifthLayerColor);
+                                            Clipboard.setData(ClipboardData(
+                                                text: mechanicContactNum));
+                                          },
+                                          child: const Text(
+                                            'Copy',
+                                            style: TextStyle(color: textColor),
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            'Cancel',
+                                            style: TextStyle(color: textColor),
+                                          )),
+                                    ],
+                                  ));
+                        },
+                      ),
+                      MechanicAction(
+                        text: 'Navigation',
+                        icon: Icons.navigation,
+                        onPressed: () {},
+                      ),
+                      MechanicAction(
+                        text: 'Book a date',
+                        icon: Icons.book,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NavigatingPage(
+                                  title: 'Book a date',
+                                  page: MechanicBookDate(
+                                    reservationsPartnerID: partnerID,
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
+                      MechanicAction(
+                        text: 'Reviews (${mechanicReviews.length})',
+                        icon: Icons.reviews,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => NavigatingPage(
+                                        title: 'Reviews',
+                                        page: MechanicReviews(
+                                          reviewsPartnerID: partnerID,
+                                        ),
+                                      ))));
+                        },
+                      ),
+                    ],
                   ),
-                  MechanicAction(
-                    text: 'Navigation',
-                    icon: Icons.navigation,
-                    onPressed: () {},
-                  ),
-                  MechanicAction(
-                    text: 'Book a date',
-                    icon: Icons.book,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NavigatingPage(
-                              title: 'Book a mechanic',
-                              page: MechanicBookDate()),
-                        ),
-                      );
-                    },
-                  ),
-                  MechanicAction(
-                    text: 'Reviews',
-                    icon: Icons.reviews,
-                    onPressed: () {},
-                  ),
-                ],
+                ),
               ),
-            ),
-          )
-        ])),
+            ],
+          ),
+        ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              nearbyMechanicBox(true),
-              nearbyMechanicBox(false),
-              nearbyMechanicBox(true),
-              nearbyMechanicBox(true),
-            ],
+          child: StreamBuilder(
+            stream: _firestore
+                .collection('Partners')
+                .where('partnerType', isEqualTo: 'Mechanic')
+                .snapshots(),
+            builder: (context, AsyncSnapshot partnerSnapshot) {
+              if (!partnerSnapshot.hasData) {
+                return const Center(
+                    child: SpinKitFadingFour(
+                  color: fifthLayerColor,
+                ));
+              } else {
+                List mechanicsList = partnerSnapshot.data.docs;
+                mechanicsList.sort((a, b) {
+                  if (b['available']) {
+                    return 1;
+                  }
+                  return -1;
+                });
+                return IntrinsicHeight(
+                  child: Row(
+                      children: mechanicsList
+                          .map<RoundedButtonContainer>((dynamic value) {
+                    return RoundedButtonContainer(
+                        boxColor: thirdLayerColor,
+                        onPressed: () {
+                          setState(() {
+                            mechanicContactNum = value['contactNumber'];
+                            mechanicReviews = value['reviews'];
+                            partnerID = value['partnerID'];
+                            mechanicPressed = !mechanicPressed;
+                          });
+                        },
+                        width: 220,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.car_repair_rounded,
+                                color: value['available'] == true
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                              Text(value['serviceName']),
+                              value['ratingAverage'] > 0
+                                  ? SizedBox(
+                                      width: 100,
+                                      height: 20,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: value['ratingAverage'] < 5
+                                              ? value['ratingAverage']
+                                              : 5,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return const Center(
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 20,
+                                              ),
+                                            );
+                                          }),
+                                    )
+                                  : const Text('No rates'),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  value['serviceAddress.addressName'],
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const TextDivider(text: Text('Working hours')),
+                              Text(value['workingHours.open'] == '' &&
+                                      value['workingHours.close'] == ''
+                                  ? 'Not specified'
+                                  : 'From: ${value['workingHours.open']} To: ${value['workingHours.close']}')
+                            ],
+                          ),
+                        ));
+                  }).toList()),
+                );
+              }
+            },
           ),
         ),
       ],
     );
   }
-
-  RoundedButtonContainer nearbyMechanicBox(bool isOpen) {
-    return RoundedButtonContainer(
-        boxColor: thirdLayerColor,
-        onPressed: () {
-          setState(() {
-            mechanicPressed = !mechanicPressed;
-          });
-        },
-        height: 180,
-        width: 180,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.car_repair_rounded,
-              color: isOpen == true ? Colors.green : Colors.red,
-            ),
-            const Text('Mechanic Name'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.star,
-                  size: 20,
-                ),
-                Icon(
-                  Icons.star,
-                  size: 20,
-                ),
-                Icon(
-                  Icons.star,
-                  size: 20,
-                ),
-                Icon(
-                  Icons.star,
-                  size: 20,
-                )
-              ],
-            ),
-            const Text(
-              'Mechanic Address Description Data',
-              textAlign: TextAlign.center,
-            )
-          ],
-        ));
-  }
 }
 
-class MechanicAction extends StatelessWidget {
+class MechanicAction extends StatefulWidget {
   const MechanicAction(
       {Key? key,
       required this.text,
@@ -137,26 +229,32 @@ class MechanicAction extends StatelessWidget {
   final String text;
   final IconData icon;
   final VoidCallback onPressed;
+
+  @override
+  State<MechanicAction> createState() => _MechanicActionState();
+}
+
+class _MechanicActionState extends State<MechanicAction> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
-          text,
+          widget.text,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: fourthLayerColor,
           ),
         ),
         CircleButton(
-          hint: text,
+          hint: widget.text,
           radius: 10,
           child: Icon(
-            icon,
+            widget.icon,
             size: 25,
           ),
-          onPressed: onPressed,
+          onPressed: widget.onPressed,
           color: fifthLayerColor,
         ),
       ],

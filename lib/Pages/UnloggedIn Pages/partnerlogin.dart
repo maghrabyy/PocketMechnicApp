@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/inputs.dart';
-import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanichome_page.dart';
+import 'package:flutter_course/Other%20Systems/Partner%20System/Mechanic/mechanicmain.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/resetpassword.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -94,8 +94,8 @@ class _PartnerLoginState extends State<PartnerLogin> {
                                 .get()
                                 .then((value) => userType = value['userType']);
                             if (userType == 'Partner') {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  MechanicHomePage.id, (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, MechanicMain.id, (route) => false);
                             } else {
                               await _auth.signOut();
                               displaySnackbar(context, 'Unauthorized login',

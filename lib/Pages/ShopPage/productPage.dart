@@ -359,7 +359,8 @@ class _ProductPageState extends State<ProductPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        const TextDivider(text: Text('Reviews')),
+                        TextDivider(
+                            text: Text('Reviews (${feedbacksList.length})')),
                         Column(
                           children: feedbacksList.isEmpty
                               ? [
@@ -472,6 +473,8 @@ class _SendFeedbackState extends State<SendFeedback> {
                         }
                       ])
                     });
+
+                    FocusScope.of(context).unfocus();
                     feedbackController.clear();
                     selectedRate = null;
                   } else {

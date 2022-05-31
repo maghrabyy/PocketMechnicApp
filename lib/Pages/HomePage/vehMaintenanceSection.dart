@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Pages/MaintenancePage/maintenancepage.dart';
 
-enum vMaintanceSubServices { nearbyMechanic, requestMechanic, towTruck }
-vMaintanceSubServices? selectedSubService;
+enum VehMaintanceSubServices { nearbyMechanic, requestMechanic, towTruck }
+
+VehMaintanceSubServices? selectedSubService;
 
 class VehMaintenanceSection extends StatefulWidget {
   const VehMaintenanceSection({Key? key}) : super(key: key);

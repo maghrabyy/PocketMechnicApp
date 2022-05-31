@@ -12,12 +12,12 @@ import 'Pages/HelpPage/helppage.dart';
 import 'Pages/ReportBug/reportbugpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+final _auth = FirebaseAuth.instance;
+
 class PageDrawer extends StatelessWidget {
-  PageDrawer({
+  const PageDrawer({
     Key? key,
   }) : super(key: key);
-
-  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +86,8 @@ class PageDrawer extends StatelessWidget {
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
       onTap: () async {
-        if (await checkIfDocExists('PartnershipSubmission',
-                await getUserID(_auth.currentUser!.uid)) ==
-            false) {
+        String userID = await getUserID(_auth.currentUser!.uid);
+        if (await checkIfDocExists('PartnershipSubmission', userID) == false) {
           Navigator.pushNamed(context, BecomePartner.id);
         } else {
           Navigator.pushNamed(context, SubmittedRequest.id);

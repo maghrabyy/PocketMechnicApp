@@ -63,7 +63,11 @@ class _ModeratorMainState extends State<ModeratorMain> {
                               ],
                             ));
                   },
-                  icon: const Icon(Icons.logout, size: 30))
+                  icon: const Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Colors.red,
+                  ))
               : IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AddProduct.id);
