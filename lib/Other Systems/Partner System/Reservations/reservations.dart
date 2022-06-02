@@ -43,6 +43,7 @@ class Reservations extends StatelessWidget {
                       .sort((a, b) => (b['from']).compareTo(a['from']));
                   reservationsList
                       .sort((a, b) => (b['date']).compareTo(a['date']));
+
                   if (reservationsList.isEmpty) {
                     return Center(
                       child: Column(
@@ -84,9 +85,6 @@ class Reservations extends StatelessWidget {
                             );
                           }
                         }
-
-                        DateTime date =
-                            DateTime.parse(value['date'].toDate().toString());
 
                         return RoundedButtonContainer(
                             onPressed: () async {
@@ -163,6 +161,54 @@ class Reservations extends StatelessWidget {
                                             )));
                               }
                             },
+                            onLongPress: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        backgroundColor: thirdLayerColor,
+                                        insetPadding: const EdgeInsets.all(2.0),
+                                        title: const Text(
+                                          'Remove',
+                                          style: TextStyle(color: textColor),
+                                        ),
+                                        content: const Text(
+                                          'Are you sure you want to delete this reservation date?',
+                                          style: TextStyle(color: textColor),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                _firestore
+                                                    .collection(
+                                                        'reservationDates')
+                                                    .doc(value['reservationID'])
+                                                    .delete()
+                                                    .then(
+                                                        // ignore: avoid_print
+                                                        (_) => print('Deleted'))
+                                                    // ignore: avoid_print
+                                                    .catchError((error) => print(
+                                                        'Delete failed: $error'));
+                                              },
+                                              child: const Text(
+                                                'Remove',
+                                                style:
+                                                    TextStyle(color: textColor),
+                                              )),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text(
+                                                'Cancel',
+                                                style:
+                                                    TextStyle(color: textColor),
+                                              )),
+                                        ],
+                                      ));
+                            },
                             boxColor: fifthLayerColor,
                             child: StreamBuilder(
                               stream: _firestore
@@ -186,8 +232,9 @@ class Reservations extends StatelessWidget {
                                       children: [
                                         Text(
                                             'From ${value['from']} To To: ${value['until']}'),
-                                        Text(
-                                            'Date: ${DateFormat('yMMMMd').format(date)}'),
+                                        Text(value['Daily'] == false
+                                            ? 'Date: ${DateFormat('yMMMMd').format(DateTime.parse(value['date'].toDate().toString()))}'
+                                            : 'Date: ${DateFormat('yMMMMd').format(DateTime.now())} Daily'),
                                       ],
                                     ),
                                     subtitle: Visibility(

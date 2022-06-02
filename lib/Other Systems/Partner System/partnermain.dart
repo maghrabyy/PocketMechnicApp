@@ -6,7 +6,7 @@ import 'package:flutter_course/Other%20Systems/Partner%20System/PartnerProfile/p
 import 'package:flutter_course/Other%20Systems/Partner%20System/Requests/requests.dart';
 import 'package:flutter_course/Other%20Systems/Partner%20System/Reservations/addreservationdate.dart';
 import 'package:flutter_course/Other%20Systems/Partner%20System/Reservations/reservations.dart';
-import 'package:flutter_course/main.dart';
+import 'package:flutter_course/logout.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

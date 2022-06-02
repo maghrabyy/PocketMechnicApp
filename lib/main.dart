@@ -24,6 +24,7 @@ import 'package:flutter_course/Pages/UnloggedIn%20Pages/moderatorlogin.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/partnerlogin.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/registerpage.dart';
 import 'package:flutter_course/Pages/UnloggedIn%20Pages/welcomepage.dart';
+import 'package:flutter_course/logout.dart';
 import 'package:flutter_course/pagedrawer.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_course/Pages/HomePage/homepage.dart';
@@ -40,11 +41,6 @@ import 'package:badges/badges.dart';
 final _firestore = FirebaseFirestore.instance;
 final userCollections = _firestore.collection('Users');
 final _auth = FirebaseAuth.instance;
-
-logout(BuildContext context) async {
-  await _auth.signOut();
-  Navigator.pushNamedAndRemoveUntil(context, InitialPage.id, (route) => false);
-}
 
 List<Widget> shopAppBarActions(BuildContext context) {
   return [
@@ -443,7 +439,34 @@ class PopupMenu extends StatelessWidget {
           Navigator.pushNamed(context, ReportBugPage.id);
         }
         if (value == 'Logout') {
-          logout(context);
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                    backgroundColor: fifthLayerColor,
+                    title: const Text(
+                      'Logout',
+                      style: TextStyle(color: textColor),
+                    ),
+                    content: const Text('Are you sure you want to logout?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            logout(context);
+                          },
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: textColor),
+                          )),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: textColor),
+                          )),
+                    ],
+                  ));
         }
       },
     );

@@ -4,7 +4,8 @@ import 'package:flutter_course/Pages/BecomePartner/becomepartner.dart';
 import 'package:flutter_course/Pages/BecomePartner/submittedrequest.dart';
 import 'package:flutter_course/Pages/ShopPage/orders.dart';
 import 'package:flutter_course/Services/database.dart';
-import 'package:flutter_course/main.dart';
+import 'package:flutter_course/logout.dart';
+import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Pages/AccountSettings/accountsettingspage.dart';
@@ -70,7 +71,34 @@ class PageDrawer extends StatelessWidget {
         style: GoogleFonts.patuaOne(fontSize: 25, fontWeight: FontWeight.w400),
       ),
       onTap: () async {
-        logout(context);
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  backgroundColor: fifthLayerColor,
+                  title: const Text(
+                    'Logout',
+                    style: TextStyle(color: textColor),
+                  ),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          logout(context);
+                        },
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(color: textColor),
+                        )),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(color: textColor),
+                        )),
+                  ],
+                ));
       },
     );
   }

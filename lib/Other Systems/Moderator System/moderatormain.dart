@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Other%20Systems/Moderator%20System/modShop/addproduct.dart';
-import 'package:flutter_course/main.dart';
+import 'package:flutter_course/logout.dart';
 import 'package:flutter_course/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'modShop/modshoppage.dart';

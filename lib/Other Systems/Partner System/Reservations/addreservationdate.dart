@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 
-enum ReservationDates { today, tomorrow, twoDaysLater, other }
+enum ReservationDates { daily, today, tomorrow, twoDaysLater, other }
 
 class AddReservations extends StatefulWidget {
   const AddReservations({Key? key}) : super(key: key);
@@ -89,70 +89,88 @@ class _AddReservationsState extends State<AddReservations> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = ReservationDates.today;
-                    });
-                  },
-                  child: const Text('Today'),
-                  style: ElevatedButton.styleFrom(
-                      primary: selectedDate == ReservationDates.today
-                          ? thirdLayerColor
-                          : fifthLayerColor),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = ReservationDates.daily;
+                      });
+                    },
+                    child: const Text('Daily'),
+                    style: ElevatedButton.styleFrom(
+                        primary: selectedDate == ReservationDates.daily
+                            ? thirdLayerColor
+                            : fifthLayerColor),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = ReservationDates.tomorrow;
-                    });
-                  },
-                  child: const Text('Tomorrow'),
-                  style: ElevatedButton.styleFrom(
-                      primary: selectedDate == ReservationDates.tomorrow
-                          ? thirdLayerColor
-                          : fifthLayerColor),
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = ReservationDates.today;
+                      });
+                    },
+                    child: const Text('Today'),
+                    style: ElevatedButton.styleFrom(
+                        primary: selectedDate == ReservationDates.today
+                            ? thirdLayerColor
+                            : fifthLayerColor),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = ReservationDates.twoDaysLater;
-                    });
-                  },
-                  child: Text(twoDaysLateDate),
-                  style: ElevatedButton.styleFrom(
-                      primary: selectedDate == ReservationDates.twoDaysLater
-                          ? thirdLayerColor
-                          : fifthLayerColor),
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = ReservationDates.tomorrow;
+                      });
+                    },
+                    child: const Text('Tomorrow'),
+                    style: ElevatedButton.styleFrom(
+                        primary: selectedDate == ReservationDates.tomorrow
+                            ? thirdLayerColor
+                            : fifthLayerColor),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = ReservationDates.other;
-                    });
-                  },
-                  child: const Text('Other'),
-                  style: ElevatedButton.styleFrom(
-                      primary: selectedDate == ReservationDates.other
-                          ? thirdLayerColor
-                          : fifthLayerColor),
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = ReservationDates.twoDaysLater;
+                      });
+                    },
+                    child: Text(twoDaysLateDate),
+                    style: ElevatedButton.styleFrom(
+                        primary: selectedDate == ReservationDates.twoDaysLater
+                            ? thirdLayerColor
+                            : fifthLayerColor),
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = ReservationDates.other;
+                      });
+                    },
+                    child: const Text('Other'),
+                    style: ElevatedButton.styleFrom(
+                        primary: selectedDate == ReservationDates.other
+                            ? thirdLayerColor
+                            : fifthLayerColor),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(
@@ -231,7 +249,8 @@ class _AddReservationsState extends State<AddReservations> {
                       'partnerID': await getPartnerID(_auth.currentUser!.uid),
                       'from': timeTextFormat(pickedStartTime!),
                       'until': timeTextFormat(pickedEndTime!),
-                      'date': pickedDate
+                      'date': pickedDate,
+                      'Daily': false
                     });
                     Navigator.pop(context);
                     displaySnackbar(
@@ -252,6 +271,21 @@ class _AddReservationsState extends State<AddReservations> {
                   }
                 } else {
                   if (pickedStartTime != null && pickedEndTime != null) {
+                    if (selectedDate == ReservationDates.daily) {
+                      _firestore.collection('reservationDates').doc(resID).set({
+                        'bookedBy': '',
+                        'booked': false,
+                        'reservationID': resID,
+                        'partnerID': await getPartnerID(_auth.currentUser!.uid),
+                        'from': timeTextFormat(pickedStartTime!),
+                        'until': timeTextFormat(pickedEndTime!),
+                        'date': DateTime.now(),
+                        'Daily': true
+                      });
+                      Navigator.pop(context);
+                      displaySnackbar(
+                          context, 'Reservation date added.', fifthLayerColor);
+                    }
                     if (selectedDate == ReservationDates.today) {
                       _firestore.collection('reservationDates').doc(resID).set({
                         'bookedBy': '',
@@ -260,7 +294,8 @@ class _AddReservationsState extends State<AddReservations> {
                         'partnerID': await getPartnerID(_auth.currentUser!.uid),
                         'from': timeTextFormat(pickedStartTime!),
                         'until': timeTextFormat(pickedEndTime!),
-                        'date': DateTime.now()
+                        'date': DateTime.now(),
+                        'Daily': false
                       });
                       Navigator.pop(context);
                       displaySnackbar(
@@ -273,7 +308,8 @@ class _AddReservationsState extends State<AddReservations> {
                         'partnerID': await getPartnerID(_auth.currentUser!.uid),
                         'from': timeTextFormat(pickedStartTime!),
                         'until': timeTextFormat(pickedEndTime!),
-                        'date': DateTime.now().add(const Duration(days: 1))
+                        'date': DateTime.now().add(const Duration(days: 1)),
+                        'Daily': false
                       });
                       Navigator.pop(context);
                       displaySnackbar(
@@ -286,7 +322,8 @@ class _AddReservationsState extends State<AddReservations> {
                         'partnerID': await getPartnerID(_auth.currentUser!.uid),
                         'from': timeTextFormat(pickedStartTime!),
                         'until': timeTextFormat(pickedEndTime!),
-                        'date': DateTime.now().add(const Duration(days: 2))
+                        'date': DateTime.now().add(const Duration(days: 2)),
+                        'Daily': false
                       });
                       Navigator.pop(context);
                       displaySnackbar(

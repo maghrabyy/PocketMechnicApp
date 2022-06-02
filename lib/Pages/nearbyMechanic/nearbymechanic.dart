@@ -5,7 +5,7 @@ import 'package:flutter_course/Components/rounded_buttoncontainer.dart';
 import 'package:flutter_course/Components/snackbar.dart';
 import 'package:flutter_course/Components/textdivider.dart';
 import 'package:flutter_course/Pages/nearbyMechanic/bookdate.dart';
-import 'package:flutter_course/Pages/nearbyMechanic/mechanicreviews.dart';
+import 'package:flutter_course/Pages/nearbyMechanic/partnerreviews.dart';
 import 'package:flutter_course/main.dart';
 import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -124,7 +124,7 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                               MaterialPageRoute(
                                   builder: ((context) => NavigatingPage(
                                         title: 'Reviews',
-                                        page: MechanicReviews(
+                                        page: PartnerReview(
                                           reviewsPartnerID: partnerID,
                                         ),
                                       ))));
@@ -162,6 +162,22 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                   child: Row(
                       children: mechanicsList
                           .map<RoundedButtonContainer>((dynamic value) {
+                    int avgRateToStars(double avgRate) {
+                      if (avgRate <= 0.5) {
+                        return 0;
+                      } else if (avgRate <= 1.5) {
+                        return 1;
+                      } else if (avgRate <= 2.5) {
+                        return 2;
+                      } else if (avgRate <= 3.5) {
+                        return 3;
+                      } else if (avgRate <= 4.5) {
+                        return 4;
+                      } else {
+                        return 5;
+                      }
+                    }
+
                     return RoundedButtonContainer(
                         boxColor: thirdLayerColor,
                         onPressed: () {
@@ -192,9 +208,9 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                                       height: 20,
                                       child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
-                                          itemCount: value['ratingAverage'] < 5
-                                              ? value['ratingAverage']
-                                              : 5,
+                                          itemCount: avgRateToStars(
+                                              value['ratingAverage']
+                                                  .toDouble()),
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             return const Center(
@@ -217,7 +233,10 @@ class _NearbyMechanicState extends State<NearbyMechanic> {
                               Text(value['workingHours.open'] == '' &&
                                       value['workingHours.close'] == ''
                                   ? 'Not specified'
-                                  : 'From: ${value['workingHours.open']} To: ${value['workingHours.close']}')
+                                  : value['workingHours.open'] !=
+                                          value['workingHours.close']
+                                      ? 'From: ${value['workingHours.open']} To: ${value['workingHours.close']}'
+                                      : '24/7')
                             ],
                           ),
                         ));

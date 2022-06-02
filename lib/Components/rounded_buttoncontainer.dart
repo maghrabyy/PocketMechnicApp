@@ -6,6 +6,7 @@ class RoundedButtonContainer extends StatelessWidget {
       {Key? key,
       required this.child,
       required this.onPressed,
+      this.onLongPress,
       this.boxColor,
       this.height,
       this.width})
@@ -13,6 +14,7 @@ class RoundedButtonContainer extends StatelessWidget {
 
   final Widget child;
   final VoidCallback onPressed;
+  final VoidCallback? onLongPress;
   final Color? boxColor;
   final double? height;
   final double? width;
@@ -25,6 +27,7 @@ class RoundedButtonContainer extends StatelessWidget {
       boxChild: RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         onPressed: onPressed,
+        onLongPress: onLongPress,
         child: child,
       ),
     );

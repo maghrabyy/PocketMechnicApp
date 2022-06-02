@@ -12,17 +12,17 @@ import '../../Components/snackbar.dart';
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
 
-class MechanicReviews extends StatefulWidget {
-  static const String id = 'MechanicReviews';
-  const MechanicReviews({Key? key, required this.reviewsPartnerID})
+class PartnerReview extends StatefulWidget {
+  static const String id = 'PartnerReview';
+  const PartnerReview({Key? key, required this.reviewsPartnerID})
       : super(key: key);
   final String reviewsPartnerID;
 
   @override
-  State<MechanicReviews> createState() => _MechanicReviewsState();
+  State<PartnerReview> createState() => _PartnerReviewState();
 }
 
-class _MechanicReviewsState extends State<MechanicReviews> {
+class _PartnerReviewState extends State<PartnerReview> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -48,9 +48,12 @@ class _MechanicReviewsState extends State<MechanicReviews> {
                   child: Column(
                     children: feedbacksList.isEmpty
                         ? [
-                            const Text(
-                              'There\'s no feedbacks on this product yet.',
-                              textAlign: TextAlign.center,
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'There\'s no feedbacks yet.',
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                             const Text('Be the first one to submit a feedback.',
                                 textAlign: TextAlign.center),
@@ -170,15 +173,15 @@ class _SendFeedbackState extends State<SendFeedback> {
                         partnerDocID = element.id;
                       });
                     });
-                    List mechanicReviews = [];
+                    List partnerReview = [];
                     _firestore
                         .collection('Partners')
                         .doc(partnerDocID)
                         .get()
-                        .then((value) => mechanicReviews = value['reviews']);
+                        .then((value) => partnerReview = value['reviews']);
                     int ratingSum() {
-                      if (mechanicReviews.isNotEmpty) {
-                        return mechanicReviews.map<int>((m) {
+                      if (partnerReview.isNotEmpty) {
+                        return partnerReview.map<int>((m) {
                           return int.parse(m['rate'].toString());
                         }).reduce((a, b) => a + b);
                       } else {
@@ -198,8 +201,9 @@ class _SendFeedbackState extends State<SendFeedback> {
                         }
                       ])
                     });
-                    int mechanicReviewsLength = mechanicReviews.length;
-                    int mechanicRateAvg = ratingSum() ~/ mechanicReviewsLength;
+
+                    int partnerReviewLength = partnerReview.length;
+                    double mechanicRateAvg = ratingSum() / partnerReviewLength;
                     await _firestore
                         .collection('Partners')
                         .doc(partnerDocID)

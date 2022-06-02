@@ -6,7 +6,7 @@ import 'package:flutter_course/style.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../main.dart';
-import '../nearbyMechanic/mechanicreviews.dart';
+import '../nearbyMechanic/partnerreviews.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _firestore = FirebaseFirestore.instance;
@@ -38,131 +38,138 @@ class TowTruckDrivers extends StatelessWidget {
             });
             return SingleChildScrollView(
               child: Column(
-                  children: towTruckDriversList
-                      .map<Card>((dynamic value) => Card(
-                            child: ExpansionTile(
-                                backgroundColor: fifthLayerColor,
-                                collapsedBackgroundColor: fifthLayerColor,
-                                textColor: textColor,
-                                collapsedIconColor: iconColor,
-                                iconColor: iconColor,
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      '[+20] ${value['contactNumber']}',
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                    trailing: CircleButton(
-                                      color: value['available'] == true
-                                          ? Colors.green
-                                          : Colors.red,
-                                      radius: 8,
-                                      onPressed: () async {
-                                        final Uri _phoneURL = Uri.parse(
-                                            'tel: ${value['contactNumber']}');
-                                        if (value['available'] == true) {
-                                          await launchUrl(_phoneURL);
-                                        } else {
-                                          displaySnackbar(
-                                              context,
-                                              'Tow-Truck driver is currently unavailable.',
-                                              fifthLayerColor);
-                                        }
-                                      },
-                                      child: const Icon(Icons.call, size: 20),
-                                      hint: 'Call',
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      const Text(
-                                        'Reviews:',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      value['ratingAverage'] > 0
-                                          ? SizedBox(
-                                              width: 100,
-                                              height: 20,
-                                              child: ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount:
-                                                      value['ratingAverage'] < 5
-                                                          ? value[
-                                                              'ratingAverage']
-                                                          : 5,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return const Center(
-                                                      child: Icon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                      ),
-                                                    );
-                                                  }),
-                                            )
-                                          : const Text(
-                                              'No rates',
-                                              style: TextStyle(fontSize: 18),
+                  children: towTruckDriversList.map<Card>((dynamic value) {
+                int avgRateToStars(double avgRate) {
+                  if (avgRate <= 0.5) {
+                    return 0;
+                  } else if (avgRate <= 1.5) {
+                    return 1;
+                  } else if (avgRate <= 2.5) {
+                    return 2;
+                  } else if (avgRate <= 3.5) {
+                    return 3;
+                  } else if (avgRate <= 4.5) {
+                    return 4;
+                  } else {
+                    return 5;
+                  }
+                }
+
+                return Card(
+                  child: ExpansionTile(
+                      backgroundColor: fifthLayerColor,
+                      collapsedBackgroundColor: fifthLayerColor,
+                      textColor: textColor,
+                      collapsedIconColor: iconColor,
+                      iconColor: iconColor,
+                      children: [
+                        ListTile(
+                          title: Text(
+                            '[+20] ${value['contactNumber']}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          trailing: CircleButton(
+                            color: value['available'] == true
+                                ? Colors.green
+                                : Colors.red,
+                            radius: 8,
+                            onPressed: () async {
+                              final Uri _phoneURL =
+                                  Uri.parse('tel: ${value['contactNumber']}');
+                              if (value['available'] == true) {
+                                await launchUrl(_phoneURL);
+                              } else {
+                                displaySnackbar(
+                                    context,
+                                    'Tow-Truck driver is currently unavailable.',
+                                    fifthLayerColor);
+                              }
+                            },
+                            child: const Icon(Icons.call, size: 20),
+                            hint: 'Call',
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              'Reviews:',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            value['ratingAverage'] > 0
+                                ? SizedBox(
+                                    width: 100,
+                                    height: 20,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: avgRateToStars(
+                                            value['ratingAverage'].toDouble()),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return const Center(
+                                            child: Icon(
+                                              Icons.star,
+                                              size: 20,
                                             ),
-                                      Text(' (${value['reviews'].length})'),
-                                      CircleButton(
-                                        color: Colors.blueGrey,
-                                        radius: 8,
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: ((context) =>
-                                                      NavigatingPage(
-                                                        title: 'Reviews',
-                                                        page: MechanicReviews(
-                                                          reviewsPartnerID:
-                                                              value[
-                                                                  'partnerID'],
-                                                        ),
-                                                      ))));
-                                        },
-                                        child:
-                                            const Icon(Icons.reviews, size: 20),
-                                        hint: 'Reviews',
-                                      )
-                                    ],
+                                          );
+                                        }),
                                   )
-                                ],
-                                title: ListTile(
-                                  leading: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6.0, bottom: 6.0),
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          value['available'] == true
-                                              ? Colors.green
-                                              : Colors.red,
-                                      foregroundColor: iconColor,
-                                      radius: 35,
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(right: 6.0),
-                                        child: Icon(
-                                          FontAwesomeIcons.truckPickup,
-                                          size: 23,
-                                        ),
-                                      ),
-                                    ),
+                                : const Text(
+                                    'No rates',
+                                    style: TextStyle(fontSize: 18),
                                   ),
-                                  title: Text(value['serviceName']),
-                                  subtitle: Text(value['workingHours.open'] ==
-                                              '' &&
-                                          value['workingHours.close'] == '' &&
-                                          value['workingHours.open'] == ''
-                                      ? 'Working hours not specified'
-                                      : 'From ${value['workingHours.open']} to ${value['workingHours.close']}'),
-                                )),
-                          ))
-                      .toList()),
+                            Text(' (${value['reviews'].length})'),
+                            CircleButton(
+                              color: Colors.blueGrey,
+                              radius: 8,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => NavigatingPage(
+                                              title: 'Reviews',
+                                              page: PartnerReview(
+                                                reviewsPartnerID:
+                                                    value['partnerID'],
+                                              ),
+                                            ))));
+                              },
+                              child: const Icon(Icons.reviews, size: 20),
+                              hint: 'Reviews',
+                            )
+                          ],
+                        )
+                      ],
+                      title: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                          child: CircleAvatar(
+                            backgroundColor: value['available'] == true
+                                ? Colors.green
+                                : Colors.red,
+                            foregroundColor: iconColor,
+                            radius: 35,
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 6.0),
+                              child: Icon(
+                                FontAwesomeIcons.truckPickup,
+                                size: 23,
+                              ),
+                            ),
+                          ),
+                        ),
+                        title: Text(value['serviceName']),
+                        subtitle: Text(value['workingHours.open'] == '' &&
+                                value['workingHours.close'] == '' &&
+                                value['workingHours.open'] == ''
+                            ? 'Working hours not specified'
+                            : value['workingHours.open'] !=
+                                    value['workingHours.close']
+                                ? 'From ${value['workingHours.open']} to ${value['workingHours.close']}'
+                                : '24/7'),
+                      )),
+                );
+              }).toList()),
             );
           }
         });
