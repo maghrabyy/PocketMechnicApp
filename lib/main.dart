@@ -100,85 +100,11 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return _auth.currentUser != null
-        ? StreamBuilder(
-            stream: _firestore
-                .collection('Users')
-                .doc(_auth.currentUser?.uid)
-                .snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return const SplashScreenLoading();
-              } else {
-                return AppRoutes(
-                    theInitialPage: (context) => _auth.currentUser != null
-                        ? snapshot.data['userType'] == 'Customer'
-                            ? snapshot.data['Vehicle.VehicleID'] != ' ' &&
-                                    snapshot.data['Vehicle.VehicleName'] != ''
-                                ? const InitialPage()
-                                : const NavigatingPage(
-                                    title: 'My vehicle',
-                                    page: InputVehicleData(),
-                                    canPop: false,
-                                  )
-                            : snapshot.data['userType'] == 'Partner'
-                                ? const PartnerMain()
-                                : const ModeratorMain()
-                        : const WelcomePage());
-              }
-            })
-        : AppRoutes(
-            theInitialPage: (context) => _auth.currentUser != null
-                ? const InitialPage()
-                : const WelcomePage(),
-          );
-  }
-}
-
-class SplashScreenLoading extends StatelessWidget {
-  const SplashScreenLoading({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: splashScreenColor,
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Image(
-              width: 250,
-              image: AssetImage('assets/PocketMechanicLogoLoading.png'),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            SpinKitFadingFour(
-              color: fifthLayerColor,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AppRoutes extends StatelessWidget {
-  const AppRoutes({Key? key, required this.theInitialPage}) : super(key: key);
-  final Widget Function(BuildContext) theInitialPage;
-
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp(
       theme: pmTheme(),
       initialRoute: InitialPage.id,
       routes: {
-        InitialPage.id: theInitialPage,
+        InitialPage.id: (context) => const InitialPage(),
         FavouriteSparePartItems.id: (context) => const NavigatingPage(
               title: 'My Favourites',
               page: FavouriteSparePartItems(),
@@ -278,6 +204,72 @@ class AppRoutes extends StatelessWidget {
             ),
       },
     );
+
+    /*_auth.currentUser != null
+        ? StreamBuilder(
+            stream: _firestore
+                .collection('Users')
+                .doc(_auth.currentUser?.uid)
+                .snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const SplashScreenLoading();
+              } else {
+                return AppRoutes(
+                    theInitialPage: (context) => _auth.currentUser != null
+                        ? snapshot.data['userType'] == 'Customer'
+                            ? snapshot.data['Vehicle.VehicleID'] != ' ' &&
+                                    snapshot.data['Vehicle.VehicleName'] != ''
+                                ? const InitialPage()
+                                : const NavigatingPage(
+                                    title: 'My vehicle',
+                                    page: InputVehicleData(),
+                                    canPop: false,
+                                  )
+                            : snapshot.data['userType'] == 'Partner'
+                                ? const PartnerMain()
+                                : const ModeratorMain()
+                        : const WelcomePage());
+              }
+            })
+        : AppRoutes(
+            theInitialPage: (context) => _auth.currentUser != null
+                ? const InitialPage()
+                : const WelcomePage(),
+          );*/
+  }
+}
+
+class SplashScreenLoading extends StatelessWidget {
+  const SplashScreenLoading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: splashScreenColor,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Image(
+              width: 250,
+              image: AssetImage('assets/PocketMechanicLogoLoading.png'),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SpinKitFadingFour(
+              color: fifthLayerColor,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -291,6 +283,48 @@ class InitialPage extends StatefulWidget {
 }
 
 class _InitialPageState extends State<InitialPage> {
+  @override
+  Widget build(BuildContext context) {
+    return _auth.currentUser != null
+        ? StreamBuilder(
+            stream: _firestore
+                .collection('Users')
+                .doc(_auth.currentUser?.uid)
+                .snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const SplashScreenLoading();
+              } else {
+                return _auth.currentUser != null
+                    ? snapshot.data['userType'] == 'Customer'
+                        ? snapshot.data['Vehicle.VehicleID'] != ' ' &&
+                                snapshot.data['Vehicle.VehicleName'] != ''
+                            ? const MainCustomerScreen()
+                            : const NavigatingPage(
+                                title: 'My vehicle',
+                                page: InputVehicleData(),
+                                canPop: false,
+                              )
+                        : snapshot.data['userType'] == 'Partner'
+                            ? const PartnerMain()
+                            : const ModeratorMain()
+                    : const WelcomePage();
+              }
+            })
+        : _auth.currentUser != null
+            ? const MainCustomerScreen()
+            : const WelcomePage();
+  }
+}
+
+class MainCustomerScreen extends StatefulWidget {
+  const MainCustomerScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainCustomerScreen> createState() => _MainCustomerScreenState();
+}
+
+class _MainCustomerScreenState extends State<MainCustomerScreen> {
   int currentPageIndex = 0;
   PageController initialPageController = PageController();
 

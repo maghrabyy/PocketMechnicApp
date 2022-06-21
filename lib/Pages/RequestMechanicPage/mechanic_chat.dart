@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Components/rounded_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _auth = FirebaseAuth.instance;
+final _fireStore = FirebaseFirestore.instance;
 
 class MechanicChat extends StatefulWidget {
   const MechanicChat({Key? key}) : super(key: key);
@@ -32,81 +34,38 @@ class _MechanicChatState extends State<MechanicChat> {
     ],
   );
 
-  sendClientMessage(String chatMsg) {
-    chatBubbles.add(Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: RoundedContainer(
-                  boxColor: Colors.blue,
-                  boxChild: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(chatMsg),
-                  )),
-            ),
-            const CircleAvatar(
-              child: Icon(
-                Icons.person,
-                size: 32,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 52.0),
-          child: Text('${_auth.currentUser!.displayName}'),
-        ),
-      ],
-    ));
-  }
-
-  sendMechanicMessage(String chatMsg) {
-    chatBubbles.add(Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const CircleAvatar(
-              backgroundColor: Colors.deepPurple,
-              child: Icon(
-                Icons.person,
-                size: 32,
-              ),
-            ),
-            Expanded(
-              child: RoundedContainer(
-                  boxColor: Colors.deepPurple,
-                  boxChild: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(chatMsg),
-                  )),
-            ),
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 52.0),
-          child: Text('Mechanic'),
-        ),
-      ],
-    ));
-  }
-
   @override
   void initState() {
     sendButtons = defaultSendButtons;
-    sendMechanicMessage(
-        'Hello, This is pocket Mechanic representative agent serving you, How can i help you today?');
+    chatBubbles.add(const MessageBubble(
+      chatMsg:
+          'Hello, This is pocket Mechanic representative agent serving you, How can i help you today?',
+      isMe: false,
+    ));
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Widget msgSendButton = ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
+          final loggedInEmail = _auth.currentUser!.email;
+          String userEmail = '';
+          await _fireStore
+              .collection('Users')
+              .doc(_auth.currentUser!.uid)
+              .get()
+              .then(
+                (value) => userEmail = value['Email'],
+              );
+
           setState(() {
-            sendClientMessage(textMessage.text);
+            chatBubbles.add(MessageBubble(
+              chatMsg: textMessage.text,
+              isMe: loggedInEmail == userEmail.toLowerCase(),
+            ));
+
             sendButtons = defaultSendButtons;
           });
           FocusScope.of(context).unfocus();
@@ -115,13 +74,12 @@ class _MechanicChatState extends State<MechanicChat> {
         child: const Text('Send'));
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
-          child: RoundedContainer(
-        boxChild: SingleChildScrollView(
-          child: Column(
+        child: ListView(reverse: true, children: [
+          Column(
             children: chatBubbles,
           ),
-        ),
-      )),
+        ]),
+      ),
       Row(
         children: [
           Expanded(
@@ -144,5 +102,66 @@ class _MechanicChatState extends State<MechanicChat> {
         ],
       )
     ]);
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({Key? key, required this.chatMsg, required this.isMe})
+      : super(key: key);
+
+  final String chatMsg;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment:
+          isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: isMe
+              ? [
+                  Expanded(
+                    child: RoundedContainer(
+                        boxColor: Colors.blue,
+                        boxChild: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(chatMsg),
+                        )),
+                  ),
+                  const CircleAvatar(
+                    child: Icon(
+                      Icons.person,
+                      size: 32,
+                    ),
+                  ),
+                ]
+              : [
+                  const CircleAvatar(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person,
+                      size: 32,
+                    ),
+                  ),
+                  Expanded(
+                    child: RoundedContainer(
+                        boxColor: Colors.deepPurple,
+                        boxChild: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(chatMsg),
+                        )),
+                  ),
+                ],
+        ),
+        Padding(
+          padding: isMe
+              ? const EdgeInsets.only(right: 52.0)
+              : const EdgeInsets.only(left: 52.0),
+          child: Text(isMe ? '${_auth.currentUser!.displayName}' : 'Mechanic'),
+        ),
+      ],
+    );
   }
 }
