@@ -1,6 +1,9 @@
 # pocket_mechanic
 
-Pocket Mechanic application
+Pocket Mechanic mobile application
+Developed using Flutter framework & Dart language. 
+Integrated with Firebase (Datebase & Authentication).
+The application consists of 4 systems, one for the customers, two other systems for the Partners, and system for the moderator. Each system integerated with eachother to provide high quality vehicle maintenance services to the customers.
 
 ## Getting Started
 
