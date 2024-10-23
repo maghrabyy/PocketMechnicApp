@@ -24,9 +24,9 @@ The application consists of 4 systems, one for the customers, two other systems 
 
 ## Screenshots
 
-![Home Screenshot](https://imgur.com/3cQhAv2)
-![Services Screenshot](https://imgur.com/gS9IISv)
-![Nearby Mechanic Screenshot](https://imgur.com/uHgjwTd)
+![Home Screenshot](Screenshots/Screenshot_2022-05-23-19-43-08-306_com.PocketMechanic.PM.jpg)
+![Services Screenshot](Screenshots/1705193746978.jpeg)
+![Nearby Mechanic Screenshot](Screenshots/1705193632990.jpeg)
 ![Book a Mechanic Screenshot](https://imgur.com/AOmPuGt)
 ![Request a Mechanic Screenshot](https://imgur.com/hu5sQk3)
 ![Spare-part Shop Screenshot](https://imgur.com/zCAB8fk)
